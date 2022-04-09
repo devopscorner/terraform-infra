@@ -1,0 +1,19 @@
+---
+##################################################
+### STAGING (DEV/UAT) Environment DEVOPSCORNER ###
+##################################################
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ops-devopscorner-access-binding
+  namespace: devopscorner
+subjects:
+  - kind: Group
+    name: engineering:ops
+    apiGroup: rbac.authorization.k8s.io
+  - kind: ServiceAccount
+    name: devopscorner-svcaccount
+roleRef:
+  kind: Role
+  name: ops-devopscorner-access
+  apiGroup: rbac.authorization.k8s.io

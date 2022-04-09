@@ -1,0 +1,81 @@
+version: 0.2
+
+env:
+  # ==================== #
+  #  Ref: SECRET CONFIG  #
+  # ==================== #
+  parameter-store:
+    BUILDNUMBER: /devopscorner/cicd/lab/repo/terraform-infra/buildnumber
+    STORE_AWS_ACCOUNT: /devopscorner/cicd/lab/credentials/aws_account
+    STORE_AWS_ACCESS_KEY: /devopscorner/cicd/lab/credentials/aws_access_key
+    STORE_AWS_SECRET_KEY: /devopscorner/cicd/lab/credentials/aws_secret_key
+    STORE_REPO_USERNAME: /devopscorner/cicd/lab/repo_credentials/codecommit/username
+    STORE_REPO_PASSWORD: /devopscorner/cicd/lab/repo_credentials/codecommit/password_encoded
+    STORE_DOCKERHUB_USERNAME: /devopscorner/cicd/lab/repo_credentials/dockerhub/username
+    STORE_DOCKERHUB_PASSWORD: /devopscorner/cicd/lab/repo_credentials/dockerhub/password_encoded
+    STORE_REPO_URL: /devopscorner/cicd/lab/repo/terraform-infra/repo_url
+    STORE_REPO_FOLDER: /devopscorner/cicd/lab/repo/terraform-infra/repo_folder
+  # ===================================== #
+  #  Ref: Pipeline Environment Variables  #
+  # ===================================== #
+  variables:
+    env_container_image: "devopscorner/terraform-infra:alpine"
+    INFRA_RESOURCES: "terraform/environment/providers/aws/infra/resources"
+    INFRA_RESOURCES_EKS: "eks"
+    WORKSPACE_ENV: "lab"
+    AWS_DEFAULT_REGION: "ap-southeast-1"
+    TF_VERSION: "1.1.7"
+
+phases:
+  install:
+    # Runtime Version
+    # https://docs.aws.amazon.com/codebuild/latest/userguide/runtime-versions.html
+    # https://docs.aws.amazon.com/codebuild/latest/userguide/available-runtimes.html
+    runtime-versions:
+      python: 3.8
+    commands:
+      - cd /usr/bin
+      - curl -O https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+      - unzip terraform_${TF_VERSION}_linux_amd64.zip
+  pre_build:
+    commands:
+      # ========================= #
+      #  Using Public Repository  #
+      #========================== #
+      # - git clone ${STORE_REPO_URL} ${STORE_REPO_FOLDER}
+      # - cd ${STORE_REPO_FOLDER} && find ./ -type f -exec sed -i "s/YOUR_AWS_ACCOUNT/${STORE_AWS_ACCOUNT}/g" {} \;
+      # ====================== #
+      #  Using AWS CodeCommit  #
+      #======================= #
+      # https://docs.aws.amazon.com/codebuild/latest/userguide/build-env-ref-env-vars.html
+      - cd ${CODEBUILD_SRC_DIR} && find ./ -type f -exec sed -i "s/YOUR_AWS_ACCOUNT/${STORE_AWS_ACCOUNT}/g" {} \;
+      - echo '- DONE -'
+  build:
+    commands:
+      - make codebuild-modules
+      - cd ${CODEBUILD_SRC_DIR}/${INFRA_RESOURCES}/${INFRA_RESOURCES_EKS}
+      - terraform init
+      - terraform workspace select ${WORKSPACE_ENV} || terraform workspace new ${WORKSPACE_ENV}
+      # - terraform plan
+      - terraform apply -auto-approve
+
+artifacts:
+  files:
+    - _infra/*
+    - terraform/*
+    - test/*
+    - docker-compose.yml
+    - Dockerfile
+    - Dockerfile.alpine
+    - Dockerfile.ubuntu
+    - ecr-build-alpine.sh
+    - ecr-push-alpine.sh
+    - ecr-tag-alpine.sh
+    - get-community.sh
+    - get-officials.sh
+    - Makefile
+    - module_community.lst
+    - module_officials.lst
+    - README.md
+    - run-docker.sh
+  name: "artifact-$(date '+%Y%m%d-%H%M%S')"

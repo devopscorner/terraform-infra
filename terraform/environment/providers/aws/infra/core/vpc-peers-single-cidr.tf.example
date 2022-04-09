@@ -1,0 +1,196 @@
+# ==========================================================================
+#  Core: vpc-peering.tf
+# --------------------------------------------------------------------------
+#  Description
+# --------------------------------------------------------------------------
+#    - VPC Peering Identity
+#    - VPC Peering owner
+#    - Main Route Table
+# ==========================================================================
+
+# --------------------------------------------------------------------------
+#  VPC Peering
+# --------------------------------------------------------------------------
+resource "aws_vpc_peering_connection" "vpc_peer_hub" {
+  peer_vpc_id   = "vpc-1234567890"   # VPC CIDR 172.x.x.x/32
+  vpc_id        = aws_vpc.infra_vpc.id
+
+  auto_accept   = true
+
+  accepter {
+    allow_classic_link_to_remote_vpc = true
+    allow_remote_vpc_dns_resolution = true
+    allow_vpc_to_remote_classic_link = true
+  }
+
+  requester {
+    allow_classic_link_to_remote_vpc = true
+    allow_remote_vpc_dns_resolution = true
+    allow_vpc_to_remote_classic_link = true
+  }
+
+  tags = merge(
+    local.tags,
+    local.tags_vpc,
+    {
+      "Name" = "vpc-peer-eks-${var.myinfra}-${var.env[local.env]}-vpc",
+      "Side" = "Requester"
+    }
+  )
+}
+
+# --------------------------------------------------------------------------
+#  VPC Route Peers
+# --------------------------------------------------------------------------
+#==================
+# REQUESTER
+#==================
+## Private
+resource "aws_route" "terraform_vpc_nat_ec2_rt_private_a" {
+  ## VPC CIDR Staging
+  for_each = toset([
+    "172.64.0.0/16"
+  ])
+  # ID of VPC 1 main route table.
+  route_table_id = "${aws_route_table.nat_ec2_rt_private_a.id}"
+  # CIDR block / IP range for VPC 2.
+  destination_cidr_block = "${each.key}"
+  # ID of VPC peering connection.
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.vpc_peer_hub.id}"
+}
+
+resource "aws_route" "terraform_vpc_nat_ec2_rt_private_b" {
+  ## VPC CIDR Staging
+  for_each = toset([
+    "172.64.0.0/16"
+  ])
+  # ID of VPC 1 main route table.
+  route_table_id = "${aws_route_table.nat_ec2_rt_private_b.id}"
+  # CIDR block / IP range for VPC 2.
+  destination_cidr_block = "${each.key}"
+  # ID of VPC peering connection.
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.vpc_peer_hub.id}"
+}
+
+resource "aws_route" "terraform_vpc_nat_eks_rt_private_a" {
+  ## VPC CIDR Staging
+  for_each = toset([
+    "172.64.0.0/16"
+  ])
+  # ID of VPC 1 main route table.
+  route_table_id = "${aws_route_table.nat_eks_rt_private_a.id}"
+  # CIDR block / IP range for VPC 2.
+  destination_cidr_block = "${each.key}"
+  # ID of VPC peering connection.
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.vpc_peer_hub.id}"
+}
+
+resource "aws_route" "terraform_vpc_nat_eks_rt_private_b" {
+  ## VPC CIDR Staging
+  for_each = toset([
+    "172.64.0.0/16"
+  ])
+  # ID of VPC 1 main route table.
+  route_table_id = "${aws_route_table.nat_eks_rt_private_b.id}"
+  # CIDR block / IP range for VPC 2.
+  destination_cidr_block = "${each.key}"
+  # ID of VPC peering connection.
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.vpc_peer_hub.id}"
+}
+
+## Public
+resource "aws_route" "terraform_vpc_igw_public" {
+  ## VPC CIDR Staging
+  for_each = toset([
+    "172.64.0.0/16"
+  ])
+  # ID of VPC 1 main route table.
+  route_table_id = "${aws_route_table.igw_public.id}"
+  # CIDR block / IP range for VPC 2.
+  destination_cidr_block = "${each.key}"
+  # ID of VPC peering connection.
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.vpc_peer_hub.id}"
+}
+
+resource "aws_route" "terraform_vpc_igw_ec2_rt_public" {
+  ## VPC CIDR Staging
+  for_each = toset([
+    "172.64.0.0/16"
+  ])
+  # ID of VPC 1 main route table.
+  route_table_id = "${aws_route_table.ec2_rt_public.id}"
+  # CIDR block / IP range for VPC 2.
+  destination_cidr_block = "${each.key}"
+  # ID of VPC peering connection.
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.vpc_peer_hub.id}"
+}
+
+resource "aws_route" "terraform_vpc_igw_eks_rt_public" {
+  ## VPC CIDR Staging
+  for_each = toset([
+    "172.64.0.0/16"
+  ])
+  # ID of VPC 1 main route table.
+  route_table_id = "${aws_route_table.eks_rt_public.id}"
+  # CIDR block / IP range for VPC 2.
+  destination_cidr_block = "${each.key}"
+  # ID of VPC peering connection.
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.vpc_peer_hub.id}"
+}
+
+
+#==================
+# ACCEPTER
+#==================
+## Private
+resource "aws_route" "staging_vpc_private" {
+  ## VPC CIDR Terraform (Public)
+  for_each = toset([
+    "${var.vpc_cidr[local.env]}",
+    "${aws_subnet.ec2_private_a.cidr_block}",
+    "${aws_subnet.ec2_private_b.cidr_block}",
+    "${aws_subnet.eks_private_a.cidr_block}",
+    "${aws_subnet.eks_private_b.cidr_block}"
+  ])
+  # ID of VPC 2 main route table.
+  route_table_id = "rtb-1234567890" # vpc_private_rt
+  # CIDR block / IP range for VPC 2.
+  destination_cidr_block = "${each.key}"
+  # ID of VPC peering connection.
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.vpc_peer_hub.id}"
+}
+
+## Public
+resource "aws_route" "staging_vpc_public" {
+  ## VPC CIDR Terraform (Public)
+  for_each = toset([
+    "${var.vpc_cidr[local.env]}",
+    "${aws_subnet.ec2_public_a.cidr_block}",
+    "${aws_subnet.ec2_public_b.cidr_block}",
+    "${aws_subnet.eks_public_a.cidr_block}",
+    "${aws_subnet.eks_public_b.cidr_block}"
+  ])
+  # ID of VPC 2 main route table.
+  route_table_id = "rtb-0987654321" # vpc_public_rt
+  # CIDR block / IP range for VPC 2.
+  destination_cidr_block = "${each.key}"
+  # ID of VPC peering connection.
+  vpc_peering_connection_id = "${aws_vpc_peering_connection.vpc_peer_hub.id}"
+}
+
+
+# --------------------------------------------------------------------------
+#  VPC Peers Output
+# --------------------------------------------------------------------------
+locals {
+  summary_vpc_peer = <<SUMMARY
+VPC Peer Summary:
+  VPC Id:            ${aws_vpc.infra_vpc.id}
+  VPC Peer Id:       ${aws_vpc_peering_connection.vpc_peer_hub.peer_vpc_id}
+  VPC Peer Name:     ${aws_vpc_peering_connection.vpc_peer_hub.tags.Name}
+SUMMARY
+}
+
+output "summary_vpc_peer" {
+  value = local.summary_vpc_peer
+}

@@ -1,0 +1,16 @@
+---
+##################################################
+### STAGING (DEV/UAT) Environment DEVOPSCORNER ###
+##################################################
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: ops-devopscorner-access
+  namespace: devopscorner
+rules:
+  - apiGroups: ["*"]
+    resources: ["*"]
+    verbs: ["patch", "get", "list", "watch", "create", "update", "delete"]
+  - apiGroups: ["autoscaling"]
+    resources: ["horizontalpodautoscallers"]
+    verbs: ["create", "delete", "patch", "update", "get", "watch", "list"]
