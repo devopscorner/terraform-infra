@@ -1,6 +1,6 @@
 -b 0.25.0 https://github.com/cloudposse/terraform-null-label.git
 -b v0.1.0 https://github.com/cloudposse/terraform-aws-budgets.git
--b 0.22.3 https://github.com/cloudposse/terraform-aws-lab-cluster.git
+-b 0.22.3 https://github.com/cloudposse/terraform-aws-emr-cluster.git
 https://github.com/cloudposse/terraform-aws-glue.git
 https://github.com/cloudposse/terraform-aws-glue-job.git
 https://github.com/cloudposse/terraform-aws-glue-workflow.git

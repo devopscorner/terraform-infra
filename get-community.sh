@@ -10,8 +10,9 @@ set -e
 TITLE="TERRAFORM COMMUNITY SUBMODULES" # script name
 VER="2.3"                              # script version
 
-SUBMODULE_TERRAFORM="./module_community.lst"
-PATH_MODULES="./terraform/modules/providers/aws/community"
+PATH_FOLDER=$(pwd)
+SUBMODULE_TERRAFORM="${PATH_FOLDER}/module_community.lst"
+PATH_MODULES="${PATH_FOLDER}/terraform/modules/providers/aws/community"
 
 COL_RED="\033[22;31m"
 COL_GREEN="\033[22;32m"
