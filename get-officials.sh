@@ -11,7 +11,7 @@ TITLE="TERRAFORM OFFICIAL SUBMODULES" # script name
 VER="2.3"                              # script version
 
 PATH_FOLDER=$(pwd)
-SUBMODULE_TERRAFORM="${PATH_FOLDER}/module_community.lst"
+SUBMODULE_TERRAFORM="${PATH_FOLDER}/module_officials.lst"
 PATH_MODULES="${PATH_FOLDER}/terraform/modules/providers/aws/officials"
 
 COL_RED="\033[22;31m"
