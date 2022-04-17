@@ -6,48 +6,48 @@ variable "region_primary" {
 
 # VPC Variables
 variable "vpc_id" {
-  description = "vpc target environment"
+  description = "Vpc target environment"
 }
 
 variable "vpn_sg_id" {
-  description = "securit group for VPN Access"
+  description = "Security group for VPN Access"
 }
 
 variable "subnet_selected_tag" {
-  description = "default subnet selection for aws cache"
+  description = "Default subnet selection for aws cache"
 }
 
 variable "sg_selected_tag" {
-  description = "default sg selection for aws cache"
+  description = "Default sg selection for aws cache"
 }
 
 # Elasticache Variables
 variable "subnet_group_name" {
-  description = "elasticache subnet group name"
+  description = "Elasticache subnet group name"
 }
 
 variable "cluster_name" {
-  description = "elastic cache cluster id / name"
+  description = "Elastic cache cluster id / name"
 }
 
 variable "cluster_engine" {
-  description = "cluster engine. redis / memcached"
+  description = "Cluster engine. redis / memcached"
 }
 
 variable "cluster_engine_version" {
-  description = "cluster engine version"
+  description = "Cluster engine version"
 }
 
 variable "cluster_node_type" {
-  description = "cluster node type selection"
+  description = "Cluster node type selection"
 }
 
 variable "cluster_node_num" {
-  description = "minimum cluster node to run"
+  description = "Minimum cluster node to run"
 }
 
 variable "cluster_maintenance" {
-  description = "maintenance window schedule for the cluster"
+  description = "Maintenance window schedule for the cluster"
   default = "sun:05:00-sun:09:00"
 }
 
