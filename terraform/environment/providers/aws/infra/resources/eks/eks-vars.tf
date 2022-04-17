@@ -70,9 +70,9 @@ variable "ssh_key_pair" {
   type        = map(string)
   description = "default keyname"
   default = {
-    lab     = "pem-deploy-lab"
-    staging = "pem-deploy-staging"
-    prod    = "pem-deploy-prod"
+    lab     = "devopscorner-deploy-lab"
+    staging = "devopscorner-deploy-staging"
+    prod    = "devopscorner-deploy-prod"
   }
 }
 
