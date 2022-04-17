@@ -135,39 +135,38 @@ resource "aws_iam_policy" "route53_cert_policy_dev" {
 POLICY
 }
 
-# resource "aws_iam_policy" "route53_cert_policy_uat" {
-#   name   = "aws-route53-cert-${var.eks_cluster_name}_${var.env[local.env]}-uat"
-#   policy = <<POLICY
-# {
-# 	"Version": "2012-10-17",
-# 	"Statement": [{
-# 			"Action": "route53:GetChange",
-# 			"Effect": "Allow",
-# 			"Resource": "arn:aws:route53:::change/*"
-# 		},
-# 		{
-# 			"Action": [
-# 				"route53:ChangeResourceRecordSets",
-# 				"route53:ListResourceRecordSets"
-# 			],
-# 			"Effect": "Allow",
-# 			"Resource": "arn:aws:route53:::hostedzone/Z02056292VAFAVGS5GA72"
-# 		}
-# 	]
-# }
-# POLICY
-# }
+resource "aws_iam_policy" "route53_cert_policy_uat" {
+  name   = "aws-route53-cert-${var.eks_cluster_name}_${var.env[local.env]}-uat"
+  policy = <<POLICY
+{
+	"Version": "2012-10-17",
+	"Statement": [{
+			"Action": "route53:GetChange",
+			"Effect": "Allow",
+			"Resource": "arn:aws:route53:::change/*"
+		},
+		{
+			"Action": [
+				"route53:ChangeResourceRecordSets",
+				"route53:ListResourceRecordSets"
+			],
+			"Effect": "Allow",
+			"Resource": "arn:aws:route53:::hostedzone/${var.dns_zone[local.env]}"
+		}
+	]
+}
+POLICY
+}
 
 resource "aws_iam_role_policy_attachment" "route53_cert_policy_dev" {
   policy_arn = aws_iam_policy.route53_cert_policy_dev.arn
   role       = aws_iam_role.eks_nodes.name
 }
 
-# resource "aws_iam_role_policy_attachment" "route53_cert_policy_uat" {
-#   policy_arn = aws_iam_policy.route53_cert_policy_uat.arn
-#   role       = aws_iam_role.eks_nodes.name
-# }
-
+resource "aws_iam_role_policy_attachment" "route53_cert_policy_uat" {
+  policy_arn = aws_iam_policy.route53_cert_policy_uat.arn
+  role       = aws_iam_role.eks_nodes.name
+}
 
 ### EKS Cluster Autoscaler (CA) ###
 data "aws_caller_identity" "current" {}
