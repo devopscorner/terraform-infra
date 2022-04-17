@@ -8,14 +8,14 @@ data:
     - groups:
       - system:bootstrappers
       - system:nodes
-      rolearn: arn:aws:iam::${YOUR_AWS_ACCOUNT}:role/eks-role-${EKS_CLUSTER}-nodes
+      rolearn: arn:aws:iam::${ACCOUNT_ID}:role/eks-role-${EKS_CLUSTER}-nodes
       username: system:node:{{EC2PrivateDNSName}}
     - groups:
       - engineering:ops
-      rolearn: arn:aws:iam::${YOUR_AWS_ACCOUNT}:role/devopscorner-Lead
+      rolearn: arn:aws:iam::${ACCOUNT_ID}:role/devopscorner-Lead
       username: devops
   mapUsers: |
-    - userarn: arn:aws:iam::${YOUR_AWS_ACCOUNT}:user/devops
+    - userarn: arn:aws:iam::${ACCOUNT_ID}:user/devops
       username: devops
       groups:
         - system:masters
