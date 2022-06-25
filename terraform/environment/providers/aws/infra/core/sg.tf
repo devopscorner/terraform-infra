@@ -36,6 +36,7 @@ resource "aws_security_group" "default" {
   }
 
   egress {
+    description      = "Node all egress"
     from_port        = 0
     to_port          = 0
     protocol         = "-1"

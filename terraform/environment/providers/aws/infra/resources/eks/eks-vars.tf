@@ -46,7 +46,7 @@ variable "dns_url" {
   type = map(string)
   default = {
     lab     = "devopscorner.lab"
-    staging = "devopscorner.staging"
+    staging = "awscb.id"
     prod    = "devopscorner.id"
   }
 }
@@ -88,8 +88,8 @@ variable "eks_name_env" {
 variable "k8s_version" {
   type = map(string)
   default = {
-    lab     = "1.19"
-    staging = "1.19"
-    prod    = "1.19"
+    lab     = "1.22"
+    staging = "1.22"
+    prod    = "1.22"
   }
 }

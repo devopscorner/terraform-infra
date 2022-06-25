@@ -5,11 +5,11 @@ ec2_client = boto3.client('ec2')
 
 ## Add ASG name value and nodegroup name here
 asg_value = 'eks-1234567890'
-eks_nodegroup = 'devops-tools_node'
+eks_nodegroup = 'devopscorner-tools_node'
 
 env = 'DEV'
 types = 'PRODUCTS'
-productname = 'DEVOPSCORNER'
+productname = 'DEVOPSCORNER-TOOLS'
 dept = 'DEVOPS'
 service = 'DEVOPS-TOOLS'
 clustername = 'devopscorner-staging'
@@ -20,7 +20,7 @@ response = asg_client.create_or_update_tags(
             'ResourceId': asg_value,
             'ResourceType': 'auto-scaling-group',
             'Key': 'Name',
-            'Value': 'EKS-1.19-'+eks_nodegroup.upper(),
+            'Value': 'EKS-1.22-'+eks_nodegroup.upper(),
             'PropagateAtLaunch': True
         },
         {
@@ -103,7 +103,7 @@ for i in instances_list:
         Tags=[
             {
                 'Key': 'Name',
-                'Value': 'EKS-1.19-'+eks_nodegroup.upper()
+                'Value': 'EKS-1.22-'+eks_nodegroup.upper()
             },
             {
                 'Key': 'Department',

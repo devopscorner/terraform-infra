@@ -15,7 +15,7 @@
 # NODE GROUP - DEVOPS SPINNAKER
 #============================================
 locals {
-  node_selector_spinnaker = "devops"
+  node_selector_spinnaker = "devopscorner"
 }
 
 resource "aws_eks_node_group" "spinnaker" {
@@ -42,7 +42,7 @@ resource "aws_eks_node_group" "spinnaker" {
     "environment" = "staging",
     "node"        = "${local.node_selector_spinnaker}-${each.key}"
     "department"  = "devops"
-    "productname" = "devopscorner-eks"
+    "productname" = "devopscorner-${each.key}"
   }
 
   remote_access {
@@ -52,7 +52,7 @@ resource "aws_eks_node_group" "spinnaker" {
 
   scaling_config {
     desired_size = 0
-    max_size     = 10
+    max_size     = 5
     min_size     = 0
   }
 
@@ -68,14 +68,14 @@ resource "aws_eks_node_group" "spinnaker" {
     },
     {
       Environment     = "DEV"
-      Name            = "EKS-1.19-DEVOPS"
+      Name            = "EKS-1.22-DEVOPSCORNER-${upper(each.key)}"
       Type            = "PRODUCTS"
-      ProductName     = "DEVOPSCORNER-EKS"
-      ProductGroup    = "DEV-DEVOPSCORNER-EKS"
+      ProductName     = "DEVOPSCORNER-${upper(each.key)}"
+      ProductGroup    = "DEV-DEVOPSCORNER--${upper(each.key)}"
       Department      = "DEVOPS"
       DepartmentGroup = "DEV-DEVOPS"
-      ResourceGroup   = "DEV-EKS-DEVOPS"
-      Services        = "${upper(local.node_selector_spinnaker)}-${upper(each.key)}"
+      ResourceGroup   = "DEV-EKS-DEVOPSCORNER"
+      Services        = "${upper(local.node_selector_devops)}-${upper(each.key)}"
     }
   )
 
@@ -88,52 +88,45 @@ resource "aws_eks_node_group" "spinnaker" {
   ]
 }
 
-# --------------------------------------------------------------------------
-#  Autoscaling Schedule Node
-# --------------------------------------------------------------------------
-## Scale Down
-resource "aws_autoscaling_schedule" "scale_down_spinnaker_dev" {
-  autoscaling_group_name = aws_eks_node_group.spinnaker["spinnaker"].resources[0].autoscaling_groups[0].name
-  desired_capacity       = 0
-  max_size               = 0
-  min_size               = 0
-  recurrence             = "0 13,16 * * *"
-  scheduled_action_name  = "scale_down"
-  # start_time           = "2022-03-25T13:00:00Z"
-}
+# ------------------------------------
+#  Target Group
+# ------------------------------------
+resource "aws_lb_target_group" "spinnaker" {
+  for_each = toset([
+    "spinnaker"
+  ])
 
-## Scale Up
-resource "aws_autoscaling_schedule" "scale_up_spinnaker_dev" {
-  autoscaling_group_name = aws_eks_node_group.spinnaker["spinnaker"].resources[0].autoscaling_groups[0].name
-  desired_capacity       = 0
-  max_size               = 10
-  min_size               = 0
-  recurrence             = "0 0 * * MON-FRI"
-  scheduled_action_name  = "scale_up"
-  # start_time           = "2022-03-28T00:00:00Z"
-}
+  name     = "devopscorner-tg-${each.key}"
+  port     = 31380
+  protocol = "HTTP"
+  vpc_id   = data.aws_vpc.selected.id
 
-# --------------------------------------------------------------------------
-#  Autoscaling Output
-# --------------------------------------------------------------------------
-## Scale Down ##
-output "eks_node_scale_down_spinnaker_dev" {
-  value = aws_autoscaling_schedule.scale_down_spinnaker_dev.arn
-}
-
-## Scale Up ##
-output "eks_node_scale_up_spinnaker_dev" {
-  value = aws_autoscaling_schedule.scale_up_spinnaker_dev.arn
+  tags = {
+    Environment     = "DEV"
+    Name            = "DEVOPSCORNER-TG-${upper(each.key)}"
+    Type            = "PRODUCTS"
+    ProductName     = "DEVOPSCORNER-TG"
+    ProductGroup    = "DEV-DEVOPSCORNER"
+    Department      = "DEVOPS"
+    DepartmentGroup = "DEV-DEVOPS"
+    ResourceGroup   = "DEV-TG-DEVOPSCORNER"
+    Services        = "TG-LB"
+    Terraform       = true
+  }
 }
 
 # --------------------------------------------------------------------------
 #  Node Group Output
 # --------------------------------------------------------------------------
 ## Spinnaker Output #
-output "eks_node_name_spinnaker_dev" {
+output "eks_node_name_spinnaker" {
   value = aws_eks_node_group.spinnaker["spinnaker"].id
 }
 
-output "eks_node_asg_group_spinnaker_dev" {
-  value = aws_eks_node_group.spinnaker["spinnaker"].resources[0].autoscaling_groups[0].name
+# --------------------------------------------------------------------------
+#  Target Group Output
+# --------------------------------------------------------------------------
+## Spinnaker Output ##
+output "eks_node_tg_spinnaker" {
+  value = aws_lb_target_group.spinnaker["spinnaker"].id
 }

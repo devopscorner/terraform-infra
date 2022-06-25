@@ -15,13 +15,13 @@
 # NODE GROUP - SHAREDREDIS
 #============================================
 locals {
-  node_selector_sharedredis = "sharedredis"
+  node_selector_sharedredis = "devopscorner"
 }
 
 resource "aws_eks_node_group" "sharedredis" {
   ## NODE GROUP
   for_each = toset([
-    "dev"
+    "sharedredis"
   ])
 
   cluster_name    = aws_eks_cluster.aws_eks.name
@@ -42,7 +42,7 @@ resource "aws_eks_node_group" "sharedredis" {
     "environment" = "staging",
     "node"        = "${local.node_selector_sharedredis}-${each.key}"
     "department"  = "softeng"
-    "productname" = "devopscorner-eks"
+    "productname" = "devopscorner-${each.key}"
   }
 
   remote_access {
@@ -52,7 +52,7 @@ resource "aws_eks_node_group" "sharedredis" {
 
   scaling_config {
     desired_size = 0
-    max_size     = 10
+    max_size     = 5
     min_size     = 0
   }
 
@@ -67,15 +67,15 @@ resource "aws_eks_node_group" "sharedredis" {
       "k8s.io/cluster-autoscaler/enabled" = "TRUE"
     },
     {
-      Environment     = "${each.key}" == "dev" ? "DEV" : "UAT"
-      Name            = "EKS-1.19-SHAREDREDIS"
+      Environment     = "DEV"
+      Name            = "EKS-1.22-DEVOPSCORNER-${upper(each.key)}"
       Type            = "PRODUCTS"
-      ProductName     = "SHAREDREDIS"
-      ProductGroup    = "${each.key}" == "dev" ? "DEV-SHAREDREDIS" : "UAT-SHAREDREDIS"
-      Department      = "SOFTENG"
-      DepartmentGroup = "${each.key}" == "dev" ? "DEV-SOFTENG" : "UAT-SOFTENG"
-      ResourceGroup   = "${each.key}" == "dev" ? "DEV-EKS-SHAREDREDIS" : "UAT-EKS-SHAREDREDIS"
-      Services        = "REDIS"
+      ProductName     = "DEVOPSCORNER-${upper(each.key)}"
+      ProductGroup    = "DEV-DEVOPSCORNER--${upper(each.key)}"
+      Department      = "DEVOPS"
+      DepartmentGroup = "DEV-DEVOPS"
+      ResourceGroup   = "DEV-EKS-DEVOPSCORNER"
+      Services        = "${upper(local.node_selector_devops)}-${upper(each.key)}"
     }
   )
 
@@ -88,52 +88,45 @@ resource "aws_eks_node_group" "sharedredis" {
   ]
 }
 
-# --------------------------------------------------------------------------
-#  Autoscaling Schedule Node
-# --------------------------------------------------------------------------
-## Scale Down
-resource "aws_autoscaling_schedule" "scale_down_sharedredis_dev" {
-  autoscaling_group_name = aws_eks_node_group.sharedredis["dev"].resources[0].autoscaling_groups[0].name
-  desired_capacity       = 0
-  max_size               = 0
-  min_size               = 0
-  recurrence             = "0 13,16 * * *"
-  scheduled_action_name  = "scale_down"
-  # start_time           = "2022-03-25T13:00:00Z"
-}
+# ------------------------------------
+#  Target Group
+# ------------------------------------
+resource "aws_lb_target_group" "sharedredis" {
+  for_each = toset([
+    "sharedredis"
+  ])
 
-## Scale Up
-resource "aws_autoscaling_schedule" "scale_up_sharedredis_dev" {
-  autoscaling_group_name = aws_eks_node_group.sharedredis["dev"].resources[0].autoscaling_groups[0].name
-  desired_capacity       = 0
-  max_size               = 10
-  min_size               = 0
-  recurrence             = "0 0 * * MON-FRI"
-  scheduled_action_name  = "scale_up"
-  # start_time           = "2022-03-28T00:00:00Z"
-}
+  name     = "devopscorner-tg-${each.key}"
+  port     = 31280
+  protocol = "HTTP"
+  vpc_id   = data.aws_vpc.selected.id
 
-# --------------------------------------------------------------------------
-#  Autoscaling Output
-# --------------------------------------------------------------------------
-## Scale Down ##
-output "eks_node_scale_down_sharedredis_dev" {
-  value = aws_autoscaling_schedule.scale_down_sharedredis_dev.arn
-}
-
-## Scale Up ##
-output "eks_node_scale_up_sharedredis_dev" {
-  value = aws_autoscaling_schedule.scale_up_sharedredis_dev.arn
+  tags = {
+    Environment     = "DEV"
+    Name            = "DEVOPSCORNER-TG-${upper(each.key)}"
+    Type            = "PRODUCTS"
+    ProductName     = "DEVOPSCORNER-TG"
+    ProductGroup    = "DEV-DEVOPSCORNER"
+    Department      = "DEVOPS"
+    DepartmentGroup = "DEV-DEVOPS"
+    ResourceGroup   = "DEV-TG-DEVOPSCORNER"
+    Services        = "TG-LB"
+    Terraform       = true
+  }
 }
 
 # --------------------------------------------------------------------------
 #  Node Group Output
 # --------------------------------------------------------------------------
-## DEV Output #
-output "eks_node_name_sharedredis_dev" {
-  value = aws_eks_node_group.sharedredis["dev"].id
+## SharedRedis Output #
+output "eks_node_name_sharedredis" {
+  value = aws_eks_node_group.sharedredis["sharedredis"].id
 }
 
-output "eks_node_asg_group_sharedredis_dev" {
-  value = aws_eks_node_group.sharedredis["dev"].resources[0].autoscaling_groups[0].name
+# --------------------------------------------------------------------------
+#  Target Group Output
+# --------------------------------------------------------------------------
+## SharedRedis Output ##
+output "eks_node_tg_sharedredis" {
+  value = aws_lb_target_group.sharedredis["sharedredis"].id
 }

@@ -19,7 +19,7 @@ locals {
 }
 
 locals {
-  use_k8s_version = substr(var.k8s_version[local.env], 0, 3) == "1.1" ? "1.19" : var.k8s_version[local.env]
+  use_k8s_version = substr(var.k8s_version[local.env], 0, 3) == "1.1" ? "1.22" : var.k8s_version[local.env]
   cluster_autoscaler_version = substr(local.use_k8s_version, 0, 4)
 }
 
@@ -101,7 +101,8 @@ resource "aws_eks_cluster" "aws_eks" {
     {
       "ClusterName" = "${var.eks_cluster_name}_${var.env[local.env]}"
       "k8s.io/cluster-autoscaler/${var.eks_cluster_name}_${var.env[local.env]}" = "owned",
-      "k8s.io/cluster-autoscaler/enabled" = "TRUE"
+      "k8s.io/cluster-autoscaler/enabled" = "TRUE",
+      "Terraform" = "true"
     }
   )
 
