@@ -109,10 +109,10 @@ resource "aws_eks_cluster" "aws_eks" {
       Name            = "EKS-1.22-${upper(var.eks_cluster_name)}-${upper(var.environment[local.env])}"
       Type            = "PRODUCTS"
       ProductName     = "DEVOPSCORNER-EKS"
-      ProductGroup    = "${var.environment[local.env]}" == "prod" ? "PROD-DEVOPSCORNER-EKS" : "STG-DEVOPSCORNER-EKS"
+      ProductGroup    = "${var.env[local.env]}" == "prod" ? "PROD-DEVOPSCORNER-EKS" : "STG-DEVOPSCORNER-EKS"
       Department      = "DEVOPS"
-      DepartmentGroup = "${var.environment[local.env]}" == "prod" ? "PROD-DEVOPS" : "STG-DEVOPS"
-      ResourceGroup   = "${var.environment[local.env]}" == "prod" ? "PROD-EKS-DEVOPSCORNER" : "STG-EKS-DEVOPSCORNER"
+      DepartmentGroup = "${var.env[local.env]}" == "prod" ? "PROD-DEVOPS" : "STG-DEVOPS"
+      ResourceGroup   = "${var.env[local.env]}" == "prod" ? "PROD-EKS-DEVOPSCORNER" : "STG-EKS-DEVOPSCORNER"
       Services        = "EKS"
     }
   )
