@@ -1,0 +1,42 @@
+=============================
+References:
+- https://github.com/kubernetes/ingress-nginx/tree/main/docs/examples/auth/basic
+- https://www.askapache.com/online-tools/htpasswd-generator/
+=============================
+
+htpasswd -c auth kubecost-admin > kubecost-auth/auth
+---
+kubecost-admin
+b74JGyVYIPokdjNy
+
+=============================
+Filename: auth (kubecost)
+=============================
+## SHA
+kubecost-admin:{SHA}v5gNaqGge8SShiE7dQEfowcJ6Oo=
+## Crypt
+kubecost-admin:aaOReaIS4/oYg
+## Bcrypt
+kubecost-admin:$2y$10$CJA.JF91PZai.gIif2TvsukIlVorY84UWH0ZjhupukPtUbN9Fqfmm
+## MD5
+kubecost-admin:$apr1$6v0t5zep$Jst.kmUB/9PrXZoYGxjt8/
+## Digest
+kubecost-admin:Authentication Required - Kubecost:aa84961f905a048d0c901b362b264cad
+
+=============================
+Kubernetes Secret
+=============================
+kubectl create secret generic kubecost-auth \
+  --from-file=kubecost-auth/auth -n kubecost
+
+kubectl get secret kubecost-auth -o yaml -n kubecost
+
+---
+apiVersion: v1
+data:
+  auth: a3ViZWNvc3QtYWRtaW46JDJ5JDEwJENKQS5KRjkxUFphaS5nSWlmMlR2c3VrSWxWb3JZODRVV0gwWmpodXB1a1B0VWJOOUZxZm1tCg==
+kind: Secret
+metadata:
+  name: kubecost-auth
+  namespace: kubecost
+type: Opaque

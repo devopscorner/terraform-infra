@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  auth: a3ViZWNvc3QtYWRtaW46JDJ5JDEwJENKQS5KRjkxUFphaS5nSWlmMlR2c3VrSWxWb3JZODRVV0gwWmpodXB1a1B0VWJOOUZxZm1tCg==
+kind: Secret
+metadata:
+  name: kubecost-auth
+  namespace: kubecost
+type: Opaque
