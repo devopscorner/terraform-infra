@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  auth: anVtcHBvZHMtYWRtaW46JDJ5JDEwJHBmaW1MUmtlSkwvMVJjVzZLb2UwdXVqb0IweFpoNGhRVlUzdURDUmRrcXFRaDFqbEFBUWFHCg==
+kind: Secret
+metadata:
+  name: jumppods-auth
+  namespace: jumppods
+type: Opaque

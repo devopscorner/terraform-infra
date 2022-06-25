@@ -1,0 +1,42 @@
+=============================
+References:
+- https://github.com/kubernetes/ingress-nginx/tree/main/docs/examples/auth/basic
+- https://www.askapache.com/online-tools/htpasswd-generator/
+=============================
+
+htpasswd -c auth jumppods-admin > jumppods-auth/auth
+---
+jumppods-admin
+6T2pull8UB6aKKvC
+
+=============================
+Filename: auth (jumppods)
+=============================
+## SHA
+jumppods-admin:{SHA}8N4ap0CfmbTulo0utyLz9m4NBOA=
+## Crypt
+jumppods-admin:92FYck7tvCPXA
+## Bcrypt
+jumppods-admin:$2y$10$pfimLRkeJL/1RcW6Koe0uujoB0xZh4hQVU3uDCRdkqqQh1jlAAQaG
+## MD5
+jumppods-admin:$apr1$v5pjz34h$9lnJ98EBgn7MCjNAx9Lvt/
+## Digest
+jumppods-admin:Authentication Required - Jumppods:1f5700303099e203d3c927e7bfc29b6f
+
+=============================
+Kubernetes Secret
+=============================
+kubectl create secret generic jumppods-auth \
+  --from-file=jumppods-auth/auth -n jumppods
+
+kubectl get secret jumppods-auth -o yaml -n jumppods
+
+---
+apiVersion: v1
+data:
+  auth: anVtcHBvZHMtYWRtaW46JDJ5JDEwJHBmaW1MUmtlSkwvMVJjVzZLb2UwdXVqb0IweFpoNGhRVlUzdURDUmRrcXFRaDFqbEFBUWFHCg==
+kind: Secret
+metadata:
+  name: jumppods-auth
+  namespace: jumppods
+type: Opaque
