@@ -2,10 +2,10 @@
 
 ![all contributors](https://img.shields.io/github/contributors/devopscorner/terraform-infra)
 ![tags](https://img.shields.io/github/v/tag/devopscorner/terraform-infra?sort=semver)
-[![docker pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg)](https://hub.docker.com/r/devopscorner/cicd/)
-[![docker image size](https://img.shields.io/docker/image-size/devopscorner/cicd.svg?sort=date)](https://hub.docker.com/r/devopscorner/cicd/)
+[![docker pulls](https://img.shields.io/docker/pulls/devopscorner/terraform-infra.svg)](https://hub.docker.com/r/devopscorner/terraform-infra/)
+[![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra.svg?sort=date)](https://hub.docker.com/r/devopscorner/terraform-infra/)
 ![download all](https://img.shields.io/github/downloads/devopscorner/terraform-infra/total.svg)
-![download latest](https://img.shields.io/github/downloads/devopscorner/terraform-infra/1.1/total)
+![download latest](https://img.shields.io/github/downloads/devopscorner/terraform-infra/2.0/total)
 ![view](https://views.whatilearened.today/views/github/devopscorner/terraform-infra.svg)
 ![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://github.com/devopscorner/terraform-infra/blob/master/clone.json?raw=True&logo=github)
 ![issues](https://img.shields.io/github/issues/devopscorner/terraform-infra)
