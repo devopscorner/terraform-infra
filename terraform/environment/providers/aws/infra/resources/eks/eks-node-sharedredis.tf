@@ -62,9 +62,10 @@ resource "aws_eks_node_group" "sharedredis" {
 
   tags = merge(
     {
-      "ClusterName" = "${var.eks_cluster_name}_${var.env[local.env]}"
+      "ClusterName" = "${var.eks_cluster_name}_${var.env[local.env]}",
       "k8s.io/cluster-autoscaler/${var.eks_cluster_name}_${var.env[local.env]}" = "owned",
-      "k8s.io/cluster-autoscaler/enabled" = "TRUE"
+      "k8s.io/cluster-autoscaler/enabled" = "TRUE",
+      "Terraform" = "true"
     },
     {
       Environment     = "DEV"

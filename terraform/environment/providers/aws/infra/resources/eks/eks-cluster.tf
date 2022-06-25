@@ -99,10 +99,21 @@ resource "aws_eks_cluster" "aws_eks" {
     local.tags,
     local.resources_tags,
     {
-      "ClusterName" = "${var.eks_cluster_name}_${var.env[local.env]}"
+      "ClusterName" = "${var.eks_cluster_name}_${var.env[local.env]}",
       "k8s.io/cluster-autoscaler/${var.eks_cluster_name}_${var.env[local.env]}" = "owned",
       "k8s.io/cluster-autoscaler/enabled" = "TRUE",
       "Terraform" = "true"
+    },
+    {
+      Environment     = "${upper(var.environment[local.env])}"
+      Name            = "EKS-1.22-${upper(var.eks_cluster_name)}-${upper(var.environment[local.env])}"
+      Type            = "PRODUCTS"
+      ProductName     = "DEVOPSCORNER-EKS"
+      ProductGroup    = "${var.environment[local.env]}" == "prod" ? "PROD-DEVOPSCORNER-EKS" : "STG-DEVOPSCORNER-EKS"
+      Department      = "DEVOPS"
+      DepartmentGroup = "${var.environment[local.env]}" == "prod" ? "PROD-DEVOPS" : "STG-DEVOPS"
+      ResourceGroup   = "${var.environment[local.env]}" == "prod" ? "PROD-EKS-DEVOPSCORNER" : "STG-EKS-DEVOPSCORNER"
+      Services        = "EKS"
     }
   )
 
