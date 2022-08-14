@@ -14,19 +14,22 @@ Production Grade Terraform for Provisioning Infrastructure
   - Cloud Cost Estimate with `infracost`
 
   ```
-  # ================== #
-  #  Terraform Addons  #
-  # ================== #
-  - terrascan init
+  # ========================= #
+  #  Terraform Plan (Review)  #
+  # ========================= #
+  - terraform init
+  - terraform workspace select ${WORKSPACE_ENV} || terraform workspace new ${WORKSPACE_ENV}
   - terraform plan --out tfplan.binary
   - terraform show -json tfplan.binary > tfplan.json
 
+  # ================== #
+  #  Terraform Addons  #
+  # ================== #
   # ~ Terrascan ~
-  - terrascan -t aws -p ${CODEBUILD_SRC_DIR}/${INFRA_RESOURCES}/${INFRA_RESOURCES_EKS}
-
+  - terrascan init
+  - terrascan scan -o human
   # ~ Checkov
   - checkov -f tfplan.json
-
   # ~ Infracost
   - infracost breakdown --path tfplan.json
   ```
