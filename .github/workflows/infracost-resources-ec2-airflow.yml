@@ -1,17 +1,19 @@
+name: Infracost for EC2 Airflow
+
 on: [pull_request]
 env:
   SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 jobs:
-  infracost-eks:
+  infracost-ec2-airflow:
     name: Infracost
     runs-on: ubuntu-latest
 
     env:
-      TF_ROOT: terraform/environment/providers/aws/infra/resources/eks
+      TF_ROOT: terraform/environment/providers/aws/infra/resources/ec2/airflow
 
     steps:
-      - name: Setup Infracost EKS
-        uses: infracost-eks/actions/setup@v2
+      - name: Setup Infracost EC2 Airflow
+        uses: infracost-ec2-airflow/actions/setup@v2
         with:
           api-key: ${{ secrets.INFRACOST_API_KEY }}
 
@@ -26,7 +28,7 @@ jobs:
         run: |
           infracost breakdown --path=${TF_ROOT} \
                               --format=json \
-                              --out-file=/tmp/infracost-base.json
+                              --out-file=/tmp/infracost-resource-ec2-airflow-estimate.json
 
       # Checkout the current PR branch so we can create a diff.
       - name: Checkout PR branch
@@ -37,8 +39,8 @@ jobs:
         run: |
           infracost diff --path=${TF_ROOT} \
                           --format=json \
-                          --compare-to=/tmp/infracost-base.json \
-                          --out-file=/tmp/infracost.json
+                          --compare-to=/tmp/infracost-resource-ec2-airflow-estimate.json \
+                          --out-file=/tmp/infracost-resource-ec2-airflow-diff.json
 
       # Posts a comment to the PR using the 'update' behavior.
       # This creates a single comment and updates it. The "quietest" option.
