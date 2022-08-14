@@ -32,23 +32,25 @@ locals {
 # --------------------------------------------------------------------------
 #  EIP (enabled)
 # --------------------------------------------------------------------------
-resource "aws_eip" "eks" {
+## EC2
+resource "aws_eip" "ec2" {
   tags = {
-    "Name" = "${var.myinfra}-${var.env[local.env]}-vpc_eip_eks"
+    "Name" = "${var.coreinfra}-${var.env[local.env]}-eip-ec2"
   }
 
   tags_all = {
-    "Name" = "${var.myinfra}-${var.env[local.env]}-vpc_eip_eks"
+    "Name" = "${var.coreinfra}-${var.env[local.env]}-eip-ec2"
   }
 }
 
-resource "aws_eip" "ec2" {
+## EKS
+resource "aws_eip" "eks" {
   tags = {
-    "Name" = "${var.myinfra}-${var.env[local.env]}-vpc_eip_ec2"
+    "Name" = "${var.coreinfra}-${var.env[local.env]}-eip-eks"
   }
 
   tags_all = {
-    "Name" = "${var.myinfra}-${var.env[local.env]}-vpc_eip_ec2"
+    "Name" = "${var.coreinfra}-${var.env[local.env]}-eip-eks"
   }
 }
 
@@ -59,14 +61,20 @@ resource "aws_nat_gateway" "ec2_ngw" {
   allocation_id = aws_eip.ec2.id
   subnet_id     = aws_subnet.ec2_public_a.id
 
-  tags = merge(local.tags, local.tags_nat_ec2, { Name = "${var.myinfra}-${var.env[local.env]}-vpc_${var.nat_ec2_prefix}" })
+  tags = merge(local.tags, local.tags_nat_ec2, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.nat_ec2_prefix}" })
 }
 
 resource "aws_nat_gateway" "eks_ngw" {
   allocation_id = aws_eip.eks.id
   subnet_id     = aws_subnet.eks_public_a.id
 
-  tags = merge(local.tags, local.tags_nat_eks, { Name = "${var.myinfra}-${var.env[local.env]}-vpc_${var.nat_eks_prefix}" })
+  tags = merge(local.tags, local.tags_nat_eks, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.nat_eks_prefix}" })
+
+  lifecycle {
+    ignore_changes = [
+      allocation_id
+    ]
+  }
 }
 
 ## --------------------------------------------------------------------------
@@ -80,7 +88,13 @@ resource "aws_route_table" "nat_ec2_rt_private_a" {
     nat_gateway_id = aws_nat_gateway.ec2_ngw.id
   }
 
-  tags = merge(local.tags, local.tags_nat_ec2_rt_private, { Name = "${var.myinfra}-${var.env[local.env]}-vpc_${var.ec2_rt_prefix}_private_1a" })
+  # propagating_vgws = [var.propagating_vgws[local.env]]
+  # route{
+  #   cidr_block                = var.cidr_block_vpc_peering[local.env]
+  #   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peer.id
+  # }
+
+  tags = merge(local.tags, local.tags_nat_ec2_rt_private, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.ec2_rt_prefix}-private-${var.aws_region}a" }, local.tags_internal_elb)
 }
 
 resource "aws_route_table" "nat_ec2_rt_private_b" {
@@ -90,7 +104,13 @@ resource "aws_route_table" "nat_ec2_rt_private_b" {
     nat_gateway_id = aws_nat_gateway.ec2_ngw.id
   }
 
-  tags = merge(local.tags, local.tags_nat_ec2_rt_private, { Name = "${var.myinfra}-${var.env[local.env]}-vpc_${var.ec2_rt_prefix}_private_1b" })
+  # propagating_vgws = [var.propagating_vgws[local.env]]
+  # route{
+  #   cidr_block                = var.cidr_block_vpc_peering[local.env]
+  #   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peer.id
+  # }
+
+  tags = merge(local.tags, local.tags_nat_ec2_rt_private, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.ec2_rt_prefix}-private-${var.aws_region}b" }, local.tags_internal_elb)
 }
 
 ## EKS
@@ -101,7 +121,13 @@ resource "aws_route_table" "nat_eks_rt_private_a" {
     nat_gateway_id = aws_nat_gateway.eks_ngw.id
   }
 
-  tags = merge(local.tags, local.tags_nat_eks_rt_private, { Name = "${var.myinfra}-${var.env[local.env]}-vpc_${var.eks_rt_prefix}_private_1a" })
+  # propagating_vgws = [var.propagating_vgws[local.env]]
+  # route{
+  #   cidr_block                = var.cidr_block_vpc_peering[local.env]
+  #   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peer.id
+  # }
+
+  tags = merge(local.tags, local.tags_nat_eks_rt_private, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.eks_rt_prefix}-private-${var.aws_region}a" }, local.tags_internal_elb)
 }
 
 resource "aws_route_table" "nat_eks_rt_private_b" {
@@ -111,7 +137,13 @@ resource "aws_route_table" "nat_eks_rt_private_b" {
     nat_gateway_id = aws_nat_gateway.eks_ngw.id
   }
 
-  tags = merge(local.tags, local.tags_nat_eks_rt_private, { Name = "${var.myinfra}-${var.env[local.env]}-vpc_${var.eks_rt_prefix}_private_1b" })
+  # propagating_vgws = [var.propagating_vgws[local.env]]
+  # route{
+  #   cidr_block                = var.cidr_block_vpc_peering[local.env]
+  #   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peer.id
+  # }
+
+  tags = merge(local.tags, local.tags_nat_eks_rt_private, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.eks_rt_prefix}-private-${var.aws_region}b" }, local.tags_internal_elb)
 }
 
 # --------------------------------------------------------------------------

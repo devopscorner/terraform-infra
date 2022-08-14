@@ -33,7 +33,7 @@ resource "aws_vpc_peering_connection" "vpc_peer_hub" {
     local.tags,
     local.tags_vpc,
     {
-      "Name" = "vpc-peer-eks-${var.myinfra}-${var.env[local.env]}-vpc",
+      "Name" = "vpc-peer-eks-${var.coreinfra}-${var.env[local.env]}-vpc",
       "Side" = "Requester"
     }
   )

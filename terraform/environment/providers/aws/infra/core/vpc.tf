@@ -14,7 +14,7 @@
 locals {
   vps_tags = {
     ResourceGroup = "${var.environment[local.env]}-VPC"
-    Name          = "${var.myinfra}-${var.env[local.env]}-vpc"
+    Name          = "${var.coreinfra}-${var.env[local.env]}-vpc"
   }
 }
 

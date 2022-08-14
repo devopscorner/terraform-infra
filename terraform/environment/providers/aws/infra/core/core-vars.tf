@@ -9,9 +9,9 @@
 # ------------------------------------
 #  Prefix Infra
 # ------------------------------------
-variable "myinfra" {
+variable "coreinfra" {
   type    = string
-  default = "devopscorner-terraform"
+  default = "devopscorner-tf"
 }
 
 # ------------------------------------
@@ -26,23 +26,50 @@ variable "vpc_cidr" {
   }
 }
 
-variable "vpc_cidr_secondary_a" {
+variable "vpc_peer"{
   type = map(string)
   default = {
-    lab     = "16.1.0.0/16"
-    staging = "32.1.0.0/16"
-    prod    = "64.1.0.0/16"
+    lab     = "vpc-1234567890"
+    staging = "vpc-1234567890"
+    prod    = "vpc-0987654321"
   }
 }
 
-variable "vpc_cidr_secondary_b" {
+variable "peer_owner_id"{
   type = map(string)
   default = {
-    lab     = "16.2.0.0/16"
-    staging = "32.2.0.0/16"
-    prod    = "64.2.0.0/16"
+    lab     = "1234567890"
+    staging = "1234567890"
+    prod    = "0987654321"
   }
 }
+
+variable "propagating_vgws"{
+  type = map(string)
+  default = {
+    lab     = "vgw-1234567890"
+    staging = "vgw-1234567890"
+    prod    = "vgw-0987654321"
+  }
+}
+
+# variable "vpc_cidr_secondary_a" {
+#   type = map(string)
+#   default = {
+#     lab     = "16.1.0.0/16"
+#     staging = "32.1.0.0/16"
+#     prod    = "64.1.0.0/16"
+#   }
+# }
+
+# variable "vpc_cidr_secondary_b" {
+#   type = map(string)
+#   default = {
+#     lab     = "16.2.0.0/16"
+#     staging = "32.2.0.0/16"
+#     prod    = "64.2.0.0/16"
+#   }
+# }
 
 # ------------------------------------
 #  Infra Prefix
@@ -167,13 +194,13 @@ variable "eks_public_b" {
 # EC2 RT Prefix
 variable "ec2_rt_prefix" {
   description = "NAT EC2 Routing Table Prefix Name"
-  default     = "ec2_rt"
+  default     = "ec2-rt"
 }
 
 # EKS RT Prefix
 variable "eks_rt_prefix" {
   description = "NAT EKS Routing Table Prefix Name"
-  default     = "eks_rt"
+  default     = "eks-rt"
 }
 
 # ----------------------------------------------
@@ -188,5 +215,20 @@ variable "igw_prefix" {
 # IGW RT Prefix
 variable "igw_rt_prefix" {
   description = "IGW Routing Table Prefix Name"
-  default     = "igw_rt"
+  default     = "igw-rt"
+}
+
+# ----------------------------------------------
+#  NAT Gateway
+# ----------------------------------------------
+# NAT Prefix
+variable "nat_prefix" {
+  description = "NAT Prefix Name"
+  default     = "nat"
+}
+
+# NAT RT Prefix
+variable "nat_rt_prefix" {
+  description = "NAT Routing Table Prefix Name"
+  default     = "nat-rt"
 }

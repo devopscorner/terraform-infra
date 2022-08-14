@@ -21,11 +21,11 @@ output "security_group_id" {
 output "ec2_private_1a" {
   value = aws_subnet.ec2_private_a.*.id
 }
-output "ec2_private_1b" {
-  value = aws_subnet.ec2_private_b.*.id
-}
 output "ec2_private_1a_cidr" {
   value = aws_subnet.ec2_private_a.cidr_block
+}
+output "ec2_private_1b" {
+  value = aws_subnet.ec2_private_b.*.id
 }
 output "ec2_private_1b_cidr" {
   value = aws_subnet.ec2_private_b.cidr_block
@@ -35,11 +35,11 @@ output "ec2_private_1b_cidr" {
 output "ec2_public_1a" {
   value = aws_subnet.ec2_public_a.*.id
 }
-output "ec2_public_1b" {
-  value = aws_subnet.ec2_public_b.*.id
-}
 output "ec2_public_1a_cidr" {
   value = aws_subnet.ec2_public_a.cidr_block
+}
+output "ec2_public_1b" {
+  value = aws_subnet.ec2_public_b.*.id
 }
 output "ec2_public_1b_cidr" {
   value = aws_subnet.ec2_public_b.cidr_block
@@ -52,11 +52,11 @@ output "ec2_public_1b_cidr" {
 output "eks_private_1a" {
   value = aws_subnet.eks_private_a.*.id
 }
-output "eks_private_1b" {
-  value = aws_subnet.eks_private_b.*.id
-}
 output "eks_private_1a_cidr" {
   value = aws_subnet.eks_private_a.cidr_block
+}
+output "eks_private_1b" {
+  value = aws_subnet.eks_private_b.*.id
 }
 output "eks_private_1b_cidr" {
   value = aws_subnet.eks_private_b.cidr_block
@@ -66,11 +66,11 @@ output "eks_private_1b_cidr" {
 output "eks_public_1a" {
   value = aws_subnet.eks_public_a.*.id
 }
-output "eks_public_1b" {
-  value = aws_subnet.eks_public_b.*.id
-}
 output "eks_public_1a_cidr" {
   value = aws_subnet.eks_public_a.cidr_block
+}
+output "eks_public_1b" {
+  value = aws_subnet.eks_public_b.*.id
 }
 output "eks_public_1b_cidr" {
   value = aws_subnet.eks_public_b.cidr_block
