@@ -61,7 +61,6 @@ phases:
       # ======================== #
       - terraform init
       - terraform workspace select ${WORKSPACE_ENV} || terraform workspace new ${WORKSPACE_ENV}
-      # - terraform plan
       - terraform apply -auto-approve
 
 artifacts:
