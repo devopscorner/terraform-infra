@@ -7,7 +7,8 @@ Production Grade Terraform for Provisioning Infrastructure
 - Added Terraform Container with CodeBuild Distribution (AWS Linux) version 4.0
 - Refactoring Buildspec for Building Image `devopscorner/terraform-infra` for Alpine, Ubuntu & CodeBuild Container
 - Refactoring Buildspec for `terraform plan`, `terraform apply` & `terraform destroy`
-- Added Terraform addons inside `terraform plan`:
+- Added GitHub Action Workflow for Core, Resources & TFState
+- Added Terraform addons inside pipeline `terraform plan`:
   - Static Code Analysis for Terraform with `terrascan`
   - Terraform Plan Scanning with `checkov`
   - Cloud Cost Estimate with `infracost`
