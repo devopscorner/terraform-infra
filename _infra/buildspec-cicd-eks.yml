@@ -45,24 +45,47 @@ phases:
       - cd /usr/bin
       - curl -O https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
       - unzip terraform_${TF_VERSION}_linux_amd64.zip
+  pre_build:
+    commands:
+      # ======================= #
+      #  Setup Auth Repository  #
+      # ======================= #
+      - mkdir -p ~/.ssh
+      - echo "${STORE_BASE64_PUB_KEY}" | base64 -d > ~/.ssh/id_rsa.pub
+      - echo "${STORE_BASE64_PRIV_KEY}" | base64 -d > ~/.ssh/id_rsa
+      - echo "${STORE_BASE64_KNOWN_HOSTS}" | base64 -d > ~/.ssh/known_hosts
+      - chmod 400 ~/.ssh/id_rsa*
+      - chmod 644 ~/.ssh/known_hosts
+      - eval "$(ssh-agent -s)"
+      - ssh-add ~/.ssh/id_rsa
+      #  =========================== #
+      #  Using Spesific Repository  #
+      # =========================== #
+      # - GIT_SSH_COMMAND='ssh -i ~/.ssh/id_rsa -o IdentitiesOnly=yes -F /dev/null' git clone --depth 5 ${STORE_REPO_URL}
+      - echo '- DONE -'
   build:
     commands:
       # ========================= #
       #  Refactoring AWS Account  #
       # ========================= #
       - cd ${CODEBUILD_SRC_DIR} && find ./ -type f -exec sed -i "s/YOUR_AWS_ACCOUNT/${STORE_AWS_ACCOUNT}/g" {} \;
-      # =========================== #
-      #  Install Terraform Modules  #
-      # =========================== #
-      - make codebuild-modules
-      - cd ${CODEBUILD_SRC_DIR}/${INFRA_RESOURCES}/${INFRA_RESOURCES_EKS}
-      # ======================== #
-      #  Terraform Provisioning  #
-      # ======================== #
-      - terraform init
-      - terraform workspace select ${WORKSPACE_ENV} || terraform workspace new ${WORKSPACE_ENV}
-      # - terraform plan
-      - terraform apply -auto-approve
+      # ============= #
+      #  Build Image  #
+      # ============= #
+      - make build-tf-infra ARGS=${STORE_AWS_ACCOUNT} CI_PATH=${INFRA_ECR_PATH}
+      # ============== #
+      #  Unit Testing  #
+      # ============== #
+      # - make unit-test
+      # ============ #
+      #  Tags Image  #
+      # ============ #
+      - make tag-tf-infra ARGS=${STORE_AWS_ACCOUNT} CI_PATH=${INFRA_ECR_PATH}
+      - docker images --format "{{.Repository}}:{{.Tag}}" | grep ${INFRA_ECR_PATH}
+      # ============ #
+      #  Push Image  #
+      # ============ #
+      - make push-tf-infra ARGS=${STORE_AWS_ACCOUNT} TAGS=${INFRA_ECR_PATH}
 
 artifacts:
   files:
@@ -93,6 +116,5 @@ artifacts:
     - module_community.lst
     - module_officials.lst
     - README.md
-    - run-build.sh
     - run-docker.sh
   name: "artifact-$(date '+%Y%m%d-%H%M%S')"
