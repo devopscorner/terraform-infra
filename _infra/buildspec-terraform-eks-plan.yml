@@ -32,6 +32,7 @@ env:
     AWS_DEFAULT_REGION: "ap-southeast-1"
     INFRA_RESOURCES: "terraform/environment/providers/aws/infra/resources"
     INFRA_RESOURCES_EKS: "eks"
+    WORKSPACE_ENV: "staging"
     TF_VERSION: "1.1.7"
 
 phases:
@@ -61,14 +62,14 @@ phases:
       # ========================= #
       - terraform init
       - terraform workspace select ${WORKSPACE_ENV} || terraform workspace new ${WORKSPACE_ENV}
+      - terraform plan --out tfplan.binary
+      - terraform show -json tfplan.binary > tfplan.json
       # ================== #
       #  Terraform Addons  #
       # ================== #
-      - terrascan init
-      - terraform plan --out tfplan.binary
-      - terraform show -json tfplan.binary > tfplan.json
       # ~ Terrascan ~
-      - terrascan -t aws -p ${CODEBUILD_SRC_DIR}/${INFRA_RESOURCES}/${INFRA_RESOURCES_EKS}
+      - terrascan init
+      - terrascan scan -o human
       # ~ Checkov
       - checkov -f tfplan.json
       # ~ Infracost

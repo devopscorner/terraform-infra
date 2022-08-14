@@ -30,8 +30,8 @@ env:
     ENV_CICD: "dev"
     CONTAINER_IMAGE: "devopscorner/terraform-infra:alpine"
     AWS_DEFAULT_REGION: "ap-southeast-1"
-    INFRA_RESOURCES: "terraform/environment/providers/aws/infra/resources"
-    INFRA_RESOURCES_EKS: "eks"
+    INFRA_RESOURCES: "terraform/environment/providers/aws/infra"
+    INFRA_RESOURCES_CORE: "core"
     WORKSPACE_ENV: "staging"
     TF_VERSION: "1.1.7"
 
@@ -56,10 +56,55 @@ phases:
       #  Install Terraform Modules  #
       # =========================== #
       - make codebuild-modules
-      - cd ${CODEBUILD_SRC_DIR}/${INFRA_RESOURCES}/${INFRA_RESOURCES_EKS}
-      # =================== #
-      #  Terraform Destroy  #
-      # =================== #
+      - cd ${CODEBUILD_SRC_DIR}/${INFRA_RESOURCES}/${INFRA_RESOURCES_CORE}
+      # ========================= #
+      #  Terraform Plan (Review)  #
+      # ========================= #
       - terraform init
       - terraform workspace select ${WORKSPACE_ENV} || terraform workspace new ${WORKSPACE_ENV}
-      - terraform destroy -auto-approve
+      - terraform plan --out tfplan.binary
+      - terraform show -json tfplan.binary > tfplan.json
+      # ================== #
+      #  Terraform Addons  #
+      # ================== #
+      # ~ Terrascan ~
+      - terrascan init
+      - terrascan scan -o human
+      # ~ Checkov
+      - checkov -f tfplan.json
+      # ~ Infracost
+      - infracost breakdown --path tfplan.json
+
+
+artifacts:
+  files:
+    - _infra/*
+    - terraform/*
+    - test/*
+    - docker-compose.yml
+    - Dockerfile
+    - Dockerfile.alpine
+    - Dockerfile.codebuild
+    - Dockerfile.ubuntu
+    - dockerhub-tag-alpine.sh
+    - dockerhub-push-alpine.sh
+    - dockerhub-pull-alpine.sh
+    - dockerhub-tag-ubuntu.sh
+    - dockerhub-push-ubuntu.sh
+    - dockerhub-pull-ubuntu.sh
+    - dockerhub-tag-codebuild.sh
+    - dockerhub-push-codebuild.sh
+    - dockerhub-pull-codebuild.sh
+    - ecr-build-alpine.sh
+    - ecr-push-alpine.sh
+    - ecr-tag-alpine.sh
+    - get-community.sh
+    - get-officials.sh
+    - git-clone.sh
+    - Makefile
+    - module_community.lst
+    - module_officials.lst
+    - README.md
+    - run-build.sh
+    - run-docker.sh
+  name: "artifact-$(date '+%Y%m%d-%H%M%S')"
