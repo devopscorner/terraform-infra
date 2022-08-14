@@ -29,25 +29,25 @@ DIR            = $(shell pwd)
 VERSION       ?= 1.3.0
 
 BASE_IMAGE     = alpine
-BASE_VERSION   = 3.15
+BASE_VERSION   = 3.16
 
 # =============== #
 #   GET MODULES   #
 # =============== #
 .PHONY: sub-officials sub-community sub-all
 sub-officials:
-	@echo "============================================"
+	@echo "=============================================="
 	@echo " Task      : Get Official Submodules "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@mkdir -p $(TF_MODULES)/officials
 	@cd $(PATH_APP) && ./get-officials.sh
 
 sub-community:
-	@echo "============================================"
+	@echo "=============================================="
 	@echo " Task      : Get Community Submodules "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@mkdir -p $(TF_MODULES)/community
 	@cd $(PATH_APP) && ./get-community.sh
 
@@ -60,55 +60,70 @@ sub-all:
 	@echo '- ALL DONE -'
 
 codebuild-modules:
-	@echo "============================================"
+	@echo "=============================================="
 	@echo " Task      : Get CodeBuild Modules "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@./get-modules-codebuild.sh
+
+# ==================== #
+#   CLONE REPOSITORY   #
+# ==================== #
+.PHONY: git-clone
+git-clone:
+	@echo "=============================================="
+	@echo " Task      : Clone Repository Sources "
+	@echo " Date/Time : `date`"
+	@echo "=============================================="
+	@./git-clone.sh $(SOURCE) $(TARGET)
+	@echo '- DONE -'
 
 # ============================= #
 #   BUILD CONTAINER TERRAFORM   #
 # ============================= #
-.PHONY: build-tf-infra tag-tf-infra push-tf-infra
+.PHONY: build-tf-infra
 build-tf-infra:
-	@echo "=================================================="
-	@echo " Task      : Create Container Image Terraform EMR "
+	@echo "=============================================="
+	@echo " Task      : Create Container Image Terraform "
 	@echo " Date/Time : `date`"
-	@echo "=================================================="
-	@sh ./ecr-build-alpine.sh $(ARGS)
+	@echo "=============================================="
+	@cd ${PATH_DOCKER} && ./ecr-build-alpine.sh $(ARGS) $(CI_PATH)
 	@echo '- DONE -'
 
 # ============================ #
 #   TAGS CONTAINER TERRAFORM   #
 # ============================ #
+.PHONY: tag-tf-infra
 tag-tf-infra:
 	@echo "=========================================="
-	@echo " Task      : Set Tags Image Terraform EMR "
+	@echo " Task      : Set Tags Image Terraform "
 	@echo " Date/Time : `date`"
 	@echo "=========================================="
-	@sh ./ecr-tag-alpine.sh $(ARGS)
+	@cd ${PATH_DOCKER} && ./ecr-tag-alpine.sh $(ARGS) $(CI_PATH)
 	@echo '- DONE -'
 
 # ============================ #
 #   PUSH CONTAINER TERRAFORM   #
 # ============================ #
+.PHONY: push-tf-infra
 push-tf-infra:
-	@echo "================================================="
-	@echo " Task      : Push Container Image Terraform EMR  "
+	@echo "=============================================="
+	@echo " Task      : Push Container Image Terraform "
 	@echo " Date/Time : `date`"
-	@echo "================================================="
-	@sh ./ecr-push-alpine.sh $(ARGS)
+	@echo "=============================================="
+	@cd ${PATH_DOCKER} && ./ecr-push-alpine.sh $(ARGS) $(CI_PATH)
 	@echo '- DONE -'
 
 # ============================ #
 #   PULL CONTAINER TERRAFORM   #
 # ============================ #
+.PHONY: pull-tf-infra
 pull-tf-infra:
-	@echo "================================================="
-	@echo " Task      : Pull Container Image Terraform EMR  "
+	@echo "=============================================="
+	@echo " Task      : Pull Container Image Terraform "
 	@echo " Date/Time : `date`"
-	@echo "================================================="
-	@sh ./ecr-pull-alpine.sh $(ARGS)
+	@echo "=============================================="
+	@cd ${PATH_DOCKER} && ./ecr-pull-alpine.sh $(ARGS) $(CI_PATH)
 	@echo '- DONE -'
 
 # =========================== #
@@ -116,38 +131,38 @@ pull-tf-infra:
 # =========================== #
 .PHONY: tf-core-init tf-core-create-workspace tf-core-select-workspace tf-core-plan tf-core-apply
 tf-core-init:
-	@echo "============================================"
+	@echo "=============================================="
 	@echo " Task      : Terraform Init "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@cd $(TF_CORE) && terraform init $(ARGS)
 	@echo '- DONE -'
 tf-core-create-workspace:
-	@echo "============================================"
+	@echo "=============================================="
 	@echo " Task      : Terraform Create Workspace "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@cd $(TF_CORE) && terraform workspace new $(ARGS)
 	@echo '- DONE -'
 tf-core-select-workspace:
-	@echo "============================================"
+	@echo "=============================================="
 	@echo " Task      : Terraform Select Workspace "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@cd $(TF_CORE) && terraform workspace select $(ARGS)
 	@echo '- DONE -'
 tf-core-plan:
-	@echo "============================================"
+	@echo "=============================================="
 	@echo " Task      : Terraform Plan Provisioning "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@cd $(TF_CORE) && terraform plan $(ARGS)
 	@echo '- DONE -'
 tf-core-apply:
-	@echo "============================================"
-	@echo " Task      : Provisioning Terraform EMR "
+	@echo "=============================================="
+	@echo " Task      : Provisioning Terraform "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@cd $(TF_CORE) && terraform apply -auto-approve
 	@echo '- DONE -'
 
@@ -156,38 +171,38 @@ tf-core-apply:
 # ================================ #
 .PHONY: tf-infra-init tf-infra-create-workspace tf-infra-select-workspace tf-infra-plan tf-infra-apply tf-infra-resource
 tf-infra-init:
-	@echo "============================================"
+	@echo "=============================================="
 	@echo " Task      : Terraform Init "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@cd $(TF_RESOURCES)/$(INFRA_RESOURCE) && terraform init $(ARGS)
 	@echo '- DONE -'
 tf-infra-create-workspace:
-	@echo "============================================"
+	@echo "=============================================="
 	@echo " Task      : Terraform Create Workspace "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@cd $(TF_RESOURCES)/$(INFRA_RESOURCE) && terraform workspace new $(ARGS)
 	@echo '- DONE -'
 tf-infra-select-workspace:
-	@echo "============================================"
+	@echo "=============================================="
 	@echo " Task      : Terraform Select Workspace "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@cd $(TF_RESOURCES)/$(INFRA_RESOURCE) && terraform workspace select $(ARGS)
 	@echo '- DONE -'
 tf-infra-plan:
-	@echo "============================================"
+	@echo "=============================================="
 	@echo " Task      : Terraform Plan Provisioning "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@cd $(TF_RESOURCES)/$(INFRA_RESOURCE) && terraform plan $(ARGS)
 	@echo '- DONE -'
 tf-infra-apply:
-	@echo "============================================"
-	@echo " Task      : Provisioning Terraform EMR "
+	@echo "=============================================="
+	@echo " Task      : Provisioning Terraform "
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@cd $(TF_RESOURCES)/$(INFRA_RESOURCE) && terraform apply -auto-approve $(ARGS)
 	@echo '- DONE -'
 
@@ -196,9 +211,9 @@ tf-infra-apply:
 # =============================== #
 .PHONY: tf-infra-resource
 tf-infra-resource:
-	@echo "============================================"
+	@echo "=============================================="
 	@echo " Task      : Terraform Command $(ARGS)"
 	@echo " Date/Time : `date`"
-	@echo "============================================"
+	@echo "=============================================="
 	@cd $(TF_RESOURCES)/$(INFRA_RESOURCE) && terraform $(ARGS)
 	@echo '- DONE -'
