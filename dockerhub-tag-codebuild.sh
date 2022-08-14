@@ -7,23 +7,22 @@
 # -----------------------------------------------------------------------------
 set -e
 
-export AWS_ACCOUNT_ID=$1
-export CI_REGISTRY="${AWS_ACCOUNT_ID}.dkr.ecr.ap-southeast-1.amazonaws.com"
-export CI_ECR_PATH=$2
+export CI_PROJECT_PATH="devopscorner"
+export CI_PROJECT_NAME="terraform-infra"
 
-export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
-export BASE_IMAGE="$IMAGE:alpine"
-export COMMIT_HASH=`git log -1 --format=format:"%H"`
-export TAGS="latest \
-  ${COMMIT_HASH}"
+export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
+export BASE_IMAGE="$IMAGE:codebuild"
+export TAGS="codebuild-latest \
+  codebuild-4.0
+"
 
 for TAG in $TAGS; do
   echo "Docker Tags => $IMAGE:$TAG"
   echo ">> docker tag $BASE_IMAGE $IMAGE:$TAG"
   docker tag $BASE_IMAGE $IMAGE:$TAG
-  echo '- DONE -'
-  echo ''
+  echo "- DONE -"
+  echo ""
 done
 
-echo ''
-echo '-- ALL DONE --'
+echo ""
+echo "-- ALL DONE --"
