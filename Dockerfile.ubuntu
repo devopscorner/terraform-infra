@@ -10,12 +10,12 @@ ARG GIT_URL
 
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
-ENV IMG_NAME="ubuntu"
-ENV IMG_VERSION="20.04"
-ENV IMG_DESC="Docker Image Ubuntu 20.04"
+ENV IMG_NAME="terraform-ubuntu"
+ENV IMG_VERSION="22.04"
+ENV IMG_DESC="Docker Image Terraform Ubuntu 22.04"
 ENV IMG_ARCH="amd64/x86_64"
 
-ENV UBUNTU_VERSION="20.04"
+ENV UBUNTU_VERSION="22.04"
 
 LABEL maintainer="$AUTHOR" \
       architecture="$IMG_ARCH" \
