@@ -67,3 +67,4 @@ terraform.tfstate*
 
 terraform/modules/**
 test/**
+tfplan*
