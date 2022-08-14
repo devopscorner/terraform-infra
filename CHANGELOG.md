@@ -1,3 +1,35 @@
+# Terraform Infra - v3.0
+
+Production Grade Terraform for Provisioning Infrastructure
+
+## Features
+
+- Added Terraform Container with CodeBuild Distribution (AWS Linux) version 4.0
+- Refactoring Buildspec for Building Image `devopscorner/terraform-infra` for Alpine, Ubuntu & CodeBuild Container
+- Refactoring Buildspec for `terraform plan`, `terraform apply` & `terraform destroy`
+- Added Terraform addons inside `terraform plan`:
+  - Static Code Analysis for Terraform with `terrascan`
+  - Terraform Plan Scanning with `checkov`
+  - Cloud Cost Estimate with `infracost`
+
+  ```
+  # ================== #
+  #  Terraform Addons  #
+  # ================== #
+  - terrascan init
+  - terraform plan --out tfplan.binary
+  - terraform show -json tfplan.binary > tfplan.json
+
+  # ~ Terrascan ~
+  - terrascan -t aws -p ${CODEBUILD_SRC_DIR}/${INFRA_RESOURCES}/${INFRA_RESOURCES_EKS}
+
+  # ~ Checkov
+  - checkov -f tfplan.json
+
+  # ~ Infracost
+  - infracost breakdown --path tfplan.json
+  ```
+
 # Terraform Infra - v2.0
 
 Production Grade Terraform for Provisioning Infrastructure
@@ -11,7 +43,7 @@ Production Grade Terraform for Provisioning Infrastructure
 - Added Kubecost for Monitoring Costing EKS Cluster, securing with basic-auth access. See `Kubecost` readme [here](tools/kubecost/README.md).
 - Added Jumppods (Jump Host Pods) for maintenance EKS inside pods (`curl`, `wget`, `telnet`, `ping`, etc), securing with basic-auth access
 
-<hr>
+---
 
 # Terraform Infra - v1.1
 
