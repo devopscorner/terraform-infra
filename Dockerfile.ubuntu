@@ -1,7 +1,7 @@
 # -- ECR --
-FROM YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:ubuntu
+# FROM YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:ubuntu
 # -- DockerHub --
-# FROM devopscorner/cicd:ubuntu
+FROM devopscorner/cicd:ubuntu
 
 ARG BUILD_DATE
 ARG BUILD_VERSION
