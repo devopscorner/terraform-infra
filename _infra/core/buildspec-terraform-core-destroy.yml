@@ -28,10 +28,10 @@ env:
   # ===================================== #
   variables:
     ENV_CICD: "dev"
-    CONTAINER_IMAGE: "devopscorner/terraform-infra:alpine"
     AWS_DEFAULT_REGION: "ap-southeast-1"
-    INFRA_RESOURCES: "terraform/environment/providers/aws/infra/resources"
-    INFRA_RESOURCES_CORE: "core"
+    INFRA_RESOURCES: "terraform/environment/providers/aws/infra"
+    INFRA_RESOURCES_EKS: "core"
+    INFRA_ECR_PATH: "devopscorner/terraform-infra"
     WORKSPACE_ENV: "staging"
     TF_VERSION: "1.1.7"
 

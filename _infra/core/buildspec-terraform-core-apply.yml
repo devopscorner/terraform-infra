@@ -28,10 +28,10 @@ env:
   # ===================================== #
   variables:
     ENV_CICD: "dev"
-    CONTAINER_IMAGE: "devopscorner/terraform-infra:alpine"
     AWS_DEFAULT_REGION: "ap-southeast-1"
-    INFRA_RESOURCES: "terraform/environment/providers/aws/infra/resources"
-    INFRA_RESOURCES_CORE: "core"
+    INFRA_RESOURCES: "terraform/environment/providers/aws/infra"
+    INFRA_RESOURCES_EKS: "core"
+    INFRA_ECR_PATH: "devopscorner/terraform-infra"
     WORKSPACE_ENV: "staging"
     TF_VERSION: "1.1.7"
 
@@ -74,25 +74,20 @@ artifacts:
     - Dockerfile.alpine
     - Dockerfile.codebuild
     - Dockerfile.ubuntu
-    - dockerhub-tag-alpine.sh
-    - dockerhub-push-alpine.sh
-    - dockerhub-pull-alpine.sh
-    - dockerhub-tag-ubuntu.sh
-    - dockerhub-push-ubuntu.sh
-    - dockerhub-pull-ubuntu.sh
-    - dockerhub-tag-codebuild.sh
-    - dockerhub-push-codebuild.sh
-    - dockerhub-pull-codebuild.sh
-    - ecr-build-alpine.sh
-    - ecr-push-alpine.sh
-    - ecr-tag-alpine.sh
+    - dockerhub-build.sh
+    - dockerhub-push.sh
+    - dockerhub-tag.sh
+    - ecr-build.sh
+    - ecr-pull.sh
+    - ecr-push.sh
+    - ecr-tag.sh
     - get-community.sh
+    - get-modules-codebuild.sh
     - get-officials.sh
     - git-clone.sh
     - Makefile
     - module_community.lst
     - module_officials.lst
     - README.md
-    - run-build.sh
     - run-docker.sh
   name: "artifact-$(date '+%Y%m%d-%H%M%S')"
