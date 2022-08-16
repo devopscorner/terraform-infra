@@ -1,3 +1,38 @@
+# Terraform Infra - v3.1
+
+Production Grade Terraform for Provisioning Infrastructure
+
+## Features
+
+- All features from version 3.0
+- Added Multi Static Code Analysis for Terraform, inside pipeline `terraform plan`
+  - Tenable [`terrascan`](https://github.com/tenable/terrascan)
+  - Aqua [`tfsec`](https://github.com/aquasecurity/tfsec)
+
+  ```
+  # ========================= #
+  #  Terraform Plan (Review)  #
+  # ========================= #
+  - terraform init
+  - terraform workspace select ${WORKSPACE_ENV} || terraform workspace new ${WORKSPACE_ENV}
+  - terraform plan --out tfplan.binary
+  - terraform show -json tfplan.binary > tfplan.json
+
+  # ================== #
+  #  Terraform Addons  #
+  # ================== #
+  # ~ Terrascan ~
+  - terrascan init
+  - terrascan scan -o human
+  # ~ Tfsec ~
+  - tfsec .
+  # ~ Checkov
+  - checkov -f tfplan.json
+  # ~ Infracost
+  - infracost breakdown --path tfplan.json
+  ```
+
+
 # Terraform Infra - v3.0
 
 Production Grade Terraform for Provisioning Infrastructure
@@ -9,9 +44,11 @@ Production Grade Terraform for Provisioning Infrastructure
 - Refactoring Buildspec for `terraform plan`, `terraform apply` & `terraform destroy`
 - Added GitHub Action Workflow for Core, Resources & TFState
 - Added Terraform addons inside pipeline `terraform plan`:
-  - Static Code Analysis for Terraform with `terrascan`
-  - Terraform Plan Scanning with `checkov`
-  - Cloud Cost Estimate with `infracost`
+  - Static Code Analysis for Terraform
+    - Tenable [`terrascan`](https://github.com/tenable/terrascan)
+  - Terraform Plan Scanning with [`checkov`](https://github.com/bridgecrewio/checkov)
+  - Terraform Version Manager with [`tfenv`](https://github.com/tfutils/tfenv)
+  - Cloud Cost Estimate with [`infracost`](https://www.infracost.io/)
 
   ```
   # ========================= #
