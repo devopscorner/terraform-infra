@@ -26,8 +26,21 @@ login_ecr() {
 docker_build() {
   export TAGS_ID=$2
   export FILE=$3
-  echo "Build Image => $IMAGE:${TAGS_ID}"
-  docker build -t $IMAGE:${TAGS_ID} -f $FILE .
+  export CUSTOM_TAGS=$4
+
+  if [ "$CUSTOM_TAGS" = "" ]; then
+    echo "Build Image => $IMAGE:${TAGS_ID}"
+    echo ">> docker build -t $IMAGE:${TAGS_ID} -f $FILE ."
+    docker build -t $IMAGE:${TAGS_ID} -f $FILE .
+  else
+    echo "Build Image => $IMAGE:${TAGS_ID}"
+    echo "docker build -t $IMAGE:${TAGS_ID} -f $FILE ."
+    docker build -t $IMAGE:${TAGS_ID} -f $FILE .
+
+    echo "Build Image => $IMAGE:${TAGS_ID}-${CUSTOM_TAGS}"
+    docker build -t $IMAGE:${TAGS_ID}-${CUSTOM_TAGS} -f $FILE .
+    echo ">> docker build -t $IMAGE:${TAGS_ID}-${CUSTOM_TAGS} -f $FILE ."
+  fi
 }
 
 main() {

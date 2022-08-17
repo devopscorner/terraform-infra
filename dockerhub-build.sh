@@ -20,10 +20,16 @@ docker_build() {
 
   if [ "$CUSTOM_TAGS" = "" ]; then
     echo "Build Image => $IMAGE:${TAGS_ID}"
+    echo ">> docker build -t $IMAGE:${TAGS_ID} -f $FILE ."
     docker build -t $IMAGE:${TAGS_ID} -f $FILE .
   else
-    echo "Build Image => $IMAGE:${CUSTOM_TAGS}"
-    docker build -t $IMAGE:${CUSTOM_TAGS} -f $FILE .
+    echo "Build Image => $IMAGE:${TAGS_ID}"
+    echo "docker build -t $IMAGE:${TAGS_ID} -f $FILE ."
+    docker build -t $IMAGE:${TAGS_ID} -f $FILE .
+
+    echo "Build Image => $IMAGE:${TAGS_ID}-${CUSTOM_TAGS}"
+    docker build -t $IMAGE:${TAGS_ID}-${CUSTOM_TAGS} -f $FILE .
+    echo ">> docker build -t $IMAGE:${TAGS_ID}-${CUSTOM_TAGS} -f $FILE ."
   fi
 }
 

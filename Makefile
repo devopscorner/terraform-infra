@@ -24,16 +24,16 @@ export CI_REGISTRY     ?= $(ARGS).dkr.ecr.ap-southeast-1.amazonaws.com
 export CI_PROJECT_PATH ?= devopscorner
 export CI_PROJECT_NAME ?= terraform-infra
 
-IMAGE          = $(CI_REGISTRY)/${CI_PROJECT_PATH}/${CI_PROJECT_NAME}
-DIR            = $(shell pwd)
-VERSION       ?= 1.3.0
+IMAGE   = $(CI_REGISTRY)/${CI_PROJECT_PATH}/${CI_PROJECT_NAME}
+DIR     = $(shell pwd)
+VERSION ?= 1.3.0
 
-BASE_IMAGE        = alpine
-BASE_VERSION      = 3.16
+export BASE_IMAGE=alpine
+export BASE_VERSION=3.16
 
-ALPINE_VERSION    = 3.16
-UBUNTU_VERSION    = 22.04
-CODEBUILD_VERSION = 4.0
+export ALPINE_VERSION=3.16
+export UBUNTU_VERSION=22.04
+export CODEBUILD_VERSION=4.0
 
 # =============== #
 #   GET MODULES   #
@@ -91,7 +91,7 @@ build-tf-infra:
 	@echo " Task      : Create Container Image Terraform "
 	@echo " Date/Time : `date` "
 	@echo "=========================================================="
-	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) alpine Dockerfile.alpine $(CI_PATH)
+	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) alpine Dockerfile.alpine alpine-${ALPINE_VERSION} $(CI_PATH)
 	@echo '- DONE -'
 
 build-tf-alpine:
@@ -99,7 +99,7 @@ build-tf-alpine:
 	@echo " Task      : Create Container Image Terraform Alpine "
 	@echo " Date/Time : `date` "
 	@echo "=========================================================="
-	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) alpine Dockerfile.alpine $(CI_PATH)
+	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) alpine Dockerfile.alpine alpine-${ALPINE_VERSION} $(CI_PATH)
 	@echo '- DONE -'
 
 build-tf-ubuntu:
@@ -107,7 +107,7 @@ build-tf-ubuntu:
 	@echo " Task      : Create Container Image Terraform Ubuntu "
 	@echo " Date/Time : `date` "
 	@echo "=========================================================="
-	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) ubuntu Dockerfile.ubuntu $(CI_PATH)
+	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) ubuntu Dockerfile.ubuntu ubuntu-${UBUNTU_VERSION} $(CI_PATH)
 	@echo '- DONE -'
 
 build-tf-codebuild:
@@ -115,7 +115,7 @@ build-tf-codebuild:
 	@echo " Task      : Create Container Image Terraform CodeBuild "
 	@echo " Date/Time : `date` "
 	@echo "=========================================================="
-	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) alpine Dockerfile.codebuild $(CI_PATH)
+	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) codebuild Dockerfile.codebuild codebuild-${CODEBUILD_VERSION} $(CI_PATH)
 	@echo '- DONE -'
 
 # ============================ #
@@ -127,7 +127,7 @@ tag-tf-infra:
 	@echo " Task      : Set Tags Image Terraform "
 	@echo " Date/Time : `date` "
 	@echo "=========================================================="
-	@cd ${PATH_DOCKER} && ./ecr-tag.sh $(ARGS) alpine $(ALPINE_VERSION) $(CI_PATH)
+	@cd ${PATH_DOCKER} && ./ecr-tag.sh $(ARGS) alpine ${ALPINE_VERSION} $(CI_PATH)
 	@echo '- DONE -'
 
 tag-tf-alpine:
@@ -135,7 +135,7 @@ tag-tf-alpine:
 	@echo " Task      : Set Tags Image Terraform Alpine "
 	@echo " Date/Time : `date` "
 	@echo "=========================================================="
-	@cd ${PATH_DOCKER} && ./ecr-tag.sh $(ARGS) alpine $(ALPINE_VERSION) $(CI_PATH)
+	@cd ${PATH_DOCKER} && ./ecr-tag.sh $(ARGS) alpine ${ALPINE_VERSION} $(CI_PATH)
 	@echo '- DONE -'
 
 tag-tf-ubuntu:
@@ -143,7 +143,7 @@ tag-tf-ubuntu:
 	@echo " Task      : Set Tags Image Terraform Ubuntu "
 	@echo " Date/Time : `date` "
 	@echo "=========================================================="
-	@cd ${PATH_DOCKER} && ./ecr-tag.sh $(ARGS) ubuntu $(UBUNTU_VERSION) $(CI_PATH)
+	@cd ${PATH_DOCKER} && ./ecr-tag.sh $(ARGS) ubuntu ${UBUNTU_VERSION} $(CI_PATH)
 	@echo '- DONE -'
 
 tag-tf-codebuild:
@@ -151,7 +151,7 @@ tag-tf-codebuild:
 	@echo " Task      : Set Tags Image Terraform CodeBuild "
 	@echo " Date/Time : `date` "
 	@echo "=========================================================="
-	@cd ${PATH_DOCKER} && ./ecr-tag.sh $(ARGS) codebuild $(CODEBUILD_VERSION) $(CI_PATH)
+	@cd ${PATH_DOCKER} && ./ecr-tag.sh $(ARGS) codebuild ${CODEBUILD_VERSION} $(CI_PATH)
 	@echo '- DONE -'
 
 # ============================ #

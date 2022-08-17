@@ -20,13 +20,20 @@ export IMAGE=$3
 
 set_tag() {
   export TAGS_ID=$1
-  export CUSTOM_VERSION=$2
+  export CUSTOM_TAGS=$2
   export BASE_IMAGE="$IMAGE:${TAGS_ID}"
   export COMMIT_HASH=`git log -1 --format=format:"%H"`
-  export TAGS="${TAGS_ID} \
+
+  if [ "$CUSTOM_TAGS" = "" ]; then
+    export TAGS="${TAGS_ID} \
     ${TAGS_ID}-latest \
-    ${TAGS_ID}-${CUSTOM_VERSION} \
     ${TAGS_ID}-${COMMIT_HASH}"
+  else
+    export TAGS="${TAGS_ID} \
+    ${TAGS_ID}-latest \
+    ${TAGS_ID}-${CUSTOM_TAGS} \
+    ${TAGS_ID}-${COMMIT_HASH}"
+  fi
 }
 
 docker_tag() {
