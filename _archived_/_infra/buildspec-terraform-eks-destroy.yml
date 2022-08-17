@@ -1,0 +1,65 @@
+version: 0.2
+
+env:
+  # ==================== #
+  #  Ref: SECRET CONFIG  #
+  # ==================== #
+  parameter-store:
+    BUILDNUMBER: /devopscorner/cicd/lab/repo/terraform-infra/buildnumber
+    STORE_AWS_ACCOUNT: /devopscorner/cicd/lab/credentials/aws_account
+    STORE_AWS_ACCESS_KEY: /devopscorner/cicd/lab/credentials/aws_access_key
+    STORE_AWS_SECRET_KEY: /devopscorner/cicd/lab/credentials/aws_secret_key
+    STORE_REPO_USERNAME: /devopscorner/cicd/lab/repo_credentials/codecommit/username
+    STORE_REPO_PASSWORD: /devopscorner/cicd/lab/repo_credentials/codecommit/password_encoded
+    STORE_DOCKERHUB_USERNAME: /devopscorner/cicd/lab/repo_credentials/dockerhub/username
+    STORE_DOCKERHUB_PASSWORD: /devopscorner/cicd/lab/repo_credentials/dockerhub/password_encoded
+    STORE_REPO_URL: /middleware/cicd/staging/repo/bookstore/url
+    STORE_REPO_BRANCH: /middleware/cicd/staging/repo/bookstore/branch
+    STORE_REPO_FOLDER: /middleware/cicd/staging/repo/bookstore/folder
+    STORE_EKS_CLUSTER: /middleware/cicd/staging/eks_cluster
+    STORE_BASE64_PUB_KEY: /middleware/cicd/staging/credentials/base64_pub_key
+    STORE_BASE64_PRIV_KEY: /middleware/cicd/staging/credentials/base64_priv_key
+    STORE_BASE64_PEM_KEY: /middleware/cicd/staging/credentials/base64_pem_key
+    STORE_BASE64_KNOWN_HOSTS: /middleware/cicd/staging/credentials/known_hosts
+    STORE_BASE64_KUBECONFIG: /middleware/cicd/staging/credentials/base64_kube_config
+
+  # ===================================== #
+  #  Ref: Pipeline Environment Variables  #
+  # ===================================== #
+  variables:
+    ENV_CICD: "dev"
+    CONTAINER_IMAGE: "devopscorner/terraform-infra:alpine"
+    AWS_DEFAULT_REGION: "ap-southeast-1"
+    INFRA_RESOURCES: "terraform/environment/providers/aws/infra/resources"
+    INFRA_RESOURCES_EKS: "eks"
+    WORKSPACE_ENV: "staging"
+    TF_VERSION: "1.1.7"
+
+phases:
+  install:
+    # Runtime Version
+    # https://docs.aws.amazon.com/codebuild/latest/userguide/runtime-versions.html
+    # https://docs.aws.amazon.com/codebuild/latest/userguide/available-runtimes.html
+    runtime-versions:
+      python: 3.8
+    commands:
+      - cd /usr/bin
+      - curl -O https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip
+      - unzip terraform_${TF_VERSION}_linux_amd64.zip
+  build:
+    commands:
+      # ========================= #
+      #  Refactoring AWS Account  #
+      # ========================= #
+      - cd ${CODEBUILD_SRC_DIR} && find ./ -type f -exec sed -i "s/YOUR_AWS_ACCOUNT/${STORE_AWS_ACCOUNT}/g" {} \;
+      # =========================== #
+      #  Install Terraform Modules  #
+      # =========================== #
+      - make codebuild-modules
+      - cd ${CODEBUILD_SRC_DIR}/${INFRA_RESOURCES}/${INFRA_RESOURCES_EKS}
+      # =================== #
+      #  Terraform Destroy  #
+      # =================== #
+      - terraform init
+      - terraform workspace select ${WORKSPACE_ENV} || terraform workspace new ${WORKSPACE_ENV}
+      - terraform destroy -auto-approve
