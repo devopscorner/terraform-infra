@@ -91,7 +91,7 @@ build-tf-infra:
 	@echo " Task      : Create Container Image Terraform "
 	@echo " Date/Time : `date` "
 	@echo "=========================================================="
-	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) alpine Dockerfile.alpine alpine-${ALPINE_VERSION} $(CI_PATH)
+	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) alpine Dockerfile.alpine ${ALPINE_VERSION} $(CI_PATH)
 	@echo '- DONE -'
 
 build-tf-alpine:
@@ -99,7 +99,7 @@ build-tf-alpine:
 	@echo " Task      : Create Container Image Terraform Alpine "
 	@echo " Date/Time : `date` "
 	@echo "=========================================================="
-	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) alpine Dockerfile.alpine alpine-${ALPINE_VERSION} $(CI_PATH)
+	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) alpine Dockerfile.alpine ${ALPINE_VERSION} $(CI_PATH)
 	@echo '- DONE -'
 
 build-tf-ubuntu:
@@ -107,7 +107,7 @@ build-tf-ubuntu:
 	@echo " Task      : Create Container Image Terraform Ubuntu "
 	@echo " Date/Time : `date` "
 	@echo "=========================================================="
-	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) ubuntu Dockerfile.ubuntu ubuntu-${UBUNTU_VERSION} $(CI_PATH)
+	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) ubuntu Dockerfile.ubuntu ${UBUNTU_VERSION} $(CI_PATH)
 	@echo '- DONE -'
 
 build-tf-codebuild:
@@ -115,7 +115,7 @@ build-tf-codebuild:
 	@echo " Task      : Create Container Image Terraform CodeBuild "
 	@echo " Date/Time : `date` "
 	@echo "=========================================================="
-	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) codebuild Dockerfile.codebuild codebuild-${CODEBUILD_VERSION} $(CI_PATH)
+	@cd ${PATH_DOCKER} && ./ecr-build.sh $(ARGS) codebuild Dockerfile.codebuild ${CODEBUILD_VERSION} $(CI_PATH)
 	@echo '- DONE -'
 
 # ============================ #
