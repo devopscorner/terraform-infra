@@ -7,10 +7,10 @@
 # -----------------------------------------------------------------------------
 set -e
 
-# export CI_REGISTRY="docker.com"
-# export CI_ECR_PATH="devopscorner/terraform-infra"
+# export CI_PROJECT_PATH="devopscorner"
+# export CI_PROJECT_NAME="terraform-infra"
 
-# export IMAGE="$CI_REGISTRY/$CI_ECR_PATH"
+# export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
 export IMAGE=$3
 
 # export CICD_VERSION="1.0.5"
