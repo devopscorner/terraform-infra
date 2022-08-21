@@ -38,7 +38,7 @@ export CODEBUILD_VERSION=4.0
 # =============== #
 #   GET MODULES   #
 # =============== #
-.PHONY: sub-officials sub-community sub-all
+.PHONY: sub-officials sub-community sub-all codebuild-modules
 sub-officials:
 	@echo "=========================================================="
 	@echo " Task      : Get Official Submodules "
