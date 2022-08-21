@@ -1,7 +1,7 @@
 # -- ECR --
 # FROM YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:codebuild
 # -- DockerHub --
-FROM devopscorner/cicd:codebuild
+FROM devopscorner/cicd:codebuild-4.0
 
 ARG BUILD_DATE
 ARG BUILD_VERSION
