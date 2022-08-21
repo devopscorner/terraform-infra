@@ -10,6 +10,7 @@ Production Grade Terraform for Provisioning Infrastructure
   - Ubuntu: `devopscorner/cicd:ubuntu-nginx-1.23`
   - CodeBuild: `devopscorner/cicd:codebuild-4.0`
 
+---
 
 # Terraform Infra - v3.1
 
@@ -45,6 +46,7 @@ Production Grade Terraform for Provisioning Infrastructure
   - infracost breakdown --path tfplan.json
   ```
 
+---
 
 # Terraform Infra - v3.0
 
@@ -84,6 +86,8 @@ Production Grade Terraform for Provisioning Infrastructure
   - infracost breakdown --path tfplan.json
   ```
 
+---
+
 # Terraform Infra - v2.0
 
 Production Grade Terraform for Provisioning Infrastructure
@@ -112,7 +116,7 @@ Production Grade Terraform for Provisioning Infrastructure
   - Ingress ALB ver-2.4.1
 - Added python scripts as new feature inspect & patch (update) tags of each autoscale EKS nodes
 
-<hr>
+---
 
 # Terraform Infra - v1.0
 
