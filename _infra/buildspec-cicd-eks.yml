@@ -5,23 +5,23 @@ env:
   #  Ref: SECRET CONFIG  #
   # ==================== #
   parameter-store:
-    BUILDNUMBER: /devopscorner/cicd/lab/repo/terraform-infra/buildnumber
-    STORE_AWS_ACCOUNT: /devopscorner/cicd/lab/credentials/aws_account
-    STORE_AWS_ACCESS_KEY: /devopscorner/cicd/lab/credentials/aws_access_key
-    STORE_AWS_SECRET_KEY: /devopscorner/cicd/lab/credentials/aws_secret_key
-    STORE_REPO_USERNAME: /devopscorner/cicd/lab/repo_credentials/codecommit/username
-    STORE_REPO_PASSWORD: /devopscorner/cicd/lab/repo_credentials/codecommit/password_encoded
-    STORE_DOCKERHUB_USERNAME: /devopscorner/cicd/lab/repo_credentials/dockerhub/username
-    STORE_DOCKERHUB_PASSWORD: /devopscorner/cicd/lab/repo_credentials/dockerhub/password_encoded
-    STORE_REPO_URL: /middleware/cicd/staging/repo/bookstore/url
-    STORE_REPO_BRANCH: /middleware/cicd/staging/repo/bookstore/branch
-    STORE_REPO_FOLDER: /middleware/cicd/staging/repo/bookstore/folder
-    STORE_EKS_CLUSTER: /middleware/cicd/staging/eks_cluster
-    STORE_BASE64_PUB_KEY: /middleware/cicd/staging/credentials/base64_pub_key
-    STORE_BASE64_PRIV_KEY: /middleware/cicd/staging/credentials/base64_priv_key
-    STORE_BASE64_PEM_KEY: /middleware/cicd/staging/credentials/base64_pem_key
-    STORE_BASE64_KNOWN_HOSTS: /middleware/cicd/staging/credentials/known_hosts
-    STORE_BASE64_KUBECONFIG: /middleware/cicd/staging/credentials/base64_kube_config
+    BUILDNUMBER: /devopscorner/cicd/staging/repo/terraform-infra/buildnumber
+    STORE_AWS_ACCOUNT: /devopscorner/cicd/staging/credentials/aws_account
+    STORE_AWS_ACCESS_KEY: /devopscorner/cicd/staging/credentials/aws_access_key
+    STORE_AWS_SECRET_KEY: /devopscorner/cicd/staging/credentials/aws_secret_key
+    STORE_REPO_USERNAME: /devopscorner/cicd/staging/repo_credentials/codecommit/username
+    STORE_REPO_PASSWORD: /devopscorner/cicd/staging/repo_credentials/codecommit/password_encoded
+    STORE_DOCKERHUB_USERNAME: /devopscorner/cicd/staging/repo_credentials/dockerhub/username
+    STORE_DOCKERHUB_PASSWORD: /devopscorner/cicd/staging/repo_credentials/dockerhub/password_encoded
+    STORE_REPO_URL: /devopscorner/cicd/staging/repo/terraform-infra/url
+    STORE_REPO_BRANCH: /devopscorner/cicd/staging/repo/terraform-infra/branch
+    STORE_REPO_FOLDER: /devopscorner/cicd/staging/repo/terraform-infra/folder
+    STORE_EKS_CLUSTER: /devopscorner/cicd/staging/eks_cluster
+    STORE_BASE64_PUB_KEY: /devopscorner/cicd/staging/credentials/base64_pub_key
+    STORE_BASE64_PRIV_KEY: /devopscorner/cicd/staging/credentials/base64_priv_key
+    STORE_BASE64_PEM_KEY: /devopscorner/cicd/staging/credentials/base64_pem_key
+    STORE_BASE64_KNOWN_HOSTS: /devopscorner/cicd/staging/credentials/known_hosts
+    STORE_BASE64_KUBECONFIG: /devopscorner/cicd/staging/credentials/base64_kube_config
 
   # ===================================== #
   #  Ref: Pipeline Environment Variables  #
