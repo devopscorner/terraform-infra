@@ -86,7 +86,7 @@ phases:
       # ============ #
       #  Push Image  #
       # ============ #
-      - make push-tf-infra ARGS=${STORE_AWS_ACCOUNT} TAGS=${INFRA_ECR_PATH}
+      - make push-tf-infra ARGS=${STORE_AWS_ACCOUNT} CI_PATH=${INFRA_ECR_PATH}
 
 artifacts:
   files:
