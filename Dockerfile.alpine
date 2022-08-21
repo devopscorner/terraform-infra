@@ -1,7 +1,7 @@
 # -- ECR --
 # FROM YOUR_AWS_ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/devopscorner/cicd:alpine
 # -- DockerHub --
-FROM devopscorner/cicd:ubuntu-nginx-1.23
+FROM devopscorner/cicd:alpine-nginx-1.23
 
 ARG BUILD_DATE
 ARG BUILD_VERSION

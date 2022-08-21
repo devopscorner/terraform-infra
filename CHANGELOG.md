@@ -1,3 +1,16 @@
+# Terraform Infra - v3.2
+
+Production Grade Terraform for Provisioning Infrastructure
+
+## Features
+
+- All features from version 3.1
+- Change references path Dockerfile with spesific tag version
+  - Alpine: `devopscorner/cicd:alpine-nginx-1.23`
+  - Ubuntu: `devopscorner/cicd:ubuntu-nginx-1.23`
+  - CodeBuild: `devopscorner/cicd:codebuild-4.0`
+
+
 # Terraform Infra - v3.1
 
 Production Grade Terraform for Provisioning Infrastructure
