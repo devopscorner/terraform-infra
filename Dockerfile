@@ -10,9 +10,9 @@ ARG GIT_URL
 
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
-ENV IMG_NAME="terraform-codebuild"
+ENV IMG_NAME="terraform-infra-codebuild"
 ENV IMG_VERSION="4.0"
-ENV IMG_DESC="Docker Image Terraform CodeBuild 4.0"
+ENV IMG_DESC="Docker Image Terraform Infra CodeBuild 4.0"
 ENV IMG_ARCH="amd64/x86_64"
 
 ENV CODEBUILD_VERSION="4.0"
