@@ -3,7 +3,6 @@
 ![all contributors](https://img.shields.io/github/contributors/devopscorner/terraform-infra)
 ![tags](https://img.shields.io/github/v/tag/devopscorner/terraform-infra?sort=semver)
 [![docker pulls](https://img.shields.io/docker/pulls/devopscorner/terraform-infra.svg)](https://hub.docker.com/r/devopscorner/terraform-infra/)
-[![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra.svg?sort=date)](https://hub.docker.com/r/devopscorner/terraform-infra/)
 ![download all](https://img.shields.io/github/downloads/devopscorner/terraform-infra/total.svg)
 ![download latest](https://img.shields.io/github/downloads/devopscorner/terraform-infra/3.2/total)
 ![view](https://views.whatilearened.today/views/github/devopscorner/terraform-infra.svg)
@@ -15,6 +14,38 @@
 [![license](https://img.shields.io/github/license/devopscorner/terraform-infra)](https://img.shields.io/github/license/devopscorner/terraform-infra)
 
 Production Grade Terraform for Provisioning Infrastructure
+
+## Available Tags
+
+### Alpine
+
+| Image name | Size |
+|------------|------|
+| `devopscorner/terraform-infra:1.0.5` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/1.0.5.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=1.0.5) |
+| `devopscorner/terraform-infra:1.0.5-alpine` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/1.0.5-alpine.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=1.0.5-alpine) |
+| `devopscorner/terraform-infra:alpine` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/alpine.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=alpine) |
+| `devopscorner/terraform-infra:alpine-latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/alpine-latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=alpine-latest) |
+| `devopscorner/terraform-infra:alpine-3.16` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/alpine-3.16.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=alpine-3.16) |
+
+### Ubuntu
+
+| Image name | Size |
+|------------|------|
+| `devopscorner/terraform-infra:1.0.5-ubuntu` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/1.0.5-ubuntu.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=1.0.5-ubuntu) |
+| `devopscorner/terraform-infra:ubuntu` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/ubuntu.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=ubuntu) |
+| `devopscorner/terraform-infra:ubuntu-latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/ubuntu-latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=ubuntu-latest) |
+| `devopscorner/terraform-infra:ubuntu-22.04` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/ubuntu-22.04.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=ubuntu-22.04) |
+  
+### AWS Linux (CodeBuild)
+
+| Image name | Size |
+|------------|------|
+| `devopscorner/terraform-infra:latest`           | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=latest) |
+| `devopscorner/terraform-infra:codebuild`        | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/codebuild.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=codebuild) |
+| `devopscorner/terraform-infra:codebuild-latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/codebuild-latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=codebuild-latest) |
+| `devopscorner/terraform-infra:codebuild-2.0`    | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/codebuild-2.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=codebuild-2.0) |
+| `devopscorner/terraform-infra:codebuild-3.0`    | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/codebuild-3.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=codebuild-3.0) |
+| `devopscorner/terraform-infra:codebuild-4.0`    | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/codebuild-4.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=codebuild-4.0) |
 
 ## Prerequirements
 
