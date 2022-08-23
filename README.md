@@ -15,6 +15,8 @@
 
 Production Grade Terraform for Provisioning Infrastructure
 
+---
+
 ## Available Tags
 
 ### Alpine
@@ -35,7 +37,7 @@ Production Grade Terraform for Provisioning Infrastructure
 | `devopscorner/terraform-infra:ubuntu` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/ubuntu.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=ubuntu) |
 | `devopscorner/terraform-infra:ubuntu-latest` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/ubuntu-latest.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=ubuntu-latest) |
 | `devopscorner/terraform-infra:ubuntu-22.04` | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/ubuntu-22.04.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=ubuntu-22.04) |
-  
+
 ### AWS Linux (CodeBuild)
 
 | Image name | Size |
@@ -47,6 +49,7 @@ Production Grade Terraform for Provisioning Infrastructure
 | `devopscorner/terraform-infra:codebuild-3.0`    | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/codebuild-3.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=codebuild-3.0) |
 | `devopscorner/terraform-infra:codebuild-4.0`    | [![docker image size](https://img.shields.io/docker/image-size/devopscorner/terraform-infra/codebuild-4.0.svg?label=Image%20size&logo=docker)](https://hub.docker.com/repository/docker/devopscorner/terraform-infra/tags?page=1&ordering=last_updated&name=codebuild-4.0) |
 
+---
 ## Prerequirements
 
 - Docker (`docker`)
