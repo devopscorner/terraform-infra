@@ -91,6 +91,24 @@ resource "aws_route_table" "igw_ec2_rt_public_b" {
   tags = merge(local.tags, local.tags_igw_rt_public, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.ec2_rt_prefix}-public-${var.aws_region}b" }, local.tags_elb)
 }
 
+resource "aws_route_table" "igw_ec2_rt_public_c" {
+  vpc_id = aws_vpc.infra_vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  # Added (Peers)
+  # propagating_vgws = [var.propagating_vgws[local.env]]
+
+  # route {
+  #   cidr_block                = var.cidr_block_vpc_peering[local.env]
+  #   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peer.id
+  # }
+
+  tags = merge(local.tags, local.tags_igw_rt_public, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.ec2_rt_prefix}-public-${var.aws_region}c" }, local.tags_elb)
+}
+
 ## EKS
 resource "aws_route_table" "igw_eks_rt_public_a" {
   vpc_id = aws_vpc.infra_vpc.id
@@ -128,6 +146,24 @@ resource "aws_route_table" "igw_eks_rt_public_b" {
   tags = merge(local.tags, local.tags_igw_rt_public, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.eks_rt_prefix}-public-${var.aws_region}b" }, local.tags_elb)
 }
 
+resource "aws_route_table" "igw_eks_rt_public_c" {
+  vpc_id = aws_vpc.infra_vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.igw.id
+  }
+
+  # Added (Peers)
+  # propagating_vgws = [var.propagating_vgws[local.env]]
+
+  # route {
+  #   cidr_block                = var.cidr_block_vpc_peering[local.env]
+  #   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peer.id
+  # }
+
+  tags = merge(local.tags, local.tags_igw_rt_public, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.eks_rt_prefix}-public-${var.aws_region}c" }, local.tags_elb)
+}
+
 # --------------------------------------------------------------------------
 #  Route Table with Public Subnet
 # --------------------------------------------------------------------------
@@ -139,7 +175,12 @@ resource "aws_route_table_association" "igw_ec2_rt_public_1a" {
 
 resource "aws_route_table_association" "igw_ec2_rt_public_1b" {
   subnet_id      = aws_subnet.ec2_public_b.id
-  route_table_id = aws_route_table.igw_ec2_rt_public_a.id
+  route_table_id = aws_route_table.igw_ec2_rt_public_b.id
+}
+
+resource "aws_route_table_association" "igw_ec2_rt_public_1c" {
+  subnet_id      = aws_subnet.ec2_public_c.id
+  route_table_id = aws_route_table.igw_ec2_rt_public_c.id
 }
 
 ## EKS
@@ -151,4 +192,9 @@ resource "aws_route_table_association" "igw_eks_rt_public_1a" {
 resource "aws_route_table_association" "igw_eks_rt_public_1b" {
   subnet_id      = aws_subnet.eks_public_b.id
   route_table_id = aws_route_table.igw_eks_rt_public_b.id
+}
+
+resource "aws_route_table_association" "igw_eks_rt_public_1c" {
+  subnet_id      = aws_subnet.eks_public_c.id
+  route_table_id = aws_route_table.igw_eks_rt_public_c.id
 }

@@ -29,8 +29,10 @@ resource "aws_security_group" "default" {
     cidr_blocks = [
       var.ec2_public_a[local.env],
       var.ec2_public_b[local.env],
+      var.ec2_public_c[local.env],
       var.eks_public_a[local.env],
-      var.eks_public_b[local.env]
+      var.eks_public_b[local.env],
+      var.eks_public_c[local.env]
     ]
     ipv6_cidr_blocks = ["::/0"]
   }
