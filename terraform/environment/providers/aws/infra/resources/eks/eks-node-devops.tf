@@ -104,7 +104,7 @@ resource "aws_lb_target_group" "devops" {
     "tools"
   ])
 
-  name     = "devopscorner-tg-${each.key}"
+  name     = "devopscorner-tg-${local.node_selector_devops}-${each.key}"
   port     = "${each.key}" == "monitoring" ? 30180 : 30280
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.selected.id
@@ -139,11 +139,12 @@ output "eks_node_name_devops_tools" {
 # --------------------------------------------------------------------------
 #  Target Group Output
 # --------------------------------------------------------------------------
-## DEV Output ##
+## Monitoring TargetGroup Output ##
 output "eks_node_tg_devops_monitoring" {
   value = aws_lb_target_group.devops["monitoring"].id
 }
 
+## Tools TargetGroup Output ##
 output "eks_node_tg_devops_tools" {
   value = aws_lb_target_group.devops["tools"].id
 }

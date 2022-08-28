@@ -120,7 +120,7 @@ resource "aws_lb_target_group" "goapp" {
 # --------------------------------------------------------------------------
 #  Node Group Output
 # --------------------------------------------------------------------------
-# DEV Output ##
+## DEV Output ##
 output "eks_node_name_goapp_dev" {
   value = aws_eks_node_group.goapp["dev"].id
 }
@@ -150,12 +150,12 @@ output "eks_node_asg_group_goapp_prod" {
 # --------------------------------------------------------------------------
 #  Target Group Output
 # --------------------------------------------------------------------------
-# DEV Output ##
+## DEV Output ##
 output "eks_node_tg_goapp_dev" {
   value = aws_lb_target_group.goapp["dev"].id
 }
 
-# UAT Output ##
+## UAT Output ##
 output "eks_node_tg_goapp_uat" {
   value = aws_lb_target_group.goapp["uat"].id
 }
