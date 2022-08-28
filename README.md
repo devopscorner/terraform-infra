@@ -1,10 +1,12 @@
 # Terraform Infra
 
+Production Grade Terraform for Provisioning Infrastructure
+
 ![all contributors](https://img.shields.io/github/contributors/devopscorner/terraform-infra)
 ![tags](https://img.shields.io/github/v/tag/devopscorner/terraform-infra?sort=semver)
 [![docker pulls](https://img.shields.io/docker/pulls/devopscorner/terraform-infra.svg)](https://hub.docker.com/r/devopscorner/terraform-infra/)
 ![download all](https://img.shields.io/github/downloads/devopscorner/terraform-infra/total.svg)
-![download latest](https://img.shields.io/github/downloads/devopscorner/terraform-infra/3.2/total)
+![download latest](https://img.shields.io/github/downloads/devopscorner/terraform-infra/3.3/total)
 ![view](https://views.whatilearened.today/views/github/devopscorner/terraform-infra.svg)
 ![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://github.com/devopscorner/terraform-infra/blob/master/clone.json?raw=True&logo=github)
 ![issues](https://img.shields.io/github/issues/devopscorner/terraform-infra)
@@ -12,8 +14,6 @@
 ![forks](https://img.shields.io/github/forks/devopscorner/terraform-infra)
 ![stars](https://img.shields.io/github/stars/devopscorner/terraform-infra)
 [![license](https://img.shields.io/github/license/devopscorner/terraform-infra)](https://img.shields.io/github/license/devopscorner/terraform-infra)
-
-Production Grade Terraform for Provisioning Infrastructure
 
 ---
 
@@ -60,7 +60,8 @@ Production Grade Terraform for Provisioning Infrastructure
 
 ## Documentation
 
-- Read [this](./docs/README.md)
+- Index Documentation, go to [this](docs/README.md) link
+- Reproduce DEMO, detail [here](docs/DEMO.md)
 
 ## Terraform Features
 
@@ -132,7 +133,7 @@ Multi Environment Workspace:
   ```
   terraform version
   ---
-  Terraform v1.1.6
+  Terraform v1.2.8
   on darwin_amd64
   - provider registry.terraform.io/hashicorp/aws v3.74.3
   - provider registry.terraform.io/hashicorp/local v2.1.0
