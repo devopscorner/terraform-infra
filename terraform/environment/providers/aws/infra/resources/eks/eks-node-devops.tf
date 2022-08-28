@@ -75,7 +75,7 @@ resource "aws_eks_node_group" "devops" {
     },
     {
       Environment     = "${upper(each.key)}"
-      Name            = "EKS-1.22-${upper(local.node_selector_devopscorner)}-${upper(each.key)}"
+      Name            = "EKS-1.22-${upper(local.node_selector_devops)}-${upper(each.key)}"
       Type            = "PRODUCTS"
       ProductName     = "EKS-DEVOPSCORNER"
       ProductGroup    = "${upper(each.key)}-EKS-DEVOPSCORNER"
@@ -104,7 +104,7 @@ resource "aws_lb_target_group" "devops" {
     "tools"
   ])
 
-  name     = "devopscorner-tg-${local.node_selector_devops}-${each.key}"
+  name     = "devopscorner-tg-${each.key}"
   port     = "${each.key}" == "monitoring" ? 30180 : 30280
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.selected.id
