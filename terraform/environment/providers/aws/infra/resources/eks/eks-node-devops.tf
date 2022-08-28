@@ -26,24 +26,26 @@ resource "aws_eks_node_group" "devops" {
   ])
 
   cluster_name    = aws_eks_cluster.aws_eks.name
-  node_group_name = "${local.node_selector_devops}-${each.key}_node"
+  node_group_name = "${local.node_selector_devops}-${each.key}-node"
   node_role_arn   = aws_iam_role.eks_nodes.arn
 
   ## EKS Private Subnet ###
   subnet_ids = [
       data.terraform_remote_state.core_state.outputs.eks_private_1a[0],
-      data.terraform_remote_state.core_state.outputs.eks_private_1b[0]
+      data.terraform_remote_state.core_state.outputs.eks_private_1b[0],
+      data.terraform_remote_state.core_state.outputs.eks_private_1c[0]
   ]
 
-  instance_types  = ["t3.medium"]
-  disk_size       = 100
-  version         = "${var.k8s_version[local.env]}"
+  instance_types = local.env == "staging" ? ["t3.medium"] : ["m5.large"]
+  disk_size      = 100
+  version        = var.k8s_version[local.env]
 
   labels = {
-    "environment" = "staging",
+    "environment" = "${var.env[local.env]}",
     "node"        = "${local.node_selector_devops}-${each.key}"
     "department"  = "devops"
     "productname" = "devopscorner-${each.key}"
+    "service"     = "${each.key}"
   }
 
   remote_access {
@@ -58,26 +60,29 @@ resource "aws_eks_node_group" "devops" {
   }
 
   lifecycle {
-    ignore_changes = [scaling_config[0].desired_size]
+    ignore_changes = [
+      scaling_config[0].desired_size,
+      scaling_config[0].min_size,
+    ]
   }
 
   tags = merge(
     {
-      "ClusterName" = "${var.eks_cluster_name}_${var.env[local.env]}",
-      "k8s.io/cluster-autoscaler/${var.eks_cluster_name}_${var.env[local.env]}" = "owned",
-      "k8s.io/cluster-autoscaler/enabled" = "TRUE",
+      "ClusterName" = "${var.eks_cluster_name}-${var.env[local.env]}"
+      "k8s.io/cluster-autoscaler/${var.eks_cluster_name}-${var.env[local.env]}" = "owned",
+      "k8s.io/cluster-autoscaler/enabled" = "true"
       "Terraform" = "true"
     },
     {
-      Environment     = "DEV"
-      Name            = "EKS-1.22-DEVOPSCORNER-${upper(each.key)}"
+      Environment     = "${upper(each.key)}"
+      Name            = "EKS-1.22-${upper(local.node_selector_devopscorner)}-${upper(each.key)}"
       Type            = "PRODUCTS"
-      ProductName     = "DEVOPSCORNER-${upper(each.key)}"
-      ProductGroup    = "DEV-DEVOPSCORNER--${upper(each.key)}"
+      ProductName     = "EKS-DEVOPSCORNER"
+      ProductGroup    = "${upper(each.key)}-EKS-DEVOPSCORNER"
       Department      = "DEVOPS"
-      DepartmentGroup = "DEV-DEVOPS"
-      ResourceGroup   = "DEV-EKS-DEVOPSCORNER"
-      Services        = "${upper(local.node_selector_devops)}-${upper(each.key)}"
+      DepartmentGroup = "${upper(each.key)}-DEVOPS"
+      ResourceGroup   = "${upper(each.key)}-EKS-DEVOPSCORNER"
+      Services        = "${upper(each.key)}"
     }
   )
 
@@ -99,21 +104,21 @@ resource "aws_lb_target_group" "devops" {
     "tools"
   ])
 
-  name     = "devopscorner-tg-${each.key}"
+  name     = "devopscorner-tg-${local.node_selector_devops}-${each.key}"
   port     = "${each.key}" == "monitoring" ? 30180 : 30280
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.selected.id
 
   tags = {
-    Environment     = "DEV"
-    Name            = "DEVOPSCORNER-TG-${upper(each.key)}"
+    Environment     = "${var.environment[local.env]}"
+    Name            = "ALB-${upper(local.node_selector_devops)}-${upper(each.key)}"
     Type            = "PRODUCTS"
-    ProductName     = "DEVOPSCORNER-TG"
-    ProductGroup    = "DEV-DEVOPSCORNER"
+    ProductName     = "TG-DEVOPSCORNER"
+    ProductGroup    = "${upper(each.key)}-TG-DEVOPSCORNER"
     Department      = "DEVOPS"
-    DepartmentGroup = "DEV-DEVOPS"
-    ResourceGroup   = "DEV-TG-DEVOPSCORNER"
-    Services        = "TG-LB"
+    DepartmentGroup = "${upper(each.key)}-DEVOPS"
+    ResourceGroup   = "${upper(each.key)}-TG-DEVOPSCORNER"
+    Services        = "${upper(local.node_selector_devops)}-${upper(each.key)}"
     Terraform       = true
   }
 }

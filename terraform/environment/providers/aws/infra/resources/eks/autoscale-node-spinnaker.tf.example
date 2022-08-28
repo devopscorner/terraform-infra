@@ -9,18 +9,18 @@
 # ==========================================================================
 
 #============================================
-# NODE GROUP - DEVOPS SPINNAKER
+# NODE GROUP - DEVOPSCORNER SPINNAKER
 #============================================
 locals {
   #for tagging
-  Environment_spinnaker     = "DEV"
-  Name_spinnaker            = "EKS-1.22-DEVOPSCORNER-SPINNAKER_NODE"
+  Environment_spinnaker     = "STG"
+  Name_spinnaker            = "EKS-1.22-DEVOPSCORNER-SPINNAKER"
   Type_spinnaker            = "PRODUCTS"
-  ProductName_spinnaker     = "DEVOPSCORNER-SPINNAKER"
-  ProductGroup_spinnaker    = "DEV-DEVOPSCORNER-SPINNAKER"
+  ProductName_spinnaker     = "EKS-DEVOPSCORNER"
+  ProductGroup_spinnaker    = "SPINNAKER-EKS-DEVOPSCORNER"
   Department_spinnaker      = "DEVOPS"
-  DepartmentGroup_spinnaker = "DEV-DEVOPS"
-  ResourceGroup_spinnaker   = "DEV-EKS-DEVOPSCORNER"
+  DepartmentGroup_spinnaker = "SPINNAKER-DEVOPS"
+  ResourceGroup_spinnaker   = "SPINNAKER-EKS-DEVOPSCORNER"
   Services_spinnaker        = "SPINNAKER"
 }
 

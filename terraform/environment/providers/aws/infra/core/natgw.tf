@@ -113,6 +113,22 @@ resource "aws_route_table" "nat_ec2_rt_private_b" {
   tags = merge(local.tags, local.tags_nat_ec2_rt_private, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.ec2_rt_prefix}-private-${var.aws_region}b" }, local.tags_internal_elb)
 }
 
+resource "aws_route_table" "nat_ec2_rt_private_c" {
+  vpc_id = aws_vpc.infra_vpc.id
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.ec2_ngw.id
+  }
+
+  # propagating_vgws = [var.propagating_vgws[local.env]]
+  # route{
+  #   cidr_block                = var.cidr_block_vpc_peering[local.env]
+  #   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peer.id
+  # }
+
+  tags = merge(local.tags, local.tags_nat_ec2_rt_private, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.ec2_rt_prefix}-private-${var.aws_region}c" }, local.tags_internal_elb)
+}
+
 ## EKS
 resource "aws_route_table" "nat_eks_rt_private_a" {
   vpc_id = aws_vpc.infra_vpc.id
@@ -146,6 +162,22 @@ resource "aws_route_table" "nat_eks_rt_private_b" {
   tags = merge(local.tags, local.tags_nat_eks_rt_private, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.eks_rt_prefix}-private-${var.aws_region}b" }, local.tags_internal_elb)
 }
 
+resource "aws_route_table" "nat_eks_rt_private_c" {
+  vpc_id = aws_vpc.infra_vpc.id
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.eks_ngw.id
+  }
+
+  # propagating_vgws = [var.propagating_vgws[local.env]]
+  # route{
+  #   cidr_block                = var.cidr_block_vpc_peering[local.env]
+  #   vpc_peering_connection_id = aws_vpc_peering_connection.vpc_peer.id
+  # }
+
+  tags = merge(local.tags, local.tags_nat_eks_rt_private, { Name = "${var.coreinfra}-${var.env[local.env]}-${var.eks_rt_prefix}-private-${var.aws_region}c" }, local.tags_internal_elb)
+}
+
 # --------------------------------------------------------------------------
 #  Route Table with Private Subnet
 # --------------------------------------------------------------------------
@@ -160,6 +192,11 @@ resource "aws_route_table_association" "nat_ec2_rt_private_1b" {
   route_table_id = aws_route_table.nat_ec2_rt_private_b.id
 }
 
+resource "aws_route_table_association" "nat_ec2_rt_private_1c" {
+  subnet_id      = aws_subnet.ec2_private_c.id
+  route_table_id = aws_route_table.nat_ec2_rt_private_c.id
+}
+
 ## EKS
 resource "aws_route_table_association" "nat_eks_rt_private_1a" {
   subnet_id      = aws_subnet.eks_private_a.id
@@ -169,4 +206,9 @@ resource "aws_route_table_association" "nat_eks_rt_private_1a" {
 resource "aws_route_table_association" "nat_eks_rt_private_1b" {
   subnet_id      = aws_subnet.eks_private_b.id
   route_table_id = aws_route_table.nat_eks_rt_private_b.id
+}
+
+resource "aws_route_table_association" "nat_eks_rt_private_1c" {
+  subnet_id      = aws_subnet.eks_private_c.id
+  route_table_id = aws_route_table.nat_eks_rt_private_c.id
 }

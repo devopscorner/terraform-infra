@@ -92,7 +92,7 @@ variable "ami" {
    type        = string
    description = "AWS Linux AMI to use.  Must match availability zone, instance type, etc"
    ### AWS Linux ###
-   # default     = "ami-0dc5785603ad4ff54"
+   default     = "ami-0dc5785603ad4ff54"
    ### Ubuntu ###
-   default   = "ami-0fed77069cd5a6d6c"
+   # default   = "ami-0fed77069cd5a6d6c"
 }

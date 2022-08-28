@@ -25,8 +25,7 @@ resource "aws_vpc" "infra_vpc" {
   # cidr                  = "10.0.0.0/16"
   # secondary_cidr_blocks = ["10.1.0.0/16", "10.2.0.0/16"]
 
-  cidr_block = var.vpc_cidr[local.env]
-
+  cidr_block           = var.vpc_cidr[local.env]
   instance_tenancy     = "default"
   enable_dns_hostnames = true
 

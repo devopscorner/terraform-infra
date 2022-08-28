@@ -9,18 +9,18 @@
 # ==========================================================================
 
 #============================================
-# NODE GROUP - DEVOPS SHAREDREDIS
+# NODE GROUP - DEVOPSCORNER SHAREDREDIS
 #============================================
 locals {
   #for tagging
-  Environment_sharedredis     = "DEV"
-  Name_sharedredis            = "EKS-1.22-DEVOPSCORNER-SHAREDREDIS_NODE"
+  Environment_sharedredis     = "STG"
+  Name_sharedredis            = "EKS-1.22-DEVOPSCORNER-SHAREDREDIS"
   Type_sharedredis            = "PRODUCTS"
-  ProductName_sharedredis     = "DEVOPSCORNER-SHAREDREDIS"
-  ProductGroup_sharedredis    = "DEV-DEVOPSCORNER-SHAREDREDIS"
+  ProductName_sharedredis     = "EKS-DEVOPSCORNER"
+  ProductGroup_sharedredis    = "SHAREDREDIS-EKS-DEVOPSCORNER"
   Department_sharedredis      = "DEVOPS"
-  DepartmentGroup_sharedredis = "DEV-DEVOPS"
-  ResourceGroup_sharedredis   = "DEV-EKS-DEVOPSCORNER"
+  DepartmentGroup_sharedredis = "SHAREDREDIS-DEVOPS"
+  ResourceGroup_sharedredis   = "SHAREDREDIS-EKS-DEVOPSCORNER"
   Services_sharedredis        = "SHAREDREDIS"
 }
 

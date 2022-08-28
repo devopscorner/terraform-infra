@@ -5,6 +5,10 @@ Production Grade Terraform for Provisioning Infrastructure
 ## Features
 
 - All features from version 3.2
+- Added zone c in Core Infra
+- Refactoring resources EKS with zone c capabilities
+- Refactoring CIDR range VPC
+- Refactoring subnet ip range class
 - Added Documentation Terraform Infra
   - Build Container `devopscorner/cicd`
     - Build Container `devopscorner/cicd` for DockerHub, detail [here](https://github.com/devopscorner/devopscorner-container/blob/master/docs/container-cicd-dockerhub.md)
@@ -41,6 +45,8 @@ Production Grade Terraform for Provisioning Infrastructure
   - [EKS Production](docs/eks-prod.md)
   - [Jumphost Staging](docs/jumphost-staging.md)
   - [Jumphost Production](docs/jumphost-prod.md)
+
+- Reproduce DEMO, detail [here](docs/DEMO.md)
 
 ---
 
