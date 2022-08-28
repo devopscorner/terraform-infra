@@ -1,5 +1,7 @@
 # Terraform Infra
 
+Production Grade Terraform for Provisioning Infrastructure
+
 ![all contributors](https://img.shields.io/github/contributors/devopscorner/terraform-infra)
 ![tags](https://img.shields.io/github/v/tag/devopscorner/terraform-infra?sort=semver)
 [![docker pulls](https://img.shields.io/docker/pulls/devopscorner/terraform-infra.svg)](https://hub.docker.com/r/devopscorner/terraform-infra/)
@@ -11,8 +13,6 @@
 ![forks](https://img.shields.io/github/forks/devopscorner/terraform-infra)
 ![stars](https://img.shields.io/github/stars/devopscorner/terraform-infra)
 [![license](https://img.shields.io/github/license/devopscorner/terraform-infra)](https://img.shields.io/github/license/devopscorner/terraform-infra)
-
-Production Grade Terraform for Provisioning Infrastructure
 
 ---
 
@@ -47,9 +47,11 @@ Production Grade Terraform for Provisioning Infrastructure
   - [Terraform Infra Costing - EKS Prod](terraform-infracost-eks-prod.md)
 
 - Terraform State Inventory
-  - [Core Infrastructure Staging](core-infra-staging.md)
-  - [Core Infrastructure Prod](core-infra-prod.md)
-  - [EKS Staging](eks-staging.md)
-  - [EKS Production](eks-prod.md)
-  - [Jumphost Staging](jumphost-staging.md)
-  - [Jumphost Production](jumphost-prod.md)
+  - [Core Infrastructure Staging](terraform-state-core-infra-staging.md)
+  - [Core Infrastructure Prod](terraform-state-core-infra-prod.md)
+  - [EKS Staging](terraform-state-eks-staging.md)
+  - [EKS Production](terraform-state-eks-prod.md)
+  - [Jumphost Staging](terraform-state-jumphost-staging.md)
+  - [Jumphost Production](terraform-state-jumphost-prod.md)
+
+- Reproduce DEMO, detail [here](DEMO.md)
