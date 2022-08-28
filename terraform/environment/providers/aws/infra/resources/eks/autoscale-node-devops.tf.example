@@ -9,23 +9,23 @@
 # ==========================================================================
 
 #============================================
-# NODE GROUP - DEVOPS
+# NODE GROUP - DEVOPSCORNER MONITORING & TOOLS
 #============================================
 locals {
   #for tagging
-  Environment_devops          = "DEV"
-  Name_monitoring             = "EKS-1.22-DEVOPSCORNER-MONITORING_NODE"
-  Name_tools                  = "EKS-1.22-DEVOPSCORNER-TOOLS_NODE"
-  Type_devops                 = "PRODUCTS"
-  ProductName_monitoring      = "DEVOPSCORNER-MONITORING"
-  ProductName_tools           = "DEVOPSCORNER-TOOLS"
-  ProductGroup_monitoring     = "DEV-DEVOPSCORNER-MONITORING"
-  ProductGroup_tools          = "DEV-DEVOPSCORNER-TOOLS"
-  Department_devops           = "DEVOPS"
-  DepartmentGroup_devops      = "DEV-DEVOPS"
-  ResourceGroup_devops        = "DEV-EKS-DEVOPSCORNER"
-  Services_monitoring         = "DEVOPS-MONITORING"
-  Services_tools              = "DEVOPS-TOOLS"
+  Environment_devops      = "STG"
+  Name_monitoring         = "EKS-1.22-DEVOPSCORNER-MONITORING"
+  Name_tools              = "EKS-1.22-DEVOPSCORNER-TOOLS"
+  Type_devops             = "PRODUCTS"
+  ProductName_monitoring  = "EKS-DEVOPSCORNER"
+  ProductName_tools       = "EKS-DEVOPSCORNER"
+  ProductGroup_monitoring = "MONITORING-EKS-DEVOPSCORNER"
+  ProductGroup_tools      = "TOOLS-EKS-DEVOPSCORNER"
+  Department_devops       = "DEVOPS"
+  DepartmentGroup_devops  = "STG-DEVOPS"
+  ResourceGroup_devops    = "STG-EKS-DEVOPSCORNER"
+  Services_monitoring     = "MONITORING"
+  Services_tools          = "TOOLS"
 }
 
 # --------------------------------------------------------------------------

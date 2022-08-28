@@ -31,7 +31,8 @@ resource "aws_eks_node_group" "spinnaker" {
   ## EKS Private Subnet ###
   subnet_ids = [
       data.terraform_remote_state.core_state.outputs.eks_private_1a[0],
-      data.terraform_remote_state.core_state.outputs.eks_private_1b[0]
+      data.terraform_remote_state.core_state.outputs.eks_private_1b[0],
+      data.terraform_remote_state.core_state.outputs.eks_private_1c[0]
   ]
 
   instance_types  = ["m5.large"]
@@ -39,10 +40,11 @@ resource "aws_eks_node_group" "spinnaker" {
   version         = "${var.k8s_version[local.env]}"
 
   labels = {
-    "environment" = "staging",
+    "environment" = "${var.env[local.env]}",
     "node"        = "${local.node_selector_spinnaker}-${each.key}"
     "department"  = "devops"
     "productname" = "devopscorner-${each.key}"
+    "service"     = "${each.key}"
   }
 
   remote_access {
@@ -57,26 +59,29 @@ resource "aws_eks_node_group" "spinnaker" {
   }
 
   lifecycle {
-    ignore_changes = [scaling_config[0].desired_size]
+    ignore_changes = [
+      scaling_config[0].desired_size,
+      scaling_config[0].min_size,
+    ]
   }
 
   tags = merge(
     {
-      "ClusterName" = "${var.eks_cluster_name}_${var.env[local.env]}",
-      "k8s.io/cluster-autoscaler/${var.eks_cluster_name}_${var.env[local.env]}" = "owned",
-      "k8s.io/cluster-autoscaler/enabled" = "TRUE",
+      "ClusterName" = "${var.eks_cluster_name}-${var.env[local.env]}"
+      "k8s.io/cluster-autoscaler/${var.eks_cluster_name}-${var.env[local.env]}" = "owned",
+      "k8s.io/cluster-autoscaler/enabled" = "true"
       "Terraform" = "true"
     },
     {
-      Environment     = "DEV"
+      Environment     = "${upper(var.environment[local.env])}"
       Name            = "EKS-1.22-DEVOPSCORNER-${upper(each.key)}"
       Type            = "PRODUCTS"
-      ProductName     = "DEVOPSCORNER-${upper(each.key)}"
-      ProductGroup    = "DEV-DEVOPSCORNER--${upper(each.key)}"
+      ProductName     = "EKS-DEVOPSCORNER"
+      ProductGroup    = "${upper(each.key)}-EKS-DEVOPSCORNER"
       Department      = "DEVOPS"
-      DepartmentGroup = "DEV-DEVOPS"
-      ResourceGroup   = "DEV-EKS-DEVOPSCORNER"
-      Services        = "${upper(local.node_selector_devops)}-${upper(each.key)}"
+      DepartmentGroup = "${upper(each.key)}-DEVOPS"
+      ResourceGroup   = "${upper(each.key)}-EKS-DEVOPSCORNER"
+      Services        = "${upper(each.key)}"
     }
   )
 

@@ -1,5 +1,5 @@
 # ==========================================================================
-#  Resources: EKS / eks-node-sharedredis.tf (EKS Node Configuration)
+#  Resources: EKS / eks-node-goapp.tf (EKS Node Configuration)
 # --------------------------------------------------------------------------
 #  Description
 # --------------------------------------------------------------------------
@@ -12,39 +12,37 @@
 # ==========================================================================
 
 #============================================
-# NODE GROUP - SHAREDREDIS
+# NODE GROUP - GOAPP
 #============================================
 locals {
-  node_selector_sharedredis = "devopscorner"
+  node_selector_goapp = "goapp"
 }
 
-resource "aws_eks_node_group" "sharedredis" {
+resource "aws_eks_node_group" "goapp" {
   ## NODE GROUP
-  for_each = toset([
-    "sharedredis"
-  ])
+  for_each = (local.env == "staging" ? toset(["dev","uat"]) : toset(["prod"]))
 
   cluster_name    = aws_eks_cluster.aws_eks.name
-  node_group_name = "${local.node_selector_sharedredis}-${each.key}_node"
+  node_group_name = "${local.node_selector_goapp}-${each.key}-node"
   node_role_arn   = aws_iam_role.eks_nodes.arn
 
   ## EKS Private Subnet ###
   subnet_ids = [
-      data.terraform_remote_state.core_state.outputs.eks_private_1a[0],
-      data.terraform_remote_state.core_state.outputs.eks_private_1b[0],
-      data.terraform_remote_state.core_state.outputs.eks_private_1c[0]
+    data.terraform_remote_state.core_state.outputs.eks_private_1a[0],
+    data.terraform_remote_state.core_state.outputs.eks_private_1b[0],
+    data.terraform_remote_state.core_state.outputs.eks_private_1c[0]
   ]
 
   instance_types = local.env == "staging" ? ["t3.medium"] : ["m5.large"]
   disk_size      = 100
-  version        = "${var.k8s_version[local.env]}"
+  version        = var.k8s_version[local.env]
 
   labels = {
     "environment" = "${var.env[local.env]}",
-    "node"        = "${local.node_selector_sharedredis}-${each.key}"
+    "node"        = "${local.node_selector_goapp}-${each.key}"
     "department"  = "softeng"
     "productname" = "devopscorner-${each.key}"
-    "service"     = "${each.key}"
+    "service"     = "goapp"
   }
 
   remote_access {
@@ -53,9 +51,9 @@ resource "aws_eks_node_group" "sharedredis" {
   }
 
   scaling_config {
-    desired_size = 0
+    desired_size = 1
     max_size     = 5
-    min_size     = 0
+    min_size     = 1
   }
 
   lifecycle {
@@ -73,15 +71,15 @@ resource "aws_eks_node_group" "sharedredis" {
       "Terraform" = "true"
     },
     {
-      Environment     = "${upper(var.environment[local.env])}"
-      Name            = "EKS-1.22-${upper(local.node_selector_sharedredis)}-${upper(each.key)}"
+      Environment     = "${upper(each.key)}"
+      Name            = "EKS-1.22-${upper(local.node_selector_goapp)}-${upper(each.key)}"
       Type            = "PRODUCTS"
       ProductName     = "EKS-DEVOPSCORNER"
       ProductGroup    = "${upper(each.key)}-EKS-DEVOPSCORNER"
-      Department      = "DEVOPS"
-      DepartmentGroup = "${upper(each.key)}-DEVOPS"
+      Department      = "SOFTENG"
+      DepartmentGroup = "${upper(each.key)}-SOFTENG"
       ResourceGroup   = "${upper(each.key)}-EKS-DEVOPSCORNER"
-      Services        = "${upper(each.key)}"
+      Services        = "${upper(local.node_selector_goapp)}"
     }
   )
 
@@ -97,26 +95,24 @@ resource "aws_eks_node_group" "sharedredis" {
 # ------------------------------------
 #  Target Group
 # ------------------------------------
-resource "aws_lb_target_group" "sharedredis" {
-  for_each = toset([
-    "sharedredis"
-  ])
+resource "aws_lb_target_group" "goapp" {
+  for_each = (local.env == "staging" ? toset(["dev","uat"]) : toset(["prod"]))
 
-  name     = "devopscorner-tg-${each.key}"
-  port     = 31280
+  name     = "devopscorner-tg-${local.node_selector_goapp}-${each.key}"
+  port     = 30080
   protocol = "HTTP"
-  vpc_id   = data.aws_vpc.selected.id
+  vpc_id   = data.terraform_remote_state.core_state.outputs.vpc_id
 
   tags = {
-    Environment     = "DEV"
-    Name            = "DEVOPSCORNER-TG-${upper(each.key)}"
+    Environment     = "${var.environment[local.env]}"
+    Name            = "ALB-${upper(local.node_selector_goapp)}-${upper(each.key)}"
     Type            = "PRODUCTS"
-    ProductName     = "DEVOPSCORNER-TG"
-    ProductGroup    = "DEV-DEVOPSCORNER"
+    ProductName     = "TG-DEVOPSCORNER"
+    ProductGroup    = "${upper(each.key)}-TG-DEVOPSCORNER"
     Department      = "DEVOPS"
-    DepartmentGroup = "DEV-DEVOPS"
-    ResourceGroup   = "DEV-TG-DEVOPSCORNER"
-    Services        = "TG-LB"
+    DepartmentGroup = "${upper(each.key)}-DEVOPS"
+    ResourceGroup   = "${upper(each.key)}-TG-DEVOPSCORNER"
+    Services        = "${upper(local.node_selector_goapp)}-${upper(each.key)}"
     Terraform       = true
   }
 }
@@ -124,15 +120,33 @@ resource "aws_lb_target_group" "sharedredis" {
 # --------------------------------------------------------------------------
 #  Node Group Output
 # --------------------------------------------------------------------------
-## SharedRedis Output #
-output "eks_node_name_sharedredis" {
-  value = aws_eks_node_group.sharedredis["sharedredis"].id
+## DEV Output ##
+output "eks_node_name_goapp_dev" {
+  value = aws_eks_node_group.goapp["dev"].id
+}
+
+output "eks_node_asg_group_goapp_dev" {
+  value = aws_eks_node_group.goapp["dev"].resources[0].autoscaling_groups[0].name
+}
+
+## UAT Output ##
+output "eks_node_name_goapp_uat" {
+  value = aws_eks_node_group.goapp["uat"].id
+}
+
+output "eks_node_asg_group_goapp_uat" {
+  value = aws_eks_node_group.goapp["uat"].resources[0].autoscaling_groups[0].name
 }
 
 # --------------------------------------------------------------------------
 #  Target Group Output
 # --------------------------------------------------------------------------
-## SharedRedis Output ##
-output "eks_node_tg_sharedredis" {
-  value = aws_lb_target_group.sharedredis["sharedredis"].id
+## DEV Output ##
+output "eks_node_tg_goapp_dev" {
+  value = aws_lb_target_group.goapp["dev"].id
+}
+
+## UAT Output ##
+output "eks_node_tg_goapp_uat" {
+  value = aws_lb_target_group.goapp["uat"].id
 }
