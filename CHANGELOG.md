@@ -1,3 +1,49 @@
+# Terraform Infra - v3.3
+
+Production Grade Terraform for Provisioning Infrastructure
+
+## Features
+
+- All features from version 3.2
+- Added Documentation Terraform Infra
+  - Build Container `devopscorner/cicd`
+    - Build Container `devopscorner/cicd` for DockerHub, detail [here](https://github.com/devopscorner/devopscorner-container/blob/master/docs/container-cicd-dockerhub.md)
+    - Build Container `devopscorner/cicd` for ECR, detail [here](https://github.com/devopscorner/devopscorner-container/blob/master/docs/container-cicd-ecr.md)
+
+  - Build Container `devopscorner/terraform-infra`
+    - Build Container `devopscorner/terraform-infra` for DockerHub, detail [here](docs/container-terraform-infra-dockerhub.md)
+    - Build Container `devopscorner/terraform-infra` for ECR, detail [here](docs/container-terraform-infra-ecr.md)
+
+  - Terraform Plan Inventory
+    - [Terraform Plan - Core Staging](docs/terraform-plan-core-staging.md)
+    - [Terraform Plan - Core Prod](docs/terraform-plan-core-prod.md)
+    - [Terraform Plan - Jumphost Staging](docs/terraform-plan-jumphost-staging.md)
+    - [Terraform Plan - Jumphost Prod](docs/terraform-plan-jumphost-prod.md)
+    - [Terraform Plan - EKS Staging](docs/terraform-plan-eks-staging.md)
+    - [Terraform Plan - EKS Prod](docs/terraform-plan-eks-prod.md)
+    - [Terraform Security Analysis - Core Staging](docs/terraform-security-analysis-core-staging.md)
+    - [Terraform Security Analysis - Core Prod](docs/terraform-security-analysis-core-prod.md)
+    - [Terraform Security Analysis - Jumphost Staging](docs/terraform-security-analysis-jumphost-staging.md)
+    - [Terraform Security Analysis - Jumphost Prod](docs/terraform-security-analysis-jumphost-prod.md)
+    - [Terraform Security Analysis - EKS Staging](docs/terraform-security-analysis-eks-staging.md)
+    - [Terraform Security Analysis - EKS Prod](docs/terraform-security-analysis-eks-prod.md)
+    - [Terraform Infra Costing - Core Staging](docs/terraform-infracost-core-staging.md)
+    - [Terraform Infra Costing - Core Prod](docs/terraform-infracost-core-prod.md)
+    - [Terraform Infra Costing - Jumphost Staging](docs/terraform-infracost-jumphost-staging.md)
+    - [Terraform Infra Costing - Jumphost Prod](docs/terraform-infracost-jumphost-prod.md)
+    - [Terraform Infra Costing - EKS Staging](docs/terraform-infracost-eks-staging.md)
+    - [Terraform Infra Costing - EKS Prod](docs/terraform-infracost-eks-prod.md)
+
+- Terraform State Inventory
+  - [Core Infrastructure Staging](docs/core-infra-staging.md)
+  - [Core Infrastructure Prod](docs/core-infra-prod.md)
+  - [EKS Staging](docs/eks-staging.md)
+  - [EKS Production](docs/eks-prod.md)
+  - [Jumphost Staging](docs/jumphost-staging.md)
+  - [Jumphost Production](docs/jumphost-prod.md)
+
+---
+
 # Terraform Infra - v3.2
 
 Production Grade Terraform for Provisioning Infrastructure
