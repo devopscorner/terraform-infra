@@ -75,7 +75,7 @@ resource "aws_eks_node_group" "devops" {
     },
     {
       Environment     = "${upper(each.key)}"
-      Name            = "EKS-1.22-${upper(local.node_selector_devopscorner)}-${upper(each.key)}"
+      Name            = "EKS-1.22-${upper(local.node_selector_devops)}-${upper(each.key)}"
       Type            = "PRODUCTS"
       ProductName     = "EKS-DEVOPSCORNER"
       ProductGroup    = "${upper(each.key)}-EKS-DEVOPSCORNER"
@@ -139,11 +139,12 @@ output "eks_node_name_devops_tools" {
 # --------------------------------------------------------------------------
 #  Target Group Output
 # --------------------------------------------------------------------------
-## DEV Output ##
+## Monitoring TargetGroup Output ##
 output "eks_node_tg_devops_monitoring" {
   value = aws_lb_target_group.devops["monitoring"].id
 }
 
+## Tools TargetGroup Output ##
 output "eks_node_tg_devops_tools" {
   value = aws_lb_target_group.devops["tools"].id
 }

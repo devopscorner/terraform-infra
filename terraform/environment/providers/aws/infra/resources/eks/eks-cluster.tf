@@ -130,7 +130,7 @@ resource "aws_eks_cluster" "aws_eks" {
 }
 
 locals {
-  tag_eks = local.env == "staging" ? "DEV" : values(var.environment[local.env])
+  tag_eks = local.env == "staging" ? "DEV" : "${var.environment[local.env]}"
   eks-oidc-thumbprint = data.tls_certificate.cluster.certificates.0.sha1_fingerprint
 }
 
