@@ -12,6 +12,9 @@
 - terraform show -json tfplan-core-prod.binary > tfplan-core-prod.json
 ```
 
+![00-terraform-plan-core-prod-p1.png](assets/terraform/00-terraform-plan-core-prod-p1.png)
+![00-terraform-plan-core-prod-p2.png](assets/terraform/00-terraform-plan-core-prod-p2.png)
+
 ### Results
 
 ```json

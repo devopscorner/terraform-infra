@@ -12,6 +12,9 @@
 - terraform show -json tfplan-core-staging.binary > tfplan-core-staging.json
 ```
 
+![00-terraform-plan-core-staging-p1.png](assets/terraform/00-terraform-plan-core-staging-p1.png)
+![00-terraform-plan-core-staging-p2.png](assets/terraform/00-terraform-plan-core-staging-p2.png)
+
 ### Results
 
 ```json
