@@ -12,6 +12,8 @@
 - terraform show -json tfplan-eks-prod.binary > tfplan-eks-prod.json
 ```
 
+![00-terraform-plan-eks-prod-p1.png](assets/terraform/00-terraform-plan-eks-prod-p1.png)
+
 ### Results
 
 ```json
