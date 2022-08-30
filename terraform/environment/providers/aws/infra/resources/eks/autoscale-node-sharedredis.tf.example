@@ -210,7 +210,7 @@ output "eks_node_scale_up_sharedredis" {
 }
 
 # --------------------------------------------------------------------------
-#  Node Group Output
+#  Autoscaling Node Group Output
 # --------------------------------------------------------------------------
 output "eks_node_asg_group_sharedredis" {
   value = aws_eks_node_group.sharedredis["sharedredis"].resources[0].autoscaling_groups[0].name

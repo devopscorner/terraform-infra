@@ -349,7 +349,26 @@ resource "aws_autoscaling_group_tag" "ClusterName_group_devops_tools" {
 }
 
 # --------------------------------------------------------------------------
-#  Node Group Output
+#  Autoscaling Output
+# --------------------------------------------------------------------------
+## Scale Down ##
+output "eks_node_scale_down_devops_monitoring" {
+  value = aws_autoscaling_schedule.scale_down_devops_monitoring.arn
+}
+output "eks_node_scale_down_devops_tools" {
+  value = aws_autoscaling_schedule.scale_down_devops_tools.arn
+}
+
+## Scale Up ##
+output "eks_node_scale_up_devops_monitoring" {
+  value = aws_autoscaling_schedule.scale_up_devops_monitoring.arn
+}
+output "eks_node_scale_up_devops_tools" {
+  value = aws_autoscaling_schedule.scale_up_devops_tools.arn
+}
+
+# --------------------------------------------------------------------------
+#  Autoscaling Node Group Output
 # --------------------------------------------------------------------------
 ## Monitoring Output #
 output "eks_node_asg_group_devops_monitoring" {

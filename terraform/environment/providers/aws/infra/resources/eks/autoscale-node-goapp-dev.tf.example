@@ -194,3 +194,10 @@ output "eks_node_scale_down_goapp_dev" {
 output "eks_node_scale_up_goapp_dev" {
   value = aws_autoscaling_schedule.scale_up_goapp_dev.arn
 }
+
+# --------------------------------------------------------------------------
+#  Autoscaling Node Group Output
+# --------------------------------------------------------------------------
+output "eks_node_asg_group_goapp_dev" {
+  value = aws_eks_node_group.goapp["dev"].resources[0].autoscaling_groups[0].name
+}
