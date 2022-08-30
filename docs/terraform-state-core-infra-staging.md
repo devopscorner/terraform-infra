@@ -11,6 +11,10 @@ ec2_private_1b = [
   "subnet-08be7507c2e00dedd",
 ]
 ec2_private_1b_cidr = "10.32.24.0/21"
+ec2_private_1c = [
+  "subnet-07d6efe20a9079a36",
+]
+ec2_private_1c_cidr = "10.32.32.0/21"
 ec2_public_1a = [
   "subnet-02ddb146bdbfb57e9",
 ]
@@ -19,6 +23,10 @@ ec2_public_1b = [
   "subnet-0fb2c4d1be62fa4e7",
 ]
 ec2_public_1b_cidr = "10.32.48.0/21"
+ec2_public_1c = [
+  "subnet-08f3fa4c78450ceb7",
+]
+ec2_public_1c_cidr = "10.32.56.0/21"
 eks_private_1a = [
   "subnet-0a97981b2a6cd223f",
 ]

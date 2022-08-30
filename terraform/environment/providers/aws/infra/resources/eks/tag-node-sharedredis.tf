@@ -25,35 +25,6 @@ locals {
 }
 
 # --------------------------------------------------------------------------
-#  Autoscaling Schedule Node
-# --------------------------------------------------------------------------
-# References:
-# - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_schedule
-# - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_attachment
-
-## Scale Down
-resource "aws_autoscaling_schedule" "scale_down_sharedredis" {
-  autoscaling_group_name = aws_eks_node_group.sharedredis["sharedredis"].resources[0].autoscaling_groups[0].name
-  desired_capacity       = 0
-  max_size               = 0
-  min_size               = 0
-  recurrence             = "0 13,16 * * *"
-  scheduled_action_name  = "scale_down"
-  # start_time           = "2022-03-25T13:00:00Z"
-}
-
-## Scale Up
-resource "aws_autoscaling_schedule" "scale_up_sharedredis" {
-  autoscaling_group_name = aws_eks_node_group.sharedredis["sharedredis"].resources[0].autoscaling_groups[0].name
-  desired_capacity       = 0
-  max_size               = 5
-  min_size               = 0
-  recurrence             = "0 0 * * MON-FRI"
-  scheduled_action_name  = "scale_up"
-  # start_time           = "2022-03-28T00:00:00Z"
-}
-
-# --------------------------------------------------------------------------
 #  Autoscaling Tag
 # --------------------------------------------------------------------------
 resource "aws_autoscaling_group_tag" "Environment_group_tag_sharedredis" {
@@ -194,19 +165,6 @@ resource "aws_autoscaling_group_tag" "ClusterName_group_tag_sharedredis" {
     value = "${var.eks_cluster_name}"
     propagate_at_launch = true
   }
-}
-
-# --------------------------------------------------------------------------
-#  Autoscaling Output
-# --------------------------------------------------------------------------
-## Scale Down ##
-output "eks_node_scale_down_sharedredis" {
-  value = aws_autoscaling_schedule.scale_down_sharedredis.arn
-}
-
-## Scale Up ##
-output "eks_node_scale_up_sharedredis" {
-  value = aws_autoscaling_schedule.scale_up_sharedredis.arn
 }
 
 # --------------------------------------------------------------------------
