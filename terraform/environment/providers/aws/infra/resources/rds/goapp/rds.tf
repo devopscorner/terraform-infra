@@ -41,8 +41,10 @@ resource "aws_db_subnet_group" "db_subnet" {
   subnet_ids = [
     data.terraform_remote_state.core_state.outputs.ec2_private_1a[0],
     data.terraform_remote_state.core_state.outputs.ec2_private_1b[0],
+    data.terraform_remote_state.core_state.outputs.ec2_private_1c[0],
     data.terraform_remote_state.core_state.outputs.eks_private_1a[0],
-    data.terraform_remote_state.core_state.outputs.eks_private_1b[0]
+    data.terraform_remote_state.core_state.outputs.eks_private_1b[0],
+    data.terraform_remote_state.core_state.outputs.eks_private_1c[0]
   ]
 }
 

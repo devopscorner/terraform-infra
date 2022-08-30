@@ -23,7 +23,8 @@ resource "aws_elb" "jumphost" {
   subnets = [
     ## Public Subnet
     data.terraform_remote_state.core_state.outputs.ec2_public_1a[0],
-    data.terraform_remote_state.core_state.outputs.ec2_public_1b[0]
+    data.terraform_remote_state.core_state.outputs.ec2_public_1b[0],
+    data.terraform_remote_state.core_state.outputs.ec2_public_1c[0]
   ]
   security_groups = ["${aws_security_group.jumphost.id}"]
 
