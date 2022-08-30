@@ -57,9 +57,9 @@ variable "kms_key" {
   type        = map(string)
   description = "KMS Key References"
   default = {
-    lab     = "arn:aws:kms:ap-southeast-1:085546766396:key/5364ed63-603a-498a-b4f3-b1b82c010f96"
-    staging = "arn:aws:kms:ap-southeast-1:085546766396:key/ed28d88f-d1fe-4a00-a322-296eb833818f"
-    prod    = "arn:aws:kms:ap-southeast-1:085546766396:key/3ee03407-43ed-45b6-93c7-2e324cdd1bdb"
+    lab     = "arn:aws:kms:ap-southeast-1:YOUR_AWS_ACCOUNT:key/CMK_KEY_HASH"
+    staging = "arn:aws:kms:ap-southeast-1:YOUR_AWS_ACCOUNT:key/CMK_KEY_HASH"
+    prod    = "arn:aws:kms:ap-southeast-1:YOUR_AWS_ACCOUNT:key/CMK_KEY_HASH"
   }
 }
 
