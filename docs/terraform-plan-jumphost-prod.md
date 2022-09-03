@@ -12,6 +12,9 @@
 - terraform show -json tfplan-jumphost-prod.binary > tfplan-jumphost-prod.json
 ```
 
+![00-terraform-plan-jumphost-prod-p1.png](assets/terraform/00-terraform-plan-jumphost-prod-p1.png)
+![00-terraform-plan-jumphost-prod-p2.png](assets/terraform/00-terraform-plan-jumphost-prod-p2.png)
+
 ### Results
 
 ```json

@@ -12,6 +12,9 @@
 - terraform show -json tfplan-jumphost-staging.binary > tfplan-jumphost-staging.json
 ```
 
+![00-terraform-plan-jumphost-staging-p1.png](assets/terraform/00-terraform-plan-jumphost-staging-p1.png)
+![00-terraform-plan-jumphost-staging-p2.png](assets/terraform/00-terraform-plan-jumphost-staging-p2.png)
+
 ### Results
 
 ```json
