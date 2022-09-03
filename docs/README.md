@@ -49,9 +49,9 @@ Production Grade Terraform for Provisioning Infrastructure
 - Terraform State Inventory
   - [Core Infrastructure Staging](terraform-state-core-infra-staging.md)
   - [Core Infrastructure Prod](terraform-state-core-infra-prod.md)
-  - [EKS Staging](terraform-state-eks-staging.md)
-  - [EKS Production](terraform-state-eks-prod.md)
   - [Jumphost Staging](terraform-state-jumphost-staging.md)
   - [Jumphost Production](terraform-state-jumphost-prod.md)
+  - [EKS Staging](terraform-state-eks-staging.md)
+  - [EKS Production](terraform-state-eks-prod.md)
 
 - Reproduce DEMO, detail [here](DEMO.md)
