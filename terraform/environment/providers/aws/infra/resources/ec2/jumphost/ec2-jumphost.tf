@@ -60,7 +60,7 @@ resource "aws_key_pair" "jumphost_ssh_key" {
 }
 
 resource "aws_instance" "jumphost" {
-  ami                    = var.ami
+  ami                    = "${var.ami_os}" == "aws-linux" ? "${var.ami_aws_linux}" : "${var.ami_ubuntu}"
   instance_type          = var.ec2_type[local.env]
   monitoring             = true
   availability_zone      = var.aws_az[local.env]
@@ -72,10 +72,10 @@ resource "aws_instance" "jumphost" {
 
   security_groups = ["${aws_security_group.jumphost.id}"]
 
-  user_data = file("./userdata/ubuntu.sh")
+  user_data = "${var.ami_os}" == "aws-linux" ? file("./userdata/amazon-linux.sh") : file("./userdata/ubuntu.sh")
 
   lifecycle {
-    prevent_destroy = false
+    prevent_destroy = true
     ignore_changes = [
       tags,
     ]

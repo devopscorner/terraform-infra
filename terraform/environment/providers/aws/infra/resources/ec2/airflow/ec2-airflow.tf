@@ -60,7 +60,7 @@ resource "aws_key_pair" "airflow_ssh_key" {
 }
 
 resource "aws_instance" "airflow" {
-  ami                    = var.ami
+  ami                    = "${var.ami_os}" == "aws-linux" ? "${var.ami_aws_linux}" : "${var.ami_ubuntu}"
   instance_type          = var.ec2_type[local.env]
   monitoring             = true
   availability_zone      = var.aws_az[local.env]
@@ -72,7 +72,7 @@ resource "aws_instance" "airflow" {
 
   security_groups = ["${aws_security_group.airflow.id}"]
 
-  user_data = file("./userdata/amazon-linux.sh")
+  user_data = "${var.ami_os}" == "aws-linux" ? file("./userdata/amazon-linux.sh") : file("./userdata/ubuntu.sh")
 
   lifecycle {
     prevent_destroy = true
