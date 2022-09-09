@@ -81,17 +81,19 @@ data "aws_vpc" "selected" {
 }
 
 resource "aws_eks_cluster" "aws_eks" {
-  enabled_cluster_log_types       = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
-  name                            = "${var.eks_cluster_name}_${var.env[local.env]}"
-  role_arn                        = aws_iam_role.eks_cluster.arn
-  version                         = var.k8s_version[local.env]
+  enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+  name                      = "${var.eks_cluster_name}-${var.env[local.env]}"
+  role_arn                  = aws_iam_role.eks_cluster.arn
+  version                   = var.k8s_version[local.env]
 
   vpc_config {
     subnet_ids = [
-        data.terraform_remote_state.core_state.outputs.eks_private_1a[0],
-        data.terraform_remote_state.core_state.outputs.eks_private_1b[0],
-        data.terraform_remote_state.core_state.outputs.eks_public_1a[0],
-        data.terraform_remote_state.core_state.outputs.eks_public_1b[0]
+      data.terraform_remote_state.core_state.outputs.eks_private_1a[0],
+      data.terraform_remote_state.core_state.outputs.eks_private_1b[0],
+      data.terraform_remote_state.core_state.outputs.eks_private_1c[0],
+      data.terraform_remote_state.core_state.outputs.eks_public_1a[0],
+      data.terraform_remote_state.core_state.outputs.eks_public_1b[0],
+      data.terraform_remote_state.core_state.outputs.eks_public_1c[0]
     ]
   }
 

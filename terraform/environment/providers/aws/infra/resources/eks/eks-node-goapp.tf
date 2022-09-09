@@ -125,27 +125,15 @@ output "eks_node_name_goapp_dev" {
   value = aws_eks_node_group.goapp["dev"].id
 }
 
-output "eks_node_asg_group_goapp_dev" {
-  value = aws_eks_node_group.goapp["dev"].resources[0].autoscaling_groups[0].name
-}
-
 ## UAT Output ##
 output "eks_node_name_goapp_uat" {
   value = aws_eks_node_group.goapp["uat"].id
 }
 
-output "eks_node_asg_group_goapp_uat" {
-  value = aws_eks_node_group.goapp["uat"].resources[0].autoscaling_groups[0].name
-}
-
 ## PROD Output ##
-output "eks_node_name_goapp_prod" {
-  value = aws_eks_node_group.goapp["prod"].id
-}
-
-output "eks_node_asg_group_goapp_prod" {
-  value = aws_eks_node_group.goapp["prod"].resources[0].autoscaling_groups[0].name
-}
+# output "eks_node_name_goapp_prod" {
+#   value = aws_eks_node_group.goapp["prod"].id
+# }
 
 # --------------------------------------------------------------------------
 #  Target Group Output
@@ -161,6 +149,6 @@ output "eks_node_tg_goapp_uat" {
 }
 
 ## PROD Output ##
-output "eks_node_tg_goapp_prod" {
-  value = aws_lb_target_group.goapp["prod"].id
-}
+# output "eks_node_tg_goapp_prod" {
+#   value = aws_lb_target_group.goapp["prod"].id
+# }

@@ -20,10 +20,13 @@ resource "aws_security_group" "eks_sg" {
     cidr_blocks = [
       data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_public_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_public_1b_cidr
+      data.terraform_remote_state.core_state.outputs.eks_public_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.eks_public_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
     # security_groups  = [data.terraform_remote_state.core_state.outputs.security_group_id]
@@ -40,10 +43,10 @@ resource "aws_security_group" "eks_sg" {
     cidr_blocks = [
       data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_public_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_public_1b_cidr
+      data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
     security_groups  = [
@@ -59,10 +62,10 @@ resource "aws_security_group" "eks_sg" {
     cidr_blocks = [
       data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_public_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_public_1b_cidr
+      data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
     security_groups  = [
@@ -108,10 +111,10 @@ resource "aws_security_group" "eks_sg" {
     cidr_blocks = [
       data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_public_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_public_1b_cidr
+      data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
     security_groups  = [
@@ -127,10 +130,10 @@ resource "aws_security_group" "eks_sg" {
     cidr_blocks = [
       data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_public_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_public_1b_cidr
+      data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
     security_groups  = [
@@ -146,12 +149,10 @@ resource "aws_security_group" "eks_sg" {
     cidr_blocks = [
       data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_public_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_public_1b_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_public_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_public_1b_cidr
+      data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
   }
