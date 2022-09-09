@@ -30,9 +30,9 @@ resource "aws_eks_node_group" "sharedredis" {
 
   ## EKS Private Subnet ###
   subnet_ids = [
-      data.terraform_remote_state.core_state.outputs.eks_private_1a[0],
-      data.terraform_remote_state.core_state.outputs.eks_private_1b[0],
-      data.terraform_remote_state.core_state.outputs.eks_private_1c[0]
+    data.terraform_remote_state.core_state.outputs.eks_private_1a[0],
+    data.terraform_remote_state.core_state.outputs.eks_private_1b[0],
+    data.terraform_remote_state.core_state.outputs.eks_private_1c[0]
   ]
 
   instance_types = local.env == "staging" ? ["t3.medium"] : ["m5.large"]

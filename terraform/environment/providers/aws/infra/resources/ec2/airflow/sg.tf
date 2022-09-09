@@ -37,8 +37,10 @@ resource "aws_security_group" "airflow" {
       "${var.access_my_ip}",
       data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr
+      data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
     security_groups  = [data.terraform_remote_state.core_state.outputs.security_group_id]
@@ -53,8 +55,10 @@ resource "aws_security_group" "airflow" {
       "${var.access_my_ip}",
       data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr
+      data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
     security_groups  = [data.terraform_remote_state.core_state.outputs.security_group_id]
@@ -69,8 +73,10 @@ resource "aws_security_group" "airflow" {
       "${var.access_my_ip}",
       data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr
+      data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
     security_groups  = [data.terraform_remote_state.core_state.outputs.security_group_id]
@@ -85,8 +91,10 @@ resource "aws_security_group" "airflow" {
       "${var.access_my_ip}",
       data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr
+      data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
+      data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
     security_groups  = [data.terraform_remote_state.core_state.outputs.security_group_id]
