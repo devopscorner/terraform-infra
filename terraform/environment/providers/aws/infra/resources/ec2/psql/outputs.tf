@@ -20,8 +20,8 @@ output "instance" {
     private_ipv4   = "${aws_eip.psql.private_ip}"
     public_dns     = "${aws_eip.psql.public_dns}"
     public_ipv4    = "${aws_eip.psql.public_ip}"
-    ssh_access_dns = "${var.ami}" == "ami-0dc5785603ad4ff54" ? "ssh ec2-user@${aws_eip.psql.public_dns}" : "ssh ubuntu@${aws_eip.psql.public_dns}"
-    ssh_access_ip  = "${var.ami}" == "ami-0dc5785603ad4ff54" ? "ssh ec2-user@${aws_eip.psql.public_ip}" : "ssh ubuntu@${aws_eip.psql.public_ip}"
+    ssh_access_dns = "${var.ami_os}" == "aws-linux" ? "ssh ec2-user@${aws_eip.psql.public_dns}" : "ssh ubuntu@${aws_eip.psql.public_dns}"
+    ssh_access_ip  = "${var.ami_os}" == "aws-linux" ? "ssh ec2-user@${aws_eip.psql.public_ip}" : "ssh ubuntu@${aws_eip.psql.public_ip}"
     subnet_id      = local.subnet_id
     vpc_id         = data.aws_vpc.selected.id
   }

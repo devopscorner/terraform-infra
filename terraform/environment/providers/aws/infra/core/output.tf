@@ -134,6 +134,7 @@ CIDR Block Private:
 CIDR Block Public:
   EC2 CIDR 1a:       ${aws_subnet.ec2_public_a.cidr_block}
   EC2 CIDR 1b:       ${aws_subnet.ec2_public_b.cidr_block}
+  EC2 CIDR 1c:       ${aws_subnet.ec2_public_c.cidr_block}
   EKS CIDR 1a:       ${aws_subnet.eks_public_a.cidr_block}
   EKS CIDR 1b:       ${aws_subnet.eks_public_b.cidr_block}
   EKS CIDR 1c:       ${aws_subnet.eks_public_c.cidr_block}
