@@ -14,7 +14,7 @@
 locals {
   elb_tags = {
     Name          = "${var.ec2_name}-elb-${var.env[local.env]}",
-    ResourceGroup = "${var.environment[local.env]}-ELB-JUMPHOST"
+    ResourceGroup = "${var.environment[local.env]}-ELB-PSQL"
   }
 }
 
