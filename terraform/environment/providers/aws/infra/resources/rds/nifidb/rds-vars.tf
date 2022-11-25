@@ -1,5 +1,5 @@
 # ==========================================================================
-#  Resources: RDS / rds-vars.tf (Spesific Environment)
+#  Resources: RDS nifidb / rds-vars.tf (Spesific Environment)
 # --------------------------------------------------------------------------
 #  Description
 # --------------------------------------------------------------------------
@@ -74,7 +74,7 @@ variable "vpc_list" {
 variable "rds_name" {
   type        = string
   description = "RDS Name"
-  default     = "GOAPPDB-PSQL"
+  default     = "NIFIDB-PSQL"
 }
 
 variable "rds_storage_size" {
