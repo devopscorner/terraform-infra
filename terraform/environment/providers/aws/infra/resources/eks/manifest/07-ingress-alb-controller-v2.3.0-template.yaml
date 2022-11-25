@@ -737,9 +737,9 @@ spec:
         ### Modified Cluster Name ###
         - --cluster-name=${EKS_CLUSTER}
         - --ingress-class=alb
-        # - --disable-restricted-sg-rules=true
-        # - --aws-vpc-id=${EKS_VPC_ID}
-        # - --aws-region=${AWS_REGION}
+        ## - --disable-restricted-sg-rules=true
+        ## - --aws-vpc-id=${EKS_VPC_ID}
+        ## - --aws-region=${AWS_REGION}
         #############################
         image: amazon/aws-alb-ingress-controller:v2.3.0
         livenessProbe:
