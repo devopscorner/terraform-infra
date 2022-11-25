@@ -8,7 +8,7 @@ Production Grade Terraform for Provisioning Infrastructure
 ![download all](https://img.shields.io/github/downloads/devopscorner/terraform-infra/total.svg)
 ![download latest](https://img.shields.io/github/downloads/devopscorner/terraform-infra/3.3/total)
 ![view](https://views.whatilearened.today/views/github/devopscorner/terraform-infra.svg)
-![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://github.com/devopscorner/terraform-infra/blob/master/clone.json?raw=True&logo=github)
+![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://raw.githubusercontent.com/devopscorner/terraform-infra/master/clone.json?raw=True&logo=github)
 ![issues](https://img.shields.io/github/issues/devopscorner/terraform-infra)
 ![pull requests](https://img.shields.io/github/issues-pr/devopscorner/terraform-infra)
 ![forks](https://img.shields.io/github/forks/devopscorner/terraform-infra)
@@ -101,15 +101,33 @@ Multi Environment Workspace:
   docker version
 
   Client:
-  Cloud integration: v1.0.22
-  Version:           20.10.12
-  API version:       1.41
-  Go version:        go1.16.12
-  Git commit:        e91ed57
-  Built:             Mon Dec 13 11:46:56 2021
-  OS/Arch:           darwin/amd64
-  Context:           default
-  Experimental:      true
+    Version:           20.10.17-rd
+    API version:       1.41
+    Go version:        go1.17.11
+    Git commit:        c2e4e01
+    Built:             Fri Jul 22 18:31:17 2022
+    OS/Arch:           darwin/amd64
+    Context:           default
+    Experimental:      true
+
+  Server: Docker Desktop 4.14.1 (91661)
+  Engine:
+    Version:          20.10.21
+    API version:      1.41 (minimum version 1.12)
+    Go version:       go1.18.7
+    Git commit:       3056208
+    Built:            Tue Oct 25 18:00:19 2022
+    OS/Arch:          linux/amd64
+    Experimental:     false
+  containerd:
+    Version:          1.6.9
+    GitCommit:        1c90a442489720eec95342e1789ee8a5e1b9536f
+  runc:
+    Version:          1.1.4
+    GitCommit:        v1.1.4-0-g5fd4c4d
+  docker-init:
+    Version:          0.19.0
+    GitCommit:        de40ad0
   ```
 
 - Docker-Compose version
@@ -117,15 +135,15 @@ Multi Environment Workspace:
   ```
   docker-compose -v
   ---
-  Docker Compose version v2.2.3
+  Docker Compose version v2.11.1
   ```
 
 - AWS Cli
 
   ```
-  aws -v
+  aws --version
   ---
-  Note: AWS CLI version 2, the latest major version of the AWS CLI, is now stable and recommended for general use. For more information, see the AWS CLI version 2 installation instructions at: <https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html>
+  aws-cli/2.8.7 Python/3.9.11 Darwin/21.6.0 exe/x86_64 prompt/off
   ```
 
 - Terraform Cli
@@ -133,7 +151,7 @@ Multi Environment Workspace:
   ```
   terraform version
   ---
-  Terraform v1.2.8
+  Terraform v1.3.5
   on darwin_amd64
   - provider registry.terraform.io/hashicorp/aws v3.74.3
   - provider registry.terraform.io/hashicorp/local v2.1.0

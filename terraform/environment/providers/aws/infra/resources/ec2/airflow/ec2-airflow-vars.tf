@@ -71,7 +71,7 @@ variable "ec2_type" {
 variable "access_my_ip" {
   type        = string
   description = "Your IP Address"
-  default     = "118.136.0.0/16"
+  default     = "118.136.0.0/22"
 }
 
 # ------------------------------------

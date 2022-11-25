@@ -1,5 +1,5 @@
 # ==========================================================================
-#  Resources: RDS goapp / rds.tf (RDS Terraform)
+#  Resources: RDS laraveldb / rds.tf (RDS Terraform)
 # --------------------------------------------------------------------------
 #  Description
 # --------------------------------------------------------------------------
@@ -49,7 +49,7 @@ resource "aws_db_subnet_group" "db_subnet" {
 }
 
 resource "aws_security_group" "rds_default" {
-  name        = "devopscorner-sg-rds-emrdb-${var.env[local.env]}"
+  name        = "devopscorner-sg-rds-laraveldb-${var.env[local.env]}"
   description = "Allow TLS inbound traffic"
   vpc_id      = data.terraform_remote_state.core_state.outputs.vpc_id
 
@@ -94,7 +94,7 @@ module "db" {
   source   = "../../../../../../../modules/providers/aws/officials/terraform-aws-rds"
   multi_az = local.env == "prod" ? true : false
 
-  identifier        = "emrdb-${var.env[local.env]}"
+  identifier        = "laraveldb-${var.env[local.env]}"
   engine            = var.rds_engine
   engine_version    = var.rds_version
   instance_class    = var.db_instance_class[local.env]
@@ -106,7 +106,7 @@ module "db" {
   kms_key_id = data.aws_kms_key.cmk_key.arn
 
   ## DB_NAME
-  db_name = "goappdb"
+  db_name = "laraveldb"
   ## DB_USER
   username = "postgres"
   ## DB_PASSWORD (static)
@@ -138,7 +138,7 @@ module "db" {
   major_engine_version = var.rds_major_engine_version
 
   # Snapshot name upon DB deletion
-  # final_snapshot_identifier = "emrdb-${var.env[local.env]}"
+  # final_snapshot_identifier = "laraveldb-${var.env[local.env]}"
   skip_final_snapshot = false
 
   # Database Deletion Protection

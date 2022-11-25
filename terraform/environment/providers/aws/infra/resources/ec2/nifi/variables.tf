@@ -1,9 +1,9 @@
 # ==========================================================================
-#  Services: EKS / variables.tf
+#  Resources: EC2 Nifi / variables.tf (Global Environment)
 # --------------------------------------------------------------------------
 #  Description
 # --------------------------------------------------------------------------
-#    - Input Variable for AWS Provider
+#    - Input Variable for Environment Variables
 # ==========================================================================
 
 # ------------------------------------
@@ -19,7 +19,7 @@ variable "aws_region" {
 #  Workspace
 # ------------------------------------
 variable "env" {
-  type = map(string)
+  type        = map(string)
   description = "Workspace Environment Selection"
   default = {
     lab     = "lab"
@@ -57,9 +57,9 @@ variable "kms_key" {
   type        = map(string)
   description = "KMS Key References"
   default = {
-    lab     = "arn:aws:kms:ap-southeast-1:085546766396:key/8fddd0c2-2cab-43e6-9858-0007d2e41b4b"
-    staging = "arn:aws:kms:ap-southeast-1:085546766396:key/8fddd0c2-2cab-43e6-9858-0007d2e41b4b"
-    prod    = "arn:aws:kms:ap-southeast-1:085546766396:key/8fddd0c2-2cab-43e6-9858-0007d2e41b4b"
+    lab     = "arn:aws:kms:ap-southeast-1:YOUR_AWS_ACCOUNT:key/CMK_KEY_HASH"
+    staging = "arn:aws:kms:ap-southeast-1:YOUR_AWS_ACCOUNT:key/CMK_KEY_HASH"
+    prod    = "arn:aws:kms:ap-southeast-1:YOUR_AWS_ACCOUNT:key/CMK_KEY_HASH"
   }
 }
 
@@ -73,38 +73,6 @@ variable "kms_env" {
     lab     = "RnD"
     staging = "Staging"
     prod    = "Production"
-  }
-}
-
-# ------------------------------------
-#  Bucket Name
-# ------------------------------------
-variable "bucket_name" {
-  type        = string
-  description = "Bucket Name"
-  default     = "devopscorner-eks"
-}
-
-# ------------------------------------
-#  SSH public key
-# ------------------------------------
-variable "ssh_public_key" {
-  type        = string
-  description = "SSH Public Key"
-  ## file:///Users/[username]/.ssh/id_rsa.pub
-  default     = ""
-}
-
-# ------------------------------------
-#  VPN Id
-# ------------------------------------
-variable "vpn_infra" {
-  type        = map(string)
-  description = "VPN Infra"
-  default = {
-    lab     = "sg-1234567890"
-    staging = "sg-1234567890"
-    prod    = "sg-0987654321"
   }
 }
 
@@ -132,5 +100,5 @@ variable "tfstate_dynamodb_table" {
 variable "tfstate_path" {
   type        = string
   description = "Path .tfstate in Bucket"
-  default     = "resources/eks/terraform.tfstate"
+  default     = "resources/nifi/terraform.tfstate"
 }

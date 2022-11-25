@@ -1,8 +1,32 @@
-# Terraform Infra - v3.3
+# Terraform Infra
 
 Production Grade Terraform for Provisioning Infrastructure
 
-## Features
+![all contributors](https://img.shields.io/github/contributors/devopscorner/terraform-infra)
+![tags](https://img.shields.io/github/v/tag/devopscorner/terraform-infra?sort=semver)
+[![docker pulls](https://img.shields.io/docker/pulls/devopscorner/terraform-infra.svg)](https://hub.docker.com/r/devopscorner/terraform-infra/)
+![download all](https://img.shields.io/github/downloads/devopscorner/terraform-infra/total.svg)
+![view](https://views.whatilearened.today/views/github/devopscorner/terraform-infra.svg)
+![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://raw.githubusercontent.com/devopscorner/terraform-infra/master/clone.json?raw=True&logo=github)
+![issues](https://img.shields.io/github/issues/devopscorner/terraform-infra)
+![pull requests](https://img.shields.io/github/issues-pr/devopscorner/terraform-infra)
+![forks](https://img.shields.io/github/forks/devopscorner/terraform-infra)
+![stars](https://img.shields.io/github/stars/devopscorner/terraform-infra)
+[![license](https://img.shields.io/github/license/devopscorner/terraform-infra)](https://img.shields.io/github/license/devopscorner/terraform-infra)
+
+---
+## Version 3.4
+
+### Features
+
+- Added EKS node, autoscale & taggination for Laravel Framework
+- Added RDS node for LaravelDB
+- Added EC2 resources for Nifi
+
+---
+## Version 3.3
+
+### Features
 
 - All features from version 3.2
 - Added zone c in Core Infra
@@ -49,12 +73,9 @@ Production Grade Terraform for Provisioning Infrastructure
 - Reproduce DEMO, detail [here](docs/DEMO.md)
 
 ---
+## Version 3.2
 
-# Terraform Infra - v3.2
-
-Production Grade Terraform for Provisioning Infrastructure
-
-## Features
+### Features
 
 - All features from version 3.1
 - Change references path Dockerfile with spesific tag version
@@ -63,12 +84,9 @@ Production Grade Terraform for Provisioning Infrastructure
   - CodeBuild: `devopscorner/cicd:codebuild-4.0`
 
 ---
+## Version 3.1
 
-# Terraform Infra - v3.1
-
-Production Grade Terraform for Provisioning Infrastructure
-
-## Features
+### Features
 
 - All features from version 3.0
 - Added Multi Static Code Analysis for Terraform, inside pipeline `terraform plan`
@@ -99,12 +117,9 @@ Production Grade Terraform for Provisioning Infrastructure
   ```
 
 ---
+## Version 3.0
 
-# Terraform Infra - v3.0
-
-Production Grade Terraform for Provisioning Infrastructure
-
-## Features
+### Features
 
 - Added Terraform Container with CodeBuild Distribution (AWS Linux) version 4.0
 - Refactoring Buildspec for Building Image `devopscorner/terraform-infra` for Alpine, Ubuntu & CodeBuild Container
@@ -139,12 +154,9 @@ Production Grade Terraform for Provisioning Infrastructure
   ```
 
 ---
+## Version 2.0
 
-# Terraform Infra - v2.0
-
-Production Grade Terraform for Provisioning Infrastructure
-
-## Features
+### Features
 
 - Upgrade EKS Cluster version to 1.22 from 1.19
 - Added Schedule Autoscale Node Group for Optimization (Staging/Develop Environment)
@@ -154,12 +166,9 @@ Production Grade Terraform for Provisioning Infrastructure
 - Added Jumppods (Jump Host Pods) for maintenance EKS inside pods (`curl`, `wget`, `telnet`, `ping`, etc), securing with basic-auth access
 
 ---
+## Version 1.1
 
-# Terraform Infra - v1.1
-
-Production Grade Terraform for Provisioning Infrastructure
-
-## Features
+### Features
 
 - Update IAM policy for DEV & UAT environment
 - Update subnet ip range from /24 (256 ips) to /20 (4096 ips)
@@ -169,12 +178,9 @@ Production Grade Terraform for Provisioning Infrastructure
 - Added python scripts as new feature inspect & patch (update) tags of each autoscale EKS nodes
 
 ---
+## Version 1.0
 
-# Terraform Infra - v1.0
-
-Production Grade Terraform for Provisioning Infrastructure
-
-## Prerequirements
+### Features
 
 - Docker (`docker`)
 - Docker Compose (`docker-compose`)

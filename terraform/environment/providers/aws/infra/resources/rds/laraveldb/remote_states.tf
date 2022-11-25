@@ -1,5 +1,5 @@
 # ==========================================================================
-#  Resources: RDS emrdb / remote_states.tf (Remote Terraform References)
+#  Resources: RDS laraveldb / remote_states.tf (Remote Terraform References)
 # --------------------------------------------------------------------------
 #  Description
 # --------------------------------------------------------------------------
