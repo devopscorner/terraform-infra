@@ -77,7 +77,7 @@ variable "cloud9_user_data_url" {
 variable "access_my_ip" {
   type        = string
   description = "Your IP Address"
-  default     = "118.136.0.0/16"
+  default     = "118.136.0.0/22"
 }
 
 # This ips should be list of AWS Cloud9 IPs according to your selected region
