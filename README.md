@@ -84,11 +84,15 @@ Multi Environment Workspace:
   - AWS Elastic Computing (EC2)
     - Airflow
     - Jumphost
+    - Nifi
     - PostgreSQL (PSQL)
   - Amazon Managed Kubernetes Service (EKS)
   - Amazon Elastic Map Reduce (EMR)
   - Amazon Managed Workflows for Apache Airflow (MWAA)
   - Amazon Relational Database Service (RDS)
+    - RDS `goappdb`
+    - RDS `laraveldb`
+    - RDS `nifidb`
   - Amazon ElastiCache for Redis
 
 ## Tested Environment
