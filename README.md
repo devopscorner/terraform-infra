@@ -4,7 +4,8 @@ Production Grade Terraform for Provisioning Infrastructure
 
 ![all contributors](https://img.shields.io/github/contributors/devopscorner/terraform-infra)
 ![tags](https://img.shields.io/github/v/tag/devopscorner/terraform-infra?sort=semver)
-[![docker pulls](https://img.shields.io/docker/pulls/devopscorner/terraform-infra.svg)](https://hub.docker.com/r/devopscorner/terraform-infra/)
+[![cicd pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg?label=cicd%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/cicd/)
+[![terraform-infra pulls](https://img.shields.io/docker/pulls/devopscorner/terraform-infra.svg?label=terraform-infra%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/terraform-infra/)
 ![download all](https://img.shields.io/github/downloads/devopscorner/terraform-infra/total.svg)
 ![download latest](https://img.shields.io/github/downloads/devopscorner/terraform-infra/3.4/total)
 ![view](https://views.whatilearened.today/views/github/devopscorner/terraform-infra.svg)
@@ -102,8 +103,12 @@ Multi Environment Workspace:
 - Docker version
 
   ```
-  docker version
+  docker -v
+  ---
+  Docker version 20.10.17-rd, build c2e4e01
 
+  docker version
+  ---
   Client:
     Version:           20.10.17-rd
     API version:       1.41
@@ -118,7 +123,7 @@ Multi Environment Workspace:
   Engine:
     Version:          20.10.21
     API version:      1.41 (minimum version 1.12)
-    Go version:       go1.18.7
+    Go version:       go9.7
     Git commit:       3056208
     Built:            Tue Oct 25 18:00:19 2022
     OS/Arch:          linux/amd64

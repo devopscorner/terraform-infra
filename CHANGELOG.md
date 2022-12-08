@@ -4,7 +4,8 @@ Production Grade Terraform for Provisioning Infrastructure
 
 ![all contributors](https://img.shields.io/github/contributors/devopscorner/terraform-infra)
 ![tags](https://img.shields.io/github/v/tag/devopscorner/terraform-infra?sort=semver)
-[![docker pulls](https://img.shields.io/docker/pulls/devopscorner/terraform-infra.svg)](https://hub.docker.com/r/devopscorner/terraform-infra/)
+[![cicd pulls](https://img.shields.io/docker/pulls/devopscorner/cicd.svg?label=cicd%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/cicd/)
+[![terraform-infra pulls](https://img.shields.io/docker/pulls/devopscorner/terraform-infra.svg?label=terraform-infra%20pulls&logo=docker)](https://hub.docker.com/r/devopscorner/terraform-infra/)
 ![download all](https://img.shields.io/github/downloads/devopscorner/terraform-infra/total.svg)
 ![view](https://views.whatilearened.today/views/github/devopscorner/terraform-infra.svg)
 ![clone](https://img.shields.io/badge/dynamic/json?color=success&label=clone&query=count&url=https://raw.githubusercontent.com/devopscorner/terraform-infra/master/clone.json?raw=True&logo=github)
