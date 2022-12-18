@@ -85,13 +85,16 @@ git-clone:
 # ============================= #
 #   BUILD CONTAINER TERRAFORM   #
 # ============================= #
+# ./dockerhub-build.sh Dockerfile [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
+# ./ecr-build.sh [AWS_ACCOUNT] Dockerfile [ECR_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
+
 .PHONY: build-tf-infra build-tf-alpine build-tf-ubuntu build-tf-codebuild
 build-tf-infra:
 	@echo "============================================================"
 	@echo " Task      : Create Container Image Terraform "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-build.sh $(ARGS) alpine Dockerfile.alpine ${ALPINE_VERSION} $(CI_PATH)
+	@sh ./ecr-build.sh $(ARGS) Dockerfile.alpine $(CI_PATH) alpine ${ALPINE_VERSION}
 	@echo '- DONE -'
 
 build-tf-alpine:
@@ -99,7 +102,7 @@ build-tf-alpine:
 	@echo " Task      : Create Container Image Terraform Alpine "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-build.sh $(ARGS) alpine Dockerfile.alpine ${ALPINE_VERSION} $(CI_PATH)
+	@sh ./ecr-build.sh $(ARGS) Dockerfile.alpine $(CI_PATH) alpine ${ALPINE_VERSION}
 	@echo '- DONE -'
 
 build-tf-ubuntu:
@@ -107,7 +110,7 @@ build-tf-ubuntu:
 	@echo " Task      : Create Container Image Terraform Ubuntu "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-build.sh $(ARGS) ubuntu Dockerfile.ubuntu ${UBUNTU_VERSION} $(CI_PATH)
+	@sh ./ecr-build.sh $(ARGS) Dockerfile.ubuntu $(CI_PATH) ubuntu ${UBUNTU_VERSION}
 	@echo '- DONE -'
 
 build-tf-codebuild:
@@ -115,19 +118,22 @@ build-tf-codebuild:
 	@echo " Task      : Create Container Image Terraform CodeBuild "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-build.sh $(ARGS) codebuild Dockerfile.codebuild ${CODEBUILD_VERSION} $(CI_PATH)
+	@sh ./ecr-build.sh $(ARGS) Dockerfile.codebuild $(CI_PATH) codebuild ${CODEBUILD_VERSION}
 	@echo '- DONE -'
 
 # ============================ #
 #   TAGS CONTAINER TERRAFORM   #
 # ============================ #
+# ./dockerhub-tag.sh [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
+# ./ecr-tag.sh [AWS_ACCOUNT] [ECR_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
+
 .PHONY: tag-tf-infra tag-tf-alpine tag-tf-ubuntu tag-tf-codebuild
 tag-tf-infra:
 	@echo "============================================================"
 	@echo " Task      : Set Tags Image Terraform "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-tag.sh $(ARGS) alpine ${ALPINE_VERSION} $(CI_PATH)
+	@sh ./ecr-tag.sh $(ARGS) $(CI_PATH) alpine ${ALPINE_VERSION}
 	@echo '- DONE -'
 
 tag-tf-alpine:
@@ -135,7 +141,7 @@ tag-tf-alpine:
 	@echo " Task      : Set Tags Image Terraform Alpine "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-tag.sh $(ARGS) alpine ${ALPINE_VERSION} $(CI_PATH)
+	@sh ./ecr-tag.sh $(ARGS) $(CI_PATH) alpine ${ALPINE_VERSION}
 	@echo '- DONE -'
 
 tag-tf-ubuntu:
@@ -143,7 +149,7 @@ tag-tf-ubuntu:
 	@echo " Task      : Set Tags Image Terraform Ubuntu "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-tag.sh $(ARGS) ubuntu ${UBUNTU_VERSION} $(CI_PATH)
+	@sh ./ecr-tag.sh $(ARGS) $(CI_PATH) ubuntu ${UBUNTU_VERSION}
 	@echo '- DONE -'
 
 tag-tf-codebuild:
@@ -151,19 +157,22 @@ tag-tf-codebuild:
 	@echo " Task      : Set Tags Image Terraform CodeBuild "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-tag.sh $(ARGS) codebuild ${CODEBUILD_VERSION} $(CI_PATH)
+	@sh ./ecr-tag.sh $(ARGS) $(CI_PATH) codebuild ${CODEBUILD_VERSION}
 	@echo '- DONE -'
 
 # ============================ #
 #   PUSH CONTAINER TERRAFORM   #
 # ============================ #
+# ./dockerhub-tag.sh [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu|codebuild] [version|latest|tags] [custom-tags]
+# ./ecr-push.sh [AWS_ACCOUNT] [ECR_PATH] [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
+
 .PHONY: push-tf-infra push-tf-alpine push-tf-ubuntu push-tf-codebuild
 push-tf-infra:
 	@echo "============================================================"
 	@echo " Task      : Push Container Image Terraform "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-push.sh $(ARGS) alpine $(CI_PATH)
+	@sh ./ecr-push.sh $(ARGS) $(CI_PATH) alpine
 	@echo '- DONE -'
 
 push-tf-alpine:
@@ -171,7 +180,7 @@ push-tf-alpine:
 	@echo " Task      : Push Container Image Terraform Alpine "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-push.sh $(ARGS) alpine $(CI_PATH)
+	@sh ./ecr-push.sh $(ARGS) $(CI_PATH) alpine
 	@echo '- DONE -'
 
 push-tf-ubuntu:
@@ -179,7 +188,7 @@ push-tf-ubuntu:
 	@echo " Task      : Push Container Image Terraform Ubuntu "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-push.sh $(ARGS) ubuntu $(CI_PATH)
+	@sh ./ecr-push.sh $(ARGS) $(CI_PATH) ubuntu
 	@echo '- DONE -'
 
 push-tf-codebuild:
@@ -187,19 +196,21 @@ push-tf-codebuild:
 	@echo " Task      : Push Container Image Terraform CodeBuild "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-push.sh $(ARGS) codebuild $(CI_PATH)
+	@sh ./ecr-push.sh $(ARGS) $(CI_PATH) codebuild
 	@echo '- DONE -'
 
 # ============================ #
 #   PULL CONTAINER TERRAFORM   #
 # ============================ #
+# ./ecr-pull.sh [AWS_ACCOUNT] [ECR_PATH] [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
+
 .PHONY: pull-tf-infra pull-tf-alpine pull-tf-ubuntu pull-tf-codebuild
 pull-tf-infra:
 	@echo "============================================================"
 	@echo " Task      : Pull Container Image Terraform "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-pull.sh $(ARGS) alpine $(CI_PATH)
+	@sh ./ecr-pull.sh $(ARGS) $(CI_PATH) alpine
 	@echo '- DONE -'
 
 pull-tf-alpine:
@@ -207,7 +218,7 @@ pull-tf-alpine:
 	@echo " Task      : Pull Container Image Terraform Alpine "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-pull.sh $(ARGS) alpine $(CI_PATH)
+	@sh ./ecr-pull.sh $(ARGS) $(CI_PATH) alpine
 	@echo '- DONE -'
 
 pull-tf-ubuntu:
@@ -215,7 +226,7 @@ pull-tf-ubuntu:
 	@echo " Task      : Pull Container Image Terraform Ubuntu "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-pull.sh $(ARGS) ubuntu $(CI_PATH)
+	@sh ./ecr-pull.sh $(ARGS) $(CI_PATH) ubuntu
 	@echo '- DONE -'
 
 pull-tf-codebuild:
@@ -223,7 +234,7 @@ pull-tf-codebuild:
 	@echo " Task      : Pull Container Image Terraform CodeBuild "
 	@echo " Date/Time : `date` "
 	@echo "============================================================"
-	@sh ./ecr-pull.sh $(ARGS) codebuild $(CI_PATH)
+	@sh ./ecr-pull.sh $(ARGS) $(CI_PATH) codebuild
 	@echo '- DONE -'
 
 # =========================== #
