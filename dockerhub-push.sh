@@ -11,7 +11,7 @@ set -e
 # export CI_PROJECT_NAME="terraform-infra"
 
 # export IMAGE="$CI_PROJECT_PATH/$CI_PROJECT_NAME"
-export IMAGE=$2
+export IMAGE=$1
 
 login_docker() {
   echo '==================='
@@ -23,8 +23,8 @@ login_docker() {
 }
 
 docker_push() {
-  export TAGS_ID=$1
-  IMAGES=`docker images --format "{{.Repository}}:{{.Tag}}" | grep $IMAGE:${TAGS_ID}`
+  export TAGS_ID=$2
+  IMAGES=$(docker images --format "{{.Repository}}:{{.Tag}}" | grep $IMAGE:${TAGS_ID})
   for IMG in $IMAGES; do
     echo "Docker Push => $IMG"
     echo ">> docker push $IMG"
@@ -36,9 +36,7 @@ docker_push() {
 
 main() {
   login_docker
-  # docker_push alpine devopscorner/terraform-infra
-  # docker_push ubuntu devopscorner/terraform-infra
-  # docker_push codebuild devopscorner/terraform-infra
+  # docker_push devopscorner/terraform-infra [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
   docker_push $1 $2
   echo ''
   echo '-- ALL DONE --'
@@ -46,3 +44,6 @@ main() {
 
 ### START HERE ###
 main $1 $2
+
+### How to Execute ###
+# ./dockerhub-push.sh [DOCKERHUB_IMAGE_PATH] [alpine|ubuntu|codebuild|version|latest|tags|custom-tags]
