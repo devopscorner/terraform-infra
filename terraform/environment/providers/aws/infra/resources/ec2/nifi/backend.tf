@@ -15,7 +15,7 @@ terraform {
     region         = "ap-southeast-1"
     bucket         = "devopscorner-terraform-remote-state"
     dynamodb_table = "devopscorner-terraform-state-lock"
-    key            = "resources/nifi/terraform.tfstate"
+    key            = "resources/ec2/nifi/terraform.tfstate"
     encrypt        = true
   }
 }

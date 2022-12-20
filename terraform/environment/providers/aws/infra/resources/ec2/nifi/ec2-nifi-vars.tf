@@ -14,8 +14,8 @@ variable "aws_az" {
   description = "AWS Zone Target Deployment"
   default = {
     lab     = "ap-southeast-1a"
-    staging = "ap-southeast-1b"
-    prod    = "ap-southeast-1b"
+    staging = "ap-southeast-1a"
+    prod    = "ap-southeast-1a"
   }
 }
 
