@@ -1,5 +1,5 @@
 # ==========================================================================
-#  Resources: Airflow / backend.tf (Storing tfstate)
+#  Resources: EC2 WorkspaceLab / backend.tf (Storing tfstate)
 # --------------------------------------------------------------------------
 #  Description
 # --------------------------------------------------------------------------
@@ -15,7 +15,7 @@ terraform {
     region         = "ap-southeast-1"
     bucket         = "devopscorner-terraform-remote-state"
     dynamodb_table = "devopscorner-terraform-state-lock"
-    key            = "resources/ec2/airflow/terraform.tfstate"
+    key            = "resources/ec2/workspacelab/terraform.tfstate"
     encrypt        = true
   }
 }

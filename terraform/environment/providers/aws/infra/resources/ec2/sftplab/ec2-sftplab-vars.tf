@@ -1,5 +1,5 @@
 # ==========================================================================
-#  Resources: EC2 Nifi / nifi-vars.tf (Spesific Environment)
+#  Resources: EC2 SFTPLab / ec2-sftplab-vars.tf (Spesific Environment)
 # --------------------------------------------------------------------------
 #  Description
 # --------------------------------------------------------------------------
@@ -46,25 +46,25 @@ variable "dns_url" {
 variable "bucket_name" {
   type        = string
   description = "Bucket Name"
-  default     = "devopscorner-nifi"
+  default     = "devopscorner-sftp"
 }
 
 # ------------------------------------
-#  Nifi
+#  SFTPLab
 # ------------------------------------
 variable "ec2_name" {
   type        = string
-  description = "Nifi Name"
-  default     = "nifi"
+  description = "SFTPLab Name"
+  default     = "sftplab"
 }
 
 variable "ec2_type" {
   type        = map(string)
-  description = "Nifi EC2 Instance Type"
+  description = "SFTPLab EC2 Instance Type"
   default = {
-    lab     = "t3.medium"
-    staging = "t3.medium"
-    prod    = "t3.medium"
+    lab     = "t3.micro"
+    staging = "t3.micro"
+    prod    = "t3.micro"
   }
 }
 
@@ -117,29 +117,11 @@ variable "ami_ubuntu" {
 variable "ebs_root_size" {
   description = "EBS size for root OS"
   type        = number
-  default     = 50
-}
-
-variable "ebs_content_repo_size" {
-  description = "EBS size for nifi content repository"
-  type        = number
-  default     = 100
-}
-
-variable "ebs_provenance_repo_size" {
-  description = "EBS size for nifi provenance repository"
-  type        = number
-  default     = 100
-}
-
-variable "ebs_flowfile_repo_size" {
-  description = "EBS size for nifi flowfile repository"
-  type        = number
-  default     = 50
+  default     = 20
 }
 
 variable "ebs_opt_data_size" {
   description = "EBS size for /opt/data folder"
   type        = number
-  default     = 100
+  default     = 50
 }

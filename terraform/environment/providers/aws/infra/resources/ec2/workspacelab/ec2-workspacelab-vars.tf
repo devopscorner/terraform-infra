@@ -1,5 +1,5 @@
 # ==========================================================================
-#  Resources: EC2 Nifi / nifi-vars.tf (Spesific Environment)
+#  Resources: EC2 WorkspaceLab / ec2-workspacelab-vars.tf (Spesific Environment)
 # --------------------------------------------------------------------------
 #  Description
 # --------------------------------------------------------------------------
@@ -46,21 +46,21 @@ variable "dns_url" {
 variable "bucket_name" {
   type        = string
   description = "Bucket Name"
-  default     = "devopscorner-nifi"
+  default     = "devopscorner-workspace"
 }
 
 # ------------------------------------
-#  Nifi
+#  WorkspaceLab
 # ------------------------------------
 variable "ec2_name" {
   type        = string
-  description = "Nifi Name"
-  default     = "nifi"
+  description = "WorkspaceLab Name"
+  default     = "workspacelab"
 }
 
 variable "ec2_type" {
   type        = map(string)
-  description = "Nifi EC2 Instance Type"
+  description = "WorkspaceLab EC2 Instance Type"
   default = {
     lab     = "t3.medium"
     staging = "t3.medium"
@@ -117,29 +117,11 @@ variable "ami_ubuntu" {
 variable "ebs_root_size" {
   description = "EBS size for root OS"
   type        = number
-  default     = 50
-}
-
-variable "ebs_content_repo_size" {
-  description = "EBS size for nifi content repository"
-  type        = number
-  default     = 100
-}
-
-variable "ebs_provenance_repo_size" {
-  description = "EBS size for nifi provenance repository"
-  type        = number
-  default     = 100
-}
-
-variable "ebs_flowfile_repo_size" {
-  description = "EBS size for nifi flowfile repository"
-  type        = number
-  default     = 50
+  default     = 30
 }
 
 variable "ebs_opt_data_size" {
   description = "EBS size for /opt/data folder"
   type        = number
-  default     = 100
+  default     = 50
 }

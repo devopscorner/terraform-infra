@@ -20,7 +20,7 @@ locals {
 
 resource "aws_eks_node_group" "laravel" {
   ## NODE GROUP
-  for_each = (local.env == "staging" ? toset(["dev","uat"]) : toset(["prod"]))
+  for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
   cluster_name    = aws_eks_cluster.aws_eks.name
   node_group_name = "${local.node_selector_laravel}-${each.key}-node"
@@ -33,7 +33,7 @@ resource "aws_eks_node_group" "laravel" {
     data.terraform_remote_state.core_state.outputs.eks_private_1c[0]
   ]
 
-  instance_types = local.env == "staging" ? ["t3.medium"] : ["m5.large"]
+  instance_types = local.env == "prod" ? ["m5.large"] : ["t3.medium"]
   disk_size      = 100
   version        = var.k8s_version[local.env]
 
@@ -96,7 +96,7 @@ resource "aws_eks_node_group" "laravel" {
 #  Target Group
 # ------------------------------------
 resource "aws_lb_target_group" "laravel" {
-  for_each = (local.env == "staging" ? toset(["dev","uat"]) : toset(["prod"]))
+  for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
   name     = "devopscorner-tg-${local.node_selector_laravel}-${each.key}"
   port     = 30080

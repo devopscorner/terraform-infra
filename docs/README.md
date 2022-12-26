@@ -19,14 +19,17 @@ Production Grade Terraform for Provisioning Infrastructure
 ## INDEX
 
 - Build Container `devopscorner/cicd`
+
   - Build Container `devopscorner/cicd` for DockerHub, detail [here](https://github.com/devopscorner/devopscorner-container/blob/master/docs/container-cicd-dockerhub.md)
   - Build Container `devopscorner/cicd` for ECR, detail [here](https://github.com/devopscorner/devopscorner-container/blob/master/docs/container-cicd-ecr.md)
 
 - Build Container `devopscorner/terraform-infra`
+
   - Build Container `devopscorner/terraform-infra` for DockerHub, detail [here](docs/container-terraform-infra-dockerhub.md)
   - Build Container `devopscorner/terraform-infra` for ECR, detail [here](docs/container-terraform-infra-ecr.md)
 
 - Terraform Plan Inventory
+
   - [Terraform Plan - Core Staging](terraform-plan-core-staging.md)
   - [Terraform Plan - Core Prod](terraform-plan-core-prod.md)
   - [Terraform Plan - Jumphost Staging](terraform-plan-jumphost-staging.md)
@@ -47,6 +50,7 @@ Production Grade Terraform for Provisioning Infrastructure
   - [Terraform Infra Costing - EKS Prod](terraform-infracost-eks-prod.md)
 
 - Terraform State Inventory
+
   - [Core Infrastructure Staging](terraform-state-core-infra-staging.md)
   - [Core Infrastructure Prod](terraform-state-core-infra-prod.md)
   - [Jumphost Staging](terraform-state-jumphost-staging.md)

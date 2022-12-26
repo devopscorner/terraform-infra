@@ -1,9 +1,9 @@
 # ==========================================================================
-#  Services: EKS / variables.tf
+#  Resources: EC2 WorkspaceLab / variables.tf (Global Environment)
 # --------------------------------------------------------------------------
 #  Description
 # --------------------------------------------------------------------------
-#    - Input Variable for AWS Provider
+#    - Input Variable for Environment Variables
 # ==========================================================================
 
 # ------------------------------------
@@ -16,11 +16,11 @@ variable "aws_region" {
 }
 
 # ------------------------------------
-#  Workspace
+#  WorkspaceLab
 # ------------------------------------
 variable "env" {
   type        = map(string)
-  description = "Workspace Environment Selection"
+  description = "WorkspaceLab Environment Selection"
   default = {
     lab     = "lab"
     staging = "staging"
@@ -77,38 +77,6 @@ variable "kms_env" {
 }
 
 # ------------------------------------
-#  Bucket Name
-# ------------------------------------
-variable "bucket_name" {
-  type        = string
-  description = "Bucket Name"
-  default     = "devopscorner-eks"
-}
-
-# ------------------------------------
-#  SSH public key
-# ------------------------------------
-variable "ssh_public_key" {
-  type        = string
-  description = "SSH Public Key"
-  ## file:///Users/[username]/.ssh/id_rsa.pub
-  default = ""
-}
-
-# ------------------------------------
-#  VPN Id
-# ------------------------------------
-variable "vpn_infra" {
-  type        = map(string)
-  description = "VPN Infra"
-  default = {
-    lab     = "sg-1234567890"
-    staging = "sg-1234567890"
-    prod    = "sg-0987654321"
-  }
-}
-
-# ------------------------------------
 #  Bucket Terraform State
 # ------------------------------------
 variable "tfstate_encrypt" {
@@ -132,5 +100,5 @@ variable "tfstate_dynamodb_table" {
 variable "tfstate_path" {
   type        = string
   description = "Path .tfstate in Bucket"
-  default     = "resources/eks/terraform.tfstate"
+  default     = "resources/workspace/terraform.tfstate"
 }
