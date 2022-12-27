@@ -36,7 +36,7 @@ resource "aws_eks_node_group" "devops" {
     data.terraform_remote_state.core_state.outputs.eks_private_1c[0]
   ]
 
-  instance_types = local.env == "prod" ? ["m5.large"] : ["t3.medium"]
+  instance_types = local.env == "prod" ? ["t3.medium"] : ["t3.small"]
   disk_size      = 100
   version        = var.k8s_version[local.env]
 
