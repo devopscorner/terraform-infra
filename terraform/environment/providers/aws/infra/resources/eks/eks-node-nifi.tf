@@ -1,5 +1,5 @@
 # ==========================================================================
-#  Resources: EKS / eks-node-goapp.tf (EKS Node Configuration)
+#  Resources: EKS / eks-node-nifi.tf (EKS Node Configuration)
 # --------------------------------------------------------------------------
 #  Description
 # --------------------------------------------------------------------------
@@ -12,18 +12,18 @@
 # ==========================================================================
 
 #============================================
-# NODE GROUP - GOAPP
+# NODE GROUP - NIFI
 #============================================
 locals {
-  node_selector_goapp = "goapp"
+  node_selector_nifi = "nifi"
 }
 
-resource "aws_eks_node_group" "goapp" {
+resource "aws_eks_node_group" "nifi" {
   ## NODE GROUP
   for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
   cluster_name    = aws_eks_cluster.aws_eks.name
-  node_group_name = "${local.node_selector_goapp}-${each.key}-node"
+  node_group_name = "${local.node_selector_nifi}-${each.key}-node"
   node_role_arn   = aws_iam_role.eks_nodes.arn
 
   ## EKS Private Subnet ###
@@ -39,10 +39,10 @@ resource "aws_eks_node_group" "goapp" {
 
   labels = {
     "environment" = "${var.env[local.env]}",
-    "node"        = "${local.node_selector_goapp}-${each.key}"
+    "node"        = "${local.node_selector_nifi}-${each.key}"
     "department"  = "softeng"
     "productname" = "devopscorner-${each.key}"
-    "service"     = "goapp"
+    "service"     = "nifi"
   }
 
   remote_access {
@@ -72,14 +72,14 @@ resource "aws_eks_node_group" "goapp" {
     },
     {
       Environment     = "${upper(each.key)}"
-      Name            = "EKS-1.22-${upper(local.node_selector_goapp)}-${upper(each.key)}"
+      Name            = "EKS-1.22-${upper(local.node_selector_nifi)}-${upper(each.key)}"
       Type            = "PRODUCTS"
       ProductName     = "EKS-DEVOPSCORNER"
       ProductGroup    = "${upper(each.key)}-EKS-DEVOPSCORNER"
       Department      = "SOFTENG"
       DepartmentGroup = "${upper(each.key)}-SOFTENG"
       ResourceGroup   = "${upper(each.key)}-EKS-DEVOPSCORNER"
-      Services        = "${upper(local.node_selector_goapp)}"
+      Services        = "${upper(local.node_selector_nifi)}"
     }
   )
 
@@ -95,24 +95,24 @@ resource "aws_eks_node_group" "goapp" {
 # ------------------------------------
 #  Target Group
 # ------------------------------------
-resource "aws_lb_target_group" "goapp" {
+resource "aws_lb_target_group" "nifi" {
   for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
-  name     = "tg-${local.node_selector_goapp}-${var.env[local.env]}-${each.key}"
-  port     = "${each.key}" == "dev" ? 30380 : 30480
+  name     = "tg-${local.node_selector_nifi}-${var.env[local.env]}-${each.key}"
+  port     = "${each.key}" == "dev" ? 30780 : 30880
   protocol = "HTTP"
   vpc_id   = data.terraform_remote_state.core_state.outputs.vpc_id
 
   tags = {
     Environment     = "${var.environment[local.env]}"
-    Name            = "ALB-${upper(local.node_selector_goapp)}-${upper(each.key)}"
+    Name            = "ALB-${upper(local.node_selector_nifi)}-${upper(each.key)}"
     Type            = "PRODUCTS"
     ProductName     = "TG-DEVOPSCORNER"
     ProductGroup    = "${upper(each.key)}-TG-DEVOPSCORNER"
     Department      = "DEVOPS"
     DepartmentGroup = "${upper(each.key)}-DEVOPS"
     ResourceGroup   = "${upper(each.key)}-TG-DEVOPSCORNER"
-    Services        = "${upper(local.node_selector_goapp)}-${upper(each.key)}"
+    Services        = "${upper(local.node_selector_nifi)}-${upper(each.key)}"
     Terraform       = true
   }
 }
@@ -121,34 +121,34 @@ resource "aws_lb_target_group" "goapp" {
 #  Node Group Output
 # --------------------------------------------------------------------------
 ## DEV Output ##
-output "eks_node_name_goapp_dev" {
-  value = aws_eks_node_group.goapp["dev"].id
+output "eks_node_name_nifi_dev" {
+  value = aws_eks_node_group.nifi["dev"].id
 }
 
 ## UAT Output ##
-output "eks_node_name_goapp_uat" {
-  value = aws_eks_node_group.goapp["uat"].id
+output "eks_node_name_nifi_uat" {
+  value = aws_eks_node_group.nifi["uat"].id
 }
 
 ## PROD Output ##
-# output "eks_node_name_goapp_prod" {
-#   value = aws_eks_node_group.goapp["prod"].id
+# output "eks_node_name_nifi_prod" {
+#   value = aws_eks_node_group.nifi["prod"].id
 # }
 
 # --------------------------------------------------------------------------
 #  Target Group Output
 # --------------------------------------------------------------------------
 ## DEV Output ##
-output "eks_node_tg_goapp_dev" {
-  value = aws_lb_target_group.goapp["dev"].id
+output "eks_node_tg_nifi_dev" {
+  value = aws_lb_target_group.nifi["dev"].id
 }
 
 ## UAT Output ##
-output "eks_node_tg_goapp_uat" {
-  value = aws_lb_target_group.goapp["uat"].id
+output "eks_node_tg_nifi_uat" {
+  value = aws_lb_target_group.nifi["uat"].id
 }
 
 ## PROD Output ##
-# output "eks_node_tg_goapp_prod" {
-#   value = aws_lb_target_group.goapp["prod"].id
+# output "eks_node_tg_nifi_prod" {
+#   value = aws_lb_target_group.nifi["prod"].id
 # }

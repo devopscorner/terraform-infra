@@ -99,7 +99,7 @@ resource "aws_lb_target_group" "laravel" {
   for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
   name     = "tg-${local.node_selector_laravel}-${var.env[local.env]}-${each.key}"
-  port     = 30080
+  port     = "${each.key}" == "dev" ? 30580 : 30680
   protocol = "HTTP"
   vpc_id   = data.terraform_remote_state.core_state.outputs.vpc_id
 
