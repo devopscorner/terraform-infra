@@ -12,7 +12,7 @@
 # --------------------------------------------------------------------------
 locals {
   s3_tags = {
-    "Name"          = "${var.eks_cluster_name}-eks-bucket"
+    "Name"          = "${var.eks_cluster_name}-${var.env[local.env]}-eks-bucket"
     "ResourceGroup" = "${var.environment[local.env]}-S3-EKS"
   }
 }
@@ -21,8 +21,8 @@ locals {
 # S3 (Object) #
 ###############
 locals {
-  bucket_name = "${var.eks_cluster_name}-eks-bucket"
-  region      = "${var.aws_region}"
+  bucket_name = "${var.eks_cluster_name}-${var.env[local.env]}-eks-bucket"
+  region      = var.aws_region
 }
 
 data "aws_canonical_user_id" "current" {}
@@ -44,7 +44,7 @@ data "aws_cloudfront_log_delivery_canonical_user_id" "cloudfront" {}
 # ------------------------------------
 ## Existing CMK ARN
 data "aws_kms_key" "cmk_key" {
-  key_id = "${var.kms_key[local.env]}"
+  key_id = var.kms_key[local.env]
 }
 # ------------------------------------
 
@@ -65,7 +65,7 @@ module "s3_bucket" {
   attach_deny_insecure_transport_policy = true
   attach_require_latest_tls_policy      = true
 
-  tags = merge(local.tags,local.s3_tags)
+  tags = merge(local.tags, local.s3_tags)
 
   versioning = {
     enabled = true

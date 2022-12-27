@@ -38,12 +38,12 @@ output "eks_security_group" {
 #  EKS Config Map Auth
 # --------------------------------------------------------------------------
 output "config_map_aws_auth" {
-  value = "${local.config_map_aws_auth}"
+  value = local.config_map_aws_auth
 }
 
 # --------------------------------------------------------------------------
 #  EKS Kube Config
 # --------------------------------------------------------------------------
 output "kubeconfig" {
-  value = "${local.kubeconfig}"
+  value = local.kubeconfig
 }

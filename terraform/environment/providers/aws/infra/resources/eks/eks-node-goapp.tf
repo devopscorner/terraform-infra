@@ -98,7 +98,7 @@ resource "aws_eks_node_group" "goapp" {
 resource "aws_lb_target_group" "goapp" {
   for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
-  name     = "devopscorner-tg-${local.node_selector_goapp}-${each.key}"
+  name     = "tg-${local.node_selector_goapp}-${var.env[local.env]}-${each.key}"
   port     = 30080
   protocol = "HTTP"
   vpc_id   = data.terraform_remote_state.core_state.outputs.vpc_id

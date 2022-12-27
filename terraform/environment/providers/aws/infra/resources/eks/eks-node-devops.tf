@@ -68,10 +68,10 @@ resource "aws_eks_node_group" "devops" {
 
   tags = merge(
     {
-      "ClusterName" = "${var.eks_cluster_name}-${var.env[local.env]}"
+      "ClusterName"                                                             = "${var.eks_cluster_name}-${var.env[local.env]}"
       "k8s.io/cluster-autoscaler/${var.eks_cluster_name}-${var.env[local.env]}" = "owned",
-      "k8s.io/cluster-autoscaler/enabled" = "true"
-      "Terraform" = "true"
+      "k8s.io/cluster-autoscaler/enabled"                                       = "true"
+      "Terraform"                                                               = "true"
     },
     {
       Environment     = "${upper(each.key)}"
@@ -104,7 +104,7 @@ resource "aws_lb_target_group" "devops" {
     "tools"
   ])
 
-  name     = "tg-${local.node_selector_devops}-${each.key}"
+  name     = "tg-${local.node_selector_devops}-${var.env[local.env]}-${each.key}"
   port     = "${each.key}" == "monitoring" ? 30180 : 30280
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.selected.id

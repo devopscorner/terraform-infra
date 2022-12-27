@@ -89,8 +89,8 @@ resource "aws_autoscaling_group_tag" "Environment_group_tag_devops_monitoring" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Environment"
-    value = local.Environment_devops
+    key                 = "Environment"
+    value               = local.Environment_devops
     propagate_at_launch = true
   }
 }
@@ -103,8 +103,8 @@ resource "aws_autoscaling_group_tag" "Name_group_tag_devops_monitoring" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Name"
-    value = local.Name_monitoring
+    key                 = "Name"
+    value               = local.Name_monitoring
     propagate_at_launch = true
   }
 }
@@ -117,8 +117,8 @@ resource "aws_autoscaling_group_tag" "Type_group_tag_devops_monitoring" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Type"
-    value = local.Type_devops
+    key                 = "Type"
+    value               = local.Type_devops
     propagate_at_launch = true
   }
 }
@@ -131,8 +131,8 @@ resource "aws_autoscaling_group_tag" "ProductName_group_tag_devops_monitoring" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "ProductName"
-    value = local.ProductName_monitoring
+    key                 = "ProductName"
+    value               = local.ProductName_monitoring
     propagate_at_launch = true
   }
 }
@@ -145,8 +145,8 @@ resource "aws_autoscaling_group_tag" "ProductGroup_group_tag_devops_monitoring" 
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "ProductGroup"
-    value = local.ProductGroup_monitoring
+    key                 = "ProductGroup"
+    value               = local.ProductGroup_monitoring
     propagate_at_launch = true
   }
 }
@@ -159,8 +159,8 @@ resource "aws_autoscaling_group_tag" "Department_group_tag_devops_monitoring" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Department"
-    value = local.Department_devops
+    key                 = "Department"
+    value               = local.Department_devops
     propagate_at_launch = true
   }
 }
@@ -173,8 +173,8 @@ resource "aws_autoscaling_group_tag" "DepartmentGroup_group_tag_devops_monitorin
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "DepartmentGroup"
-    value = local.DepartmentGroup_devops
+    key                 = "DepartmentGroup"
+    value               = local.DepartmentGroup_devops
     propagate_at_launch = true
   }
 }
@@ -187,8 +187,8 @@ resource "aws_autoscaling_group_tag" "ResourceGroup_group_tag_devops_monitoring"
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "ResourceGroup"
-    value = local.ResourceGroup_devops
+    key                 = "ResourceGroup"
+    value               = local.ResourceGroup_devops
     propagate_at_launch = true
   }
 }
@@ -201,8 +201,8 @@ resource "aws_autoscaling_group_tag" "Services_group_tag_devops_monitoring" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Service"
-    value = local.Services_monitoring
+    key                 = "Service"
+    value               = local.Services_monitoring
     propagate_at_launch = true
   }
 }
@@ -216,8 +216,8 @@ resource "aws_autoscaling_group_tag" "Environment_group_tag_devops_tools" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Environment"
-    value = local.Environment_devops
+    key                 = "Environment"
+    value               = local.Environment_devops
     propagate_at_launch = true
   }
 }
@@ -230,8 +230,8 @@ resource "aws_autoscaling_group_tag" "Name_group_tag_devops_tools" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Name"
-    value = local.Name_tools
+    key                 = "Name"
+    value               = local.Name_tools
     propagate_at_launch = true
   }
 }
@@ -244,8 +244,8 @@ resource "aws_autoscaling_group_tag" "Type_group_tag_devops_tools" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Type"
-    value = local.Type_devops
+    key                 = "Type"
+    value               = local.Type_devops
     propagate_at_launch = true
   }
 }
@@ -258,8 +258,8 @@ resource "aws_autoscaling_group_tag" "ProductName_group_tag_devops_tools" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "ProductName"
-    value = local.ProductName_tools
+    key                 = "ProductName"
+    value               = local.ProductName_tools
     propagate_at_launch = true
   }
 }
@@ -272,8 +272,8 @@ resource "aws_autoscaling_group_tag" "ProductGroup_group_tag_devops_tools" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "ProductGroup"
-    value = local.ProductGroup_tools
+    key                 = "ProductGroup"
+    value               = local.ProductGroup_tools
     propagate_at_launch = true
   }
 }
@@ -286,8 +286,8 @@ resource "aws_autoscaling_group_tag" "Department_group_tag_devops_tools" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Department"
-    value = local.Department_devops
+    key                 = "Department"
+    value               = local.Department_devops
     propagate_at_launch = true
   }
 }
@@ -300,8 +300,8 @@ resource "aws_autoscaling_group_tag" "DepartmentGroup_group_tag_devops_tools" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "DepartmentGroup"
-    value = local.DepartmentGroup_devops
+    key                 = "DepartmentGroup"
+    value               = local.DepartmentGroup_devops
     propagate_at_launch = true
   }
 }
@@ -314,8 +314,8 @@ resource "aws_autoscaling_group_tag" "ResourceGroup_group_tag_devops_tools" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "ResourceGroup"
-    value = local.ResourceGroup_devops
+    key                 = "ResourceGroup"
+    value               = local.ResourceGroup_devops
     propagate_at_launch = true
   }
 }
@@ -328,8 +328,8 @@ resource "aws_autoscaling_group_tag" "Services_group_tag_devops_tools" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Service"
-    value = local.Services_tools
+    key                 = "Service"
+    value               = local.Services_tools
     propagate_at_launch = true
   }
 }
@@ -342,8 +342,8 @@ resource "aws_autoscaling_group_tag" "ClusterName_group_devops_tools" {
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "ClusterName"
-    value = "${var.eks_cluster_name}"
+    key                 = "ClusterName"
+    value               = var.eks_cluster_name
     propagate_at_launch = true
   }
 }

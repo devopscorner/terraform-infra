@@ -102,7 +102,7 @@ resource "aws_lb_target_group" "sharedredis" {
     "sharedredis"
   ])
 
-  name     = "devopscorner-tg-${each.key}"
+  name     = "tg-${local.node_selector_sharedredis}-${var.env[local.env]}-${each.key}"
   port     = 31280
   protocol = "HTTP"
   vpc_id   = data.aws_vpc.selected.id
