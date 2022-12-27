@@ -65,10 +65,10 @@ resource "aws_eks_node_group" "laravel" {
 
   tags = merge(
     {
-      "ClusterName" = "${var.eks_cluster_name}-${var.env[local.env]}"
+      "ClusterName"                                                             = "${var.eks_cluster_name}-${var.env[local.env]}"
       "k8s.io/cluster-autoscaler/${var.eks_cluster_name}-${var.env[local.env]}" = "owned",
-      "k8s.io/cluster-autoscaler/enabled" = "true"
-      "Terraform" = "true"
+      "k8s.io/cluster-autoscaler/enabled"                                       = "true"
+      "Terraform"                                                               = "true"
     },
     {
       Environment     = "${upper(each.key)}"
@@ -98,7 +98,7 @@ resource "aws_eks_node_group" "laravel" {
 resource "aws_lb_target_group" "laravel" {
   for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
-  name     = "devopscorner-tg-${local.node_selector_laravel}-${each.key}"
+  name     = "tg-${local.node_selector_laravel}-${var.env[local.env]}-${each.key}"
   port     = 30080
   protocol = "HTTP"
   vpc_id   = data.terraform_remote_state.core_state.outputs.vpc_id
