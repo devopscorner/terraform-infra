@@ -40,9 +40,9 @@ LABEL maintainer="$AUTHOR" \
       fr.hbis.docker.base.version="$BUILD_VERSION"
 
 USER root
-COPY rootfs /
-COPY . /root
 
-WORKDIR /root
+COPY . /terraform-infra
+
+WORKDIR /terraform-infra
 
 EXPOSE 22
