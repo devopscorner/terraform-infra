@@ -172,20 +172,6 @@ Multi Environment Workspace:
   aws-cli/2.9.16 Python/3.9.11 Darwin/22.3.0 exe/x86_64 prompt/off
   ```
 
-- Terraform Cli
-
-  ```
-  terraform version
-  ---
-  Terraform v1.3.5
-  on darwin_amd64
-  - provider registry.terraform.io/hashicorp/aws v3.74.3
-  - provider registry.terraform.io/hashicorp/local v2.1.0
-  - provider registry.terraform.io/hashicorp/null v3.1.0
-  - provider registry.terraform.io/hashicorp/random v3.1.0
-  - provider registry.terraform.io/hashicorp/time v0.7.2
-  ```
-
 - Terraform Environment Cli
 
   ```
@@ -200,7 +186,12 @@ Multi Environment Workspace:
   terraform version
   ---
   Terraform v1.3.9
-  on darwin_arm64
+  on darwin_amd64
+  - provider registry.terraform.io/hashicorp/aws v3.74.3
+  - provider registry.terraform.io/hashicorp/local v2.1.0
+  - provider registry.terraform.io/hashicorp/null v3.1.0
+  - provider registry.terraform.io/hashicorp/random v3.1.0
+  - provider registry.terraform.io/hashicorp/time v0.7.2
   ```
 
 ## Security Check
