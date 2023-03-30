@@ -11,11 +11,11 @@ ARG GIT_URL
 ENV VENDOR="DevOpsCornerId"
 ENV AUTHOR="DevOpsCorner.id <support@devopscorner.id>"
 ENV IMG_NAME="terraform-infra-alpine"
-ENV IMG_VERSION="3.16"
-ENV IMG_DESC="Docker Image Terraform Infra Alpine 3.16"
+ENV IMG_VERSION="3.17"
+ENV IMG_DESC="Docker Image Terraform Infra Alpine 3.17"
 ENV IMG_ARCH="amd64/x86_64"
 
-ENV ALPINE_VERSION="3.16"
+ENV ALPINE_VERSION="3.17"
 
 LABEL maintainer="$AUTHOR" \
       architecture="$IMG_ARCH" \
