@@ -1,0 +1,67 @@
+NAME: cert-manager-letsencrypt
+LAST DEPLOYED: Thu Apr 27 21:23:15 2023
+NAMESPACE: cert-manager
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+USER-SUPPLIED VALUES:
+dnsZones:
+- ""
+email: ""
+
+COMPUTED VALUES:
+dnsZones:
+- ""
+email: ""
+
+HOOKS:
+MANIFEST:
+---
+# Source: cert-manager-letsencrypt/templates/clusterissuer-production.yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cert-manager-letsencrypt-production-route53
+  labels:
+    ca: letsencrypt
+    environment: production
+    solver: dns01
+    provider: route53
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    preferredChain: ISRG Root X1
+    privateKeySecretRef:
+      name: cert-manager-letsencrypt-production-route53
+    solvers:
+      - dns01:
+          route53:
+            region: global
+        selector:
+          dnsZones:
+            - ""
+---
+# Source: cert-manager-letsencrypt/templates/clusterissuer-staging.yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cert-manager-letsencrypt-staging-route53
+  labels:
+    ca: letsencrypt
+    environment: staging
+    solver: dns01
+    provider: route53
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    preferredChain: ISRG Root X1
+    privateKeySecretRef:
+      name: cert-manager-letsencrypt-staging-route53
+    solvers:
+      - dns01:
+          route53:
+            region: global
+        selector:
+          dnsZones:
+            - ""
+

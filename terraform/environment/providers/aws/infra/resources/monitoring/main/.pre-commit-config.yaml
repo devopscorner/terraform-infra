@@ -1,0 +1,28 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: f71fa2c1f9cf5cb705f73dffe4b21f7c61470ba9  # frozen: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+        args: ['--markdown-linebreak-ext=md']
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: detect-private-key
+      - id: detect-aws-credentials
+        args: ['--allow-missing-credentials']
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: 1d54ea2b9950097568c6a7a2e2bcb6d4b4ebfb61  # frozen: v1.77.0
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_docs
+        args:
+          - '--args=--lockfile=false'
+      - id: terraform_validate
+        exclude: deploy
+      - id: terraform_tflint
+        args:
+          - '--args=--config=__GIT_WORKING_DIR__/.tflint.hcl'
+      - id: terraform_tfsec
+        files: ^examples/ # only scan `examples/*` which are the implementation
+        args:
+          - --args=--config-file=__GIT_WORKING_DIR__/tfsec.yaml
+          - --args=--concise-output

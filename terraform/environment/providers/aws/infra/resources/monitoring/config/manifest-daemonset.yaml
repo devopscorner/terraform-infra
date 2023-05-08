@@ -1,0 +1,125 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: adot-collector
+  namespace: adot-collector-kubeprometheus
+  labels:
+    app.kubernetes.io/component: opentelemetry-collector
+    app.kubernetes.io/instance: adot-collector-kubeprometheus.adot
+    app.kubernetes.io/managed-by: opentelemetry-operator
+    app.kubernetes.io/name: adot-collector
+    app.kubernetes.io/part-of: opentelemetry
+    app.kubernetes.io/version: latest
+  annotations:
+    meta.helm.sh/release-name: adot-collector-kubeprometheus
+    meta.helm.sh/release-namespace: adot-collector-kubeprometheus
+    opentelemetry-operator-config/sha256: ceb4dc5a8eab5da9aa3567427b9e4d3cb8018f20cde02cd527d89b1a01793ecd
+    prometheus.io/path: /metrics
+    prometheus.io/port: "8888"
+    prometheus.io/scrape: "true"
+template:
+  metadata:
+    creationTimestamp: null
+    labels:
+      app.kubernetes.io/component: opentelemetry-collector
+      app.kubernetes.io/instance: adot-collector-kubeprometheus.adot
+      app.kubernetes.io/managed-by: opentelemetry-operator
+      app.kubernetes.io/name: adot-collector
+      app.kubernetes.io/part-of: opentelemetry
+      app.kubernetes.io/version: latest
+    annotations:
+      opentelemetry-operator-config/sha256: ceb4dc5a8eab5da9aa3567427b9e4d3cb8018f20cde02cd527d89b1a01793ecd
+  spec:
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: opentelemetry-collector
+        app.kubernetes.io/instance: adot-collector-kubeprometheus.adot
+        app.kubernetes.io/managed-by: opentelemetry-operator
+        app.kubernetes.io/part-of: opentelemetry
+      spec:
+        volumes:
+          - name: otc-internal
+            configMap:
+              name: adot-collector
+              items:
+                - key: collector.yaml
+                  path: collector.yaml
+              defaultMode: 420
+        containers:
+          - name: otc-container
+            # image: otel/opentelemetry-collector-contrib:0.45.0
+            image: public.ecr.aws/aws-observability/aws-otel-collector:v0.26.1
+            args:
+              - "--config=/conf/collector.yaml"
+            ports:
+              - name: metrics
+                hostPort: 8888
+                containerPort: 8888
+                protocol: TCP
+              - name: otlp-grpc
+                hostPort: 4317
+                containerPort: 4317
+                protocol: TCP
+              - name: otlp-http
+                hostPort: 4318
+                containerPort: 4318
+                protocol: TCP
+            env:
+              - name: K8S_NODE_NAME
+                valueFrom:
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: spec.nodeName
+              - name: K8S_POD_NAME
+                valueFrom:
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.name
+              - name: K8S_NAMESPACE
+                valueFrom:
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+              - name: POD_NAME
+                valueFrom:
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.name
+              - name: HOST_IP
+                valueFrom:
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: status.hostIP
+              - name: HOST_NAME
+                valueFrom:
+                  fieldRef:
+                    apiVersion: v1
+                    fieldPath: spec.nodeName
+            resources: {}
+            volumeMounts:
+              - name: otc-internal
+                mountPath: /conf
+              - name: rootfs
+                hostPath:
+                path: /
+            livenessProbe:
+              httpGet:
+                path: /
+                port: 13133
+                scheme: HTTP
+              timeoutSeconds: 1
+              periodSeconds: 10
+              successThreshold: 1
+              failureThreshold: 3
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            imagePullPolicy: IfNotPresent
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 30
+        dnsPolicy: ClusterFirstWithHostNet
+        serviceAccountName: adot-collector-kubeprometheus
+        serviceAccount: adot-collector-kubeprometheus
+        hostNetwork: true
+        securityContext: {}
+        schedulerName: default-scheduler

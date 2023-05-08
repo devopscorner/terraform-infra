@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: xray-daemon
+  namespace: amazon-cloudwatch
+spec:
+  selector:
+    matchLabels:
+      name: xray-daemon
+  template:
+    metadata:
+      labels:
+        name: xray-daemon
+    spec:
+      containers:
+        - name: xray-daemon
+          image: amazon/aws-xray-daemon:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 2000
+              hostPort: 2000
+              protocol: UDP
+          resources:
+            limits:
+              cpu:  100m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 50Mi
+      terminationGracePeriodSeconds: 60
