@@ -81,7 +81,7 @@ sudo apt-get install -y \
     rm -f packer_${PACKER_VERSION}_linux_amd64.zip
 
 python3 -m pip install pip==21.3.1 &&
-    pip3 install --upgrade pip cffi awscli &&
+    pip3 install --upgrade pip cffi &&
     # install ansible
     pip3 install --no-cache-dir ansible-core==${ANSIBLE_VERSION} \
         ansible-tower-cli==3.3.4 \
@@ -95,22 +95,23 @@ python3 -m pip install pip==21.3.1 &&
 sudo update-alternatives --install /usr/bin/python python /usr/bin/python3 10
 
 ## install tfenv
-git clone https://github.com/tfutils/tfenv.git ~/.tfenv
-echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >>~/.bash_profile
-ln -sf ~/.tfenv/bin/* /usr/local/bin
-mkdir -p ~/.local/bin/
-. ~/.profile
-ln -sf ~/.tfenv/bin/* ~/.local/bin
+git clone https://github.com/tfutils/tfenv.git $HOME/.tfenv
+echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> $HOME/.bash_profile
+ln -sf $HOME/.tfenv/bin/* /usr/local/bin
+sudo mkdir -p $HOME/.local/bin/
+. $HOME/.profile
+ln -sf $HOME/.tfenv/bin/* $HOME/.local/bin
 
 # Cleanup Cache
 sudo apt-get clean &&
     sudo apt-get autoremove -y
 
-##### CUSTOMIZE ~/.profile #####
-echo '' >>~/.profile
+##### CUSTOMIZE $HOME/.profile #####
+touch $HOME/.profile
+echo '' >> $HOME/.profile
 echo '### Docker ###
 export DOCKER_CLIENT_TIMEOUT=300
-export COMPOSE_HTTP_TIMEOUT=300' >>~/.profile
+export COMPOSE_HTTP_TIMEOUT=300' >> $HOME/.profile
 
 ##### CONFIGURE DOCKER #####
 sudo usermod -a -G docker ubuntu
@@ -124,9 +125,10 @@ chmod +x ./install
 ./install auto
 
 ## Set Locale
-sudo echo 'LANG=en_US.utf-8' >>/etc/environment
-sudo echo 'LC_ALL=en_US.utf-8' >>/etc/environment
+sudo touch /etc/environment
+sudo echo 'LANG=en_US.utf-8' >> /etc/environment
+sudo echo 'LC_ALL=en_US.utf-8' >> /etc/environment
 
 ## Adding Custom Sysctl
-sudo echo 'vm.max_map_count=524288' >>/etc/sysctl.conf
-sudo echo 'fs.file-max=131072' >>/etc/sysctl.conf
+sudo echo 'vm.max_map_count=524288' >> /etc/sysctl.conf
+sudo echo 'fs.file-max=131072' >> /etc/sysctl.conf

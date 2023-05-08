@@ -41,22 +41,22 @@ sudo curl -L https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE
 sudo chmod +x /usr/bin/docker-compose
 
 # install terraform
-curl -o terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
+wget -O terraform_${TERRAFORM_VERSION}_linux_amd64.zip \
     https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip &&
     unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /usr/local/bin &&
     rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip &&
     # install terragrunt
-    curl -o /usr/local/bin/terragrunt \
+    wget -O /usr/local/bin/terragrunt \
         https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_amd64 &&
     chmod +x /usr/local/bin/terragrunt &&
     # install packer
-    curl -o packer_${PACKER_VERSION}_linux_amd64.zip \
+    wget -O packer_${PACKER_VERSION}_linux_amd64.zip \
         https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip &&
     unzip packer_${PACKER_VERSION}_linux_amd64.zip -d /usr/local/bin &&
     rm -f packer_${PACKER_VERSION}_linux_amd64.zip
 
 python3 -m pip install pip==21.3.1 &&
-    pip3 install --upgrade pip cffi awscli &&
+    pip3 install --upgrade pip cffi &&
     # install ansible
     pip3 install --no-cache-dir ansible-core==${ANSIBLE_VERSION} \
         ansible-tower-cli==3.3.4 \
@@ -67,29 +67,37 @@ python3 -m pip install pip==21.3.1 &&
         requests \
         boto3
 
-# Cleanup Cache
-sudo yum autoremove -y
-
 ## install tfenv
-git clone https://github.com/tfutils/tfenv.git ~/.tfenv
-echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >>~/.bash_profile
-ln -sf ~/.tfenv/bin/* /usr/local/bin
-sudo mkdir -p ~/.local/bin/
-. ~/.profile
-ln -sf ~/.tfenv/bin/* ~/.local/bin
+git clone https://github.com/tfutils/tfenv.git $HOME/.tfenv
+echo 'export PATH="$HOME/.tfenv/bin:$PATH"' >> $HOME/.bash_profile
+sudo ln -sf $HOME/.tfenv/bin/* /usr/local/bin
+sudo mkdir -p $HOME/.local/bin/
+. $HOME/.profile
+ln -sf $HOME/.tfenv/bin/* $HOME/.local/bin
+
+##### CUSTOMIZE $HOME/.profile #####
+touch $HOME/.profile
+echo '' >> $HOME/.profile
+echo '### Docker ###
+export DOCKER_CLIENT_TIMEOUT=300
+export COMPOSE_HTTP_TIMEOUT=300' >> $HOME/.profile
+
+##### CONFIGURE DOCKER #####
+sudo usermod -a -G docker ec2-user
+
+sudo ln -snf $DOCKER_PATH /usr/bin/dock
+sudo ln -snf $DOCKER_COMPOSE_PATH /usr/bin/dcomp
 
 ##### CONFIGURE CodeDeploy #####
-# wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
-# chmod +x ./install
-# ./install auto
-curl -s https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install | bash -s auto
+wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
+chmod +x ./install
+./install auto
 
 ## Set Locale
-sudo echo 'LANG=en_US.utf-8' >>/etc/environment
-sudo echo 'LC_ALL=en_US.utf-8' >>/etc/environment
+sudo touch /etc/environment
+sudo echo 'LANG=en_US.utf-8' >> /etc/environment
+sudo echo 'LC_ALL=en_US.utf-8' >> /etc/environment
 
 ## Adding Custom Sysctl
-sudo echo 'vm.max_map_count=524288' >>/etc/sysctl.conf
-sudo echo 'fs.file-max=131072' >>/etc/sysctl.conf
-
-################################################
+sudo echo 'vm.max_map_count=524288' >> /etc/sysctl.conf
+sudo echo 'fs.file-max=131072' >> /etc/sysctl.conf
