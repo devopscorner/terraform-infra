@@ -39,9 +39,9 @@ resource "aws_budgets_budget" "monthly_forcasted" {
 }
 
 resource "aws_budgets_budget" "monthly_budget" {
-  name              = "monthly_budget_300"
+  name              = "monthly_budget_150"
   budget_type       = "COST"
-  limit_amount      = "300"
+  limit_amount      = "150"
   limit_unit        = "USD"
   time_unit         = "MONTHLY"
   time_period_start = "2022-01-01_00:00"
