@@ -14,7 +14,7 @@
 locals {
   #for tagging
   Environment_laravel_uat     = "UAT"
-  Name_laravel_uat            = "EKS-1.22-LARAVEL-UAT"
+  Name_laravel_uat            = "EKS-1.23-LARAVEL-UAT"
   Type_laravel_uat            = "PROJECTS"
   ProductName_laravel_uat     = "EKS-DEVOPSCORNER"
   ProductGroup_laravel_uat    = "UAT-EKS-DEVOPSCORNER"

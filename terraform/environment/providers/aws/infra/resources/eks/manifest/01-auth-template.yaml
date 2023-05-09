@@ -15,6 +15,10 @@ data:
       rolearn: arn:aws:iam::${ACCOUNT_ID}:role/devopscorner-Lead
       username: devops
   mapUsers: |
+    - userarn: arn:aws:iam::${ACCOUNT_ID}:user/zeroc0d3
+      username: zeroc0d3
+      groups:
+        - system:masters
     - userarn: arn:aws:iam::${ACCOUNT_ID}:user/devops
       username: devops
       groups:

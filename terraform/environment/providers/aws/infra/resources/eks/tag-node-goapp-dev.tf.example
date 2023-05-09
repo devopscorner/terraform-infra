@@ -14,7 +14,7 @@
 locals {
   #for tagging
   Environment_goapp_dev     = "DEV"
-  Name_goapp_dev            = "EKS-1.22-GOAPP-DEV"
+  Name_goapp_dev            = "EKS-1.23-GOAPP-DEV"
   Type_goapp_dev            = "PROJECTS"
   ProductName_goapp_dev     = "EKS-DEVOPSCORNER"
   ProductGroup_goapp_dev    = "DEV-EKS-DEVOPSCORNER"

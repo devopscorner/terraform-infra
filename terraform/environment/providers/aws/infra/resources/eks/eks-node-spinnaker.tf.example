@@ -12,20 +12,18 @@
 # ==========================================================================
 
 #============================================
-# NODE GROUP - DEVOPS SPINNAKER
+# NODE GROUP - SPINNAKER
 #============================================
 locals {
-  node_selector_spinnaker = "devopscorner"
+  node_selector_spinnaker = "spinnaker"
 }
 
 resource "aws_eks_node_group" "spinnaker" {
   ## NODE GROUP
-  for_each = toset([
-    "spinnaker"
-  ])
+  for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
   cluster_name    = aws_eks_cluster.aws_eks.name
-  node_group_name = "${local.node_selector_spinnaker}-${each.key}_node"
+  node_group_name = "${local.node_selector_spinnaker}-${each.key}-node"
   node_role_arn   = aws_iam_role.eks_nodes.arn
 
   ## EKS Private Subnet ###
@@ -35,16 +33,16 @@ resource "aws_eks_node_group" "spinnaker" {
     data.terraform_remote_state.core_state.outputs.eks_private_1c[0]
   ]
 
-  instance_types  = ["m5.large"]
-  disk_size       = 100
-  version         = "${var.k8s_version[local.env]}"
+  instance_types = local.env == "prod" ? ["t3.large"] : ["t3.medium"]
+  disk_size      = 100
+  version        = var.k8s_version[local.env]
 
   labels = {
     "environment" = "${var.env[local.env]}",
     "node"        = "${local.node_selector_spinnaker}-${each.key}"
-    "department"  = "devops"
+    "department"  = "softeng"
     "productname" = "devopscorner-${each.key}"
-    "service"     = "${each.key}"
+    "service"     = "spinnaker"
   }
 
   remote_access {
@@ -53,9 +51,9 @@ resource "aws_eks_node_group" "spinnaker" {
   }
 
   scaling_config {
-    desired_size = 0
+    desired_size = 1
     max_size     = 5
-    min_size     = 0
+    min_size     = 1
   }
 
   lifecycle {
@@ -67,21 +65,21 @@ resource "aws_eks_node_group" "spinnaker" {
 
   tags = merge(
     {
-      "ClusterName" = "${var.eks_cluster_name}-${var.env[local.env]}"
+      "ClusterName"                                                             = "${var.eks_cluster_name}-${var.env[local.env]}"
       "k8s.io/cluster-autoscaler/${var.eks_cluster_name}-${var.env[local.env]}" = "owned",
-      "k8s.io/cluster-autoscaler/enabled" = "true"
-      "Terraform" = "true"
+      "k8s.io/cluster-autoscaler/enabled"                                       = "true"
+      "Terraform"                                                               = "true"
     },
     {
-      Environment     = "${upper(var.environment[local.env])}"
-      Name            = "EKS-1.22-DEVOPSCORNER-${upper(each.key)}"
+      Environment     = "${upper(each.key)}"
+      Name            = "EKS-${var.k8s_version[local.env]}-${upper(local.node_selector_spinnaker)}-${upper(each.key)}"
       Type            = "PRODUCTS"
       ProductName     = "EKS-DEVOPSCORNER"
       ProductGroup    = "${upper(each.key)}-EKS-DEVOPSCORNER"
       Department      = "DEVOPS"
       DepartmentGroup = "${upper(each.key)}-DEVOPS"
       ResourceGroup   = "${upper(each.key)}-EKS-DEVOPSCORNER"
-      Services        = "${upper(each.key)}"
+      Services        = "${upper(local.node_selector_spinnaker)}"
     }
   )
 
@@ -98,25 +96,23 @@ resource "aws_eks_node_group" "spinnaker" {
 #  Target Group
 # ------------------------------------
 resource "aws_lb_target_group" "spinnaker" {
-  for_each = toset([
-    "spinnaker"
-  ])
+  for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
   name     = "tg-${local.node_selector_spinnaker}-${var.env[local.env]}-${each.key}"
-  port     = 31380
+  port     = "${each.key}" == "dev" ? 30580 : 30680
   protocol = "HTTP"
-  vpc_id   = data.aws_vpc.selected.id
+  vpc_id   = data.terraform_remote_state.core_state.outputs.vpc_id
 
   tags = {
-    Environment     = "DEV"
-    Name            = "DEVOPSCORNER-TG-${upper(each.key)}"
+    Environment     = "${var.environment[local.env]}"
+    Name            = "ALB-${upper(local.node_selector_spinnaker)}-${upper(each.key)}"
     Type            = "PRODUCTS"
-    ProductName     = "DEVOPSCORNER-TG"
-    ProductGroup    = "DEV-DEVOPSCORNER"
+    ProductName     = "TG-DEVOPSCORNER"
+    ProductGroup    = "${upper(each.key)}-TG-DEVOPSCORNER"
     Department      = "DEVOPS"
-    DepartmentGroup = "DEV-DEVOPS"
-    ResourceGroup   = "DEV-TG-DEVOPSCORNER"
-    Services        = "TG-LB"
+    DepartmentGroup = "${upper(each.key)}-DEVOPS"
+    ResourceGroup   = "${upper(each.key)}-TG-DEVOPSCORNER"
+    Services        = "${upper(local.node_selector_spinnaker)}-${upper(each.key)}"
     Terraform       = true
   }
 }
@@ -124,15 +120,35 @@ resource "aws_lb_target_group" "spinnaker" {
 # --------------------------------------------------------------------------
 #  Node Group Output
 # --------------------------------------------------------------------------
-## Spinnaker Output #
-output "eks_node_name_spinnaker" {
-  value = aws_eks_node_group.spinnaker["spinnaker"].id
+## DEV Output ##
+# output "eks_node_name_spinnaker_dev" {
+#   value = aws_eks_node_group.spinnaker["dev"].id
+# }
+
+## UAT Output ##
+# output "eks_node_name_spinnaker_uat" {
+#   value = aws_eks_node_group.spinnaker["uat"].id
+# }
+
+## PROD Output ##
+output "eks_node_name_spinnaker_prod" {
+  value = aws_eks_node_group.spinnaker["prod"].id
 }
 
 # --------------------------------------------------------------------------
 #  Target Group Output
 # --------------------------------------------------------------------------
-## Spinnaker Output ##
-output "eks_node_tg_spinnaker" {
-  value = aws_lb_target_group.spinnaker["spinnaker"].id
+## DEV Output ##
+# output "eks_node_tg_spinnaker_dev" {
+#   value = aws_lb_target_group.spinnaker["dev"].id
+# }
+
+# ## UAT Output ##
+# output "eks_node_tg_spinnaker_uat" {
+#   value = aws_lb_target_group.spinnaker["uat"].id
+# }
+
+## PROD Output ##
+output "eks_node_tg_spinnaker_prod" {
+  value = aws_lb_target_group.spinnaker["prod"].id
 }

@@ -15,17 +15,15 @@
 # NODE GROUP - SHAREDREDIS
 #============================================
 locals {
-  node_selector_sharedredis = "devopscorner"
+  node_selector_sharedredis = "sharedredis"
 }
 
 resource "aws_eks_node_group" "sharedredis" {
   ## NODE GROUP
-  for_each = toset([
-    "sharedredis"
-  ])
+  for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
   cluster_name    = aws_eks_cluster.aws_eks.name
-  node_group_name = "${local.node_selector_sharedredis}-${each.key}_node"
+  node_group_name = "${local.node_selector_sharedredis}-${each.key}-node"
   node_role_arn   = aws_iam_role.eks_nodes.arn
 
   ## EKS Private Subnet ###
@@ -35,16 +33,16 @@ resource "aws_eks_node_group" "sharedredis" {
     data.terraform_remote_state.core_state.outputs.eks_private_1c[0]
   ]
 
-  instance_types = local.env == "staging" ? ["t3.medium"] : ["m5.large"]
+  instance_types = local.env == "prod" ? ["t3.large"] : ["t3.medium"]
   disk_size      = 100
-  version        = "${var.k8s_version[local.env]}"
+  version        = var.k8s_version[local.env]
 
   labels = {
     "environment" = "${var.env[local.env]}",
     "node"        = "${local.node_selector_sharedredis}-${each.key}"
     "department"  = "softeng"
     "productname" = "devopscorner-${each.key}"
-    "service"     = "${each.key}"
+    "service"     = "sharedredis"
   }
 
   remote_access {
@@ -53,9 +51,9 @@ resource "aws_eks_node_group" "sharedredis" {
   }
 
   scaling_config {
-    desired_size = 0
+    desired_size = 1
     max_size     = 5
-    min_size     = 0
+    min_size     = 1
   }
 
   lifecycle {
@@ -67,21 +65,21 @@ resource "aws_eks_node_group" "sharedredis" {
 
   tags = merge(
     {
-      "ClusterName" = "${var.eks_cluster_name}-${var.env[local.env]}"
+      "ClusterName"                                                             = "${var.eks_cluster_name}-${var.env[local.env]}"
       "k8s.io/cluster-autoscaler/${var.eks_cluster_name}-${var.env[local.env]}" = "owned",
-      "k8s.io/cluster-autoscaler/enabled" = "true"
-      "Terraform" = "true"
+      "k8s.io/cluster-autoscaler/enabled"                                       = "true"
+      "Terraform"                                                               = "true"
     },
     {
-      Environment     = "${upper(var.environment[local.env])}"
-      Name            = "EKS-1.22-${upper(local.node_selector_sharedredis)}-${upper(each.key)}"
+      Environment     = "${upper(each.key)}"
+      Name            = "EKS-${var.k8s_version[local.env]}-${upper(local.node_selector_sharedredis)}-${upper(each.key)}"
       Type            = "PRODUCTS"
       ProductName     = "EKS-DEVOPSCORNER"
       ProductGroup    = "${upper(each.key)}-EKS-DEVOPSCORNER"
       Department      = "DEVOPS"
       DepartmentGroup = "${upper(each.key)}-DEVOPS"
       ResourceGroup   = "${upper(each.key)}-EKS-DEVOPSCORNER"
-      Services        = "${upper(each.key)}"
+      Services        = "${upper(local.node_selector_sharedredis)}"
     }
   )
 
@@ -98,25 +96,23 @@ resource "aws_eks_node_group" "sharedredis" {
 #  Target Group
 # ------------------------------------
 resource "aws_lb_target_group" "sharedredis" {
-  for_each = toset([
-    "sharedredis"
-  ])
+  for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
   name     = "tg-${local.node_selector_sharedredis}-${var.env[local.env]}-${each.key}"
-  port     = 31280
+  port     = "${each.key}" == "dev" ? 30580 : 30680
   protocol = "HTTP"
-  vpc_id   = data.aws_vpc.selected.id
+  vpc_id   = data.terraform_remote_state.core_state.outputs.vpc_id
 
   tags = {
-    Environment     = "DEV"
-    Name            = "DEVOPSCORNER-TG-${upper(each.key)}"
+    Environment     = "${var.environment[local.env]}"
+    Name            = "ALB-${upper(local.node_selector_sharedredis)}-${upper(each.key)}"
     Type            = "PRODUCTS"
-    ProductName     = "DEVOPSCORNER-TG"
-    ProductGroup    = "DEV-DEVOPSCORNER"
+    ProductName     = "TG-DEVOPSCORNER"
+    ProductGroup    = "${upper(each.key)}-TG-DEVOPSCORNER"
     Department      = "DEVOPS"
-    DepartmentGroup = "DEV-DEVOPS"
-    ResourceGroup   = "DEV-TG-DEVOPSCORNER"
-    Services        = "TG-LB"
+    DepartmentGroup = "${upper(each.key)}-DEVOPS"
+    ResourceGroup   = "${upper(each.key)}-TG-DEVOPSCORNER"
+    Services        = "${upper(local.node_selector_sharedredis)}-${upper(each.key)}"
     Terraform       = true
   }
 }
@@ -124,15 +120,35 @@ resource "aws_lb_target_group" "sharedredis" {
 # --------------------------------------------------------------------------
 #  Node Group Output
 # --------------------------------------------------------------------------
-## SharedRedis Output #
-output "eks_node_name_sharedredis" {
-  value = aws_eks_node_group.sharedredis["sharedredis"].id
+## DEV Output ##
+# output "eks_node_name_sharedredis_dev" {
+#   value = aws_eks_node_group.sharedredis["dev"].id
+# }
+
+## UAT Output ##
+# output "eks_node_name_sharedredis_uat" {
+#   value = aws_eks_node_group.sharedredis["uat"].id
+# }
+
+## PROD Output ##
+output "eks_node_name_sharedredis_prod" {
+  value = aws_eks_node_group.sharedredis["prod"].id
 }
 
 # --------------------------------------------------------------------------
 #  Target Group Output
 # --------------------------------------------------------------------------
-## SharedRedis Output ##
-output "eks_node_tg_sharedredis" {
-  value = aws_lb_target_group.sharedredis["sharedredis"].id
+## DEV Output ##
+# output "eks_node_tg_sharedredis_dev" {
+#   value = aws_lb_target_group.sharedredis["dev"].id
+# }
+
+# ## UAT Output ##
+# output "eks_node_tg_sharedredis_uat" {
+#   value = aws_lb_target_group.sharedredis["uat"].id
+# }
+
+## PROD Output ##
+output "eks_node_tg_sharedredis_prod" {
+  value = aws_lb_target_group.sharedredis["prod"].id
 }

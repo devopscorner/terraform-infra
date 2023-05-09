@@ -144,7 +144,7 @@ resource "aws_iam_role_policy_attachment" "route53_cert_policy" {
 data "aws_caller_identity" "current" {}
 
 locals {
-  cluster_oidc_path = format("oidc.eks.%s.amazonaws.com/id/%s", "${var.region[local.env]}", join("", regex("https://([^.]+).+", "${aws_eks_cluster.aws_eks.endpoint}")))
+  cluster_oidc_path = format("oidc.eks.%s.amazonaws.com/id/%s", "${var.aws_region}", join("", regex("https://([^.]+).+", "${aws_eks_cluster.aws_eks.endpoint}")))
 }
 
 resource "aws_iam_role" "cluster_autoscaler_role" {
@@ -184,7 +184,11 @@ resource "aws_iam_role_policy" "cluster_autoscaler_policy" {
           "autoscaling:DescribeTags",
           "autoscaling:SetDesiredCapacity",
           "autoscaling:TerminateInstanceInAutoScalingGroup",
-          "ec2:DescribeLaunchTemplateVersions"
+          "ec2:DescribeLaunchTemplateVersions",
+          "ec2:DescribeInstances",
+          "ec2:DescribeInstanceTypes",
+          "ec2:DescribeRegions",
+          "ec2:DescribeAvailabilityZones"
         ],
         "Resource" : "*",
         "Effect" : "Allow"
@@ -192,6 +196,7 @@ resource "aws_iam_role_policy" "cluster_autoscaler_policy" {
     ]
   })
 }
+
 
 resource "null_resource" "eks_cluster_autoscaler_role" {
   triggers = {

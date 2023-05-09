@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cluster-autoscaler
+  name: cluster-autoscaler
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: cluster-autoscaler
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        cluster-autoscaler.kubernetes.io/safe-to-evict: "false"
+        prometheus.io/port: "8085"
+        prometheus.io/scrape: "true"
+      labels:
+        app: cluster-autoscaler
+    spec:
+      containers:
+      - command:
+        - ./cluster-autoscaler
+        - --v=4
+        - --stderrthreshold=info
+        - --cloud-provider=aws
+        - --skip-nodes-with-local-storage=false
+        - --expander=least-waste
+        - --node-group-auto-discovery=asg:tag=k8s.io/cluster-autoscaler/enabled,k8s.io/cluster-autoscaler/devopscorner-prod
+        - --balance-similar-node-groups
+        - --skip-nodes-with-system-pods=false
+        env:
+        - name: AWS_STS_REGIONAL_ENDPOINTS
+          value: regional
+        - name: AWS_DEFAULT_REGION
+          value: ap-southeast-1
+        - name: AWS_REGION
+          value: ap-southeast-1
+        - name: AWS_ROLE_ARN
+          value: arn:aws:iam::YOUR_AWS_ACCOUNT:role/cluster-autoscaler-devopscorner-prod-role
+        - name: AWS_WEB_IDENTITY_TOKEN_FILE
+          value: /var/run/secrets/eks.amazonaws.com/serviceaccount/token
+        image: k8s.gcr.io/autoscaling/cluster-autoscaler:v1.23.0
+        imagePullPolicy: Always
+        name: cluster-autoscaler
+        resources:
+          limits:
+            cpu: 300m
+            memory: 600Mi
+          requests:
+            cpu: 100m
+            memory: 300Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/ssl/certs/ca-certificates.crt
+          name: ssl-certs
+          readOnly: true
+        - mountPath: /var/run/secrets/eks.amazonaws.com/serviceaccount
+          name: aws-iam-token
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      priorityClassName: system-cluster-critical
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 65534
+        runAsNonRoot: true
+        runAsUser: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      serviceAccount: cluster-autoscaler
+      serviceAccountName: cluster-autoscaler
+      automountServiceAccountToken: true
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /etc/ssl/certs/ca-bundle.crt
+          type: ""
+        name: ssl-certs
+      - name: aws-iam-token
+        projected:
+          sources:
+          - serviceAccountToken:
+              path: token
+              expirationSeconds: 7200
+              audience: sts.amazonaws.com

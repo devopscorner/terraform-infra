@@ -14,7 +14,7 @@
 locals {
   #for tagging
   Environment_goapp_uat     = "UAT"
-  Name_goapp_uat            = "EKS-1.22-GOAPP-UAT"
+  Name_goapp_uat            = "EKS-1.23-GOAPP-UAT"
   Type_goapp_uat            = "PROJECTS"
   ProductName_goapp_uat     = "EKS-DEVOPSCORNER"
   ProductGroup_goapp_uat    = "UAT-EKS-DEVOPSCORNER"
@@ -178,6 +178,63 @@ resource "aws_autoscaling_group_tag" "Services_group_tag_goapp_uat" {
   tag {
     key                 = "Service"
     value               = local.Services_goapp_uat
+    propagate_at_launch = true
+  }
+}
+
+// Mandatory TAGS for Cluster-Autoscaller
+resource "aws_autoscaling_group_tag" "Clustername_group_tag_goapp_uat" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.goapp["uat"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "ClusterName"
+    value               = "${var.eks_cluster_name}-${var.env[local.env]}"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_group_tag" "Autoscaler_ownership_group_tag_goapp_uat" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.goapp["uat"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "k8s.io/cluster-autoscaler/${var.eks_cluster_name}-${var.env[local.env]}"
+    value               = "owned"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_group_tag" "Autoscaler_enable_group_tag_goapp_uat" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.goapp["uat"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "k8s.io/cluster-autoscaler/enabled"
+    value               = "true"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_group_tag" "Terraform_group_tag_goapp_uat" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.goapp["uat"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "Terraform"
+    value               = "true"
     propagate_at_launch = true
   }
 }

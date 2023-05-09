@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: opensearch-staging
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+spec:
+  rules:
+    - host: opensearch-cluster-master.observability.svc.cluster.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix   # Prefix -or - ImplementationSpecific
+            backend:
+              service:
+                name: opensearch-cluster-master
+                port:
+                  number: 80
+  tls:
+    - hosts:
+      - opensearch-cluster-master.observability.svc.cluster.local

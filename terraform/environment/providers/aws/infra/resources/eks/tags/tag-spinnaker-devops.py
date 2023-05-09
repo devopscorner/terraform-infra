@@ -20,7 +20,7 @@ response = asg_client.create_or_update_tags(
             'ResourceId': asg_value,
             'ResourceType': 'auto-scaling-group',
             'Key': 'Name',
-            'Value': 'EKS-1.22-'+eks_nodegroup.upper(),
+            'Value': 'EKS-1.23-'+eks_nodegroup.upper(),
             'PropagateAtLaunch': True
         },
         {
@@ -103,7 +103,7 @@ for i in instances_list:
         Tags=[
             {
                 'Key': 'Name',
-                'Value': 'EKS-1.22-'+eks_nodegroup.upper()
+                'Value': 'EKS-1.23-'+eks_nodegroup.upper()
             },
             {
                 'Key': 'Department',

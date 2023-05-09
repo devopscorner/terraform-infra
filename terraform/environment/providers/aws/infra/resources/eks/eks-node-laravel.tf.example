@@ -1,5 +1,5 @@
 # ==========================================================================
-#  Resources: EKS / eks-node-devops.tf (EKS Node Configuration)
+#  Resources: EKS / eks-node-laravel.tf (EKS Node Configuration)
 # --------------------------------------------------------------------------
 #  Description
 # --------------------------------------------------------------------------
@@ -12,21 +12,18 @@
 # ==========================================================================
 
 #============================================
-# NODE GROUP - DEVOPS
+# NODE GROUP - LARAVEL
 #============================================
 locals {
-  node_selector_devops = "devopscorner"
+  node_selector_laravel = "laravel"
 }
 
-resource "aws_eks_node_group" "devops" {
+resource "aws_eks_node_group" "laravel" {
   ## NODE GROUP
-  for_each = toset([
-    "monitoring",
-    "tools",
-  ])
+  for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
   cluster_name    = aws_eks_cluster.aws_eks.name
-  node_group_name = "${local.node_selector_devops}-${each.key}-node"
+  node_group_name = "${local.node_selector_laravel}-${each.key}-node"
   node_role_arn   = aws_iam_role.eks_nodes.arn
 
   ## EKS Private Subnet ###
@@ -36,16 +33,16 @@ resource "aws_eks_node_group" "devops" {
     data.terraform_remote_state.core_state.outputs.eks_private_1c[0]
   ]
 
-  instance_types = local.env == "prod" ? ["t3.medium"] : ["t3.small"]
+  instance_types = local.env == "prod" ? ["t3.large"] : ["t3.medium"]
   disk_size      = 100
   version        = var.k8s_version[local.env]
 
   labels = {
     "environment" = "${var.env[local.env]}",
-    "node"        = "${local.node_selector_devops}-${each.key}"
-    "department"  = "devops"
+    "node"        = "${local.node_selector_laravel}-${each.key}"
+    "department"  = "softeng"
     "productname" = "devopscorner-${each.key}"
-    "service"     = "${each.key}"
+    "service"     = "laravel"
   }
 
   remote_access {
@@ -75,14 +72,14 @@ resource "aws_eks_node_group" "devops" {
     },
     {
       Environment     = "${upper(each.key)}"
-      Name            = "EKS-1.22-${upper(local.node_selector_devops)}-${upper(each.key)}"
+      Name            = "EKS-${var.k8s_version[local.env]}-${upper(local.node_selector_laravel)}-${upper(each.key)}"
       Type            = "PRODUCTS"
       ProductName     = "EKS-DEVOPSCORNER"
       ProductGroup    = "${upper(each.key)}-EKS-DEVOPSCORNER"
-      Department      = "DEVOPS"
-      DepartmentGroup = "${upper(each.key)}-DEVOPS"
+      Department      = "SOFTENG"
+      DepartmentGroup = "${upper(each.key)}-SOFTENG"
       ResourceGroup   = "${upper(each.key)}-EKS-DEVOPSCORNER"
-      Services        = "${upper(each.key)}"
+      Services        = "${upper(local.node_selector_laravel)}"
     }
   )
 
@@ -98,27 +95,24 @@ resource "aws_eks_node_group" "devops" {
 # ------------------------------------
 #  Target Group
 # ------------------------------------
-resource "aws_lb_target_group" "devops" {
-  for_each = toset([
-    "monitoring",
-    "tools"
-  ])
+resource "aws_lb_target_group" "laravel" {
+  for_each = (local.env == "prod" ? toset(["prod"]) : toset(["dev", "uat"]))
 
-  name     = "tg-${local.node_selector_devops}-${var.env[local.env]}-${each.key}"
-  port     = "${each.key}" == "monitoring" ? 30180 : 30280
+  name     = "tg-${local.node_selector_laravel}-${var.env[local.env]}-${each.key}"
+  port     = "${each.key}" == "dev" ? 30580 : 30680
   protocol = "HTTP"
-  vpc_id   = data.aws_vpc.selected.id
+  vpc_id   = data.terraform_remote_state.core_state.outputs.vpc_id
 
   tags = {
     Environment     = "${var.environment[local.env]}"
-    Name            = "ALB-${upper(local.node_selector_devops)}-${upper(each.key)}"
+    Name            = "ALB-${upper(local.node_selector_laravel)}-${upper(each.key)}"
     Type            = "PRODUCTS"
     ProductName     = "TG-DEVOPSCORNER"
     ProductGroup    = "${upper(each.key)}-TG-DEVOPSCORNER"
     Department      = "DEVOPS"
     DepartmentGroup = "${upper(each.key)}-DEVOPS"
     ResourceGroup   = "${upper(each.key)}-TG-DEVOPSCORNER"
-    Services        = "${upper(local.node_selector_devops)}-${upper(each.key)}"
+    Services        = "${upper(local.node_selector_laravel)}-${upper(each.key)}"
     Terraform       = true
   }
 }
@@ -126,25 +120,35 @@ resource "aws_lb_target_group" "devops" {
 # --------------------------------------------------------------------------
 #  Node Group Output
 # --------------------------------------------------------------------------
-## Monitoring Output #
-output "eks_node_name_devops_monitoring" {
-  value = aws_eks_node_group.devops["monitoring"].id
-}
+## DEV Output ##
+# output "eks_node_name_laravel_dev" {
+#   value = aws_eks_node_group.laravel["dev"].id
+# }
 
-## Tools Output #
-output "eks_node_name_devops_tools" {
-  value = aws_eks_node_group.devops["tools"].id
+## UAT Output ##
+# output "eks_node_name_laravel_uat" {
+#   value = aws_eks_node_group.laravel["uat"].id
+# }
+
+## PROD Output ##
+output "eks_node_name_laravel_prod" {
+  value = aws_eks_node_group.laravel["prod"].id
 }
 
 # --------------------------------------------------------------------------
 #  Target Group Output
 # --------------------------------------------------------------------------
-## Monitoring TargetGroup Output ##
-output "eks_node_tg_devops_monitoring" {
-  value = aws_lb_target_group.devops["monitoring"].id
-}
+## DEV Output ##
+# output "eks_node_tg_laravel_dev" {
+#   value = aws_lb_target_group.laravel["dev"].id
+# }
 
-## Tools TargetGroup Output ##
-output "eks_node_tg_devops_tools" {
-  value = aws_lb_target_group.devops["tools"].id
+# ## UAT Output ##
+# output "eks_node_tg_laravel_uat" {
+#   value = aws_lb_target_group.laravel["uat"].id
+# }
+
+## PROD Output ##
+output "eks_node_tg_laravel_prod" {
+  value = aws_lb_target_group.laravel["prod"].id
 }
