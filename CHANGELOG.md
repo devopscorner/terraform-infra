@@ -16,6 +16,17 @@ Production Grade Terraform for Provisioning Infrastructure
 [![license](https://img.shields.io/github/license/devopscorner/terraform-infra)](https://img.shields.io/github/license/devopscorner/terraform-infra)
 
 ---
+## Version 3.5
+
+### Features
+
+- Upgrade EKS version to 1.23 from previous 1.22
+- Added Terraform Monitoring OpenTelemetry with ADOT (AWS Distro for OpenTelemetry)
+- Added Terraform EKS ADOT Collector
+- Update Manifest EKS
+- Added Manifest NLB (Network Load Balancer) for EKS
+
+---
 ## Version 3.4
 
 ### Features
