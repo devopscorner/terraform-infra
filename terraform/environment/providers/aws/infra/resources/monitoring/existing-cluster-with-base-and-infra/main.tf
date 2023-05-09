@@ -35,7 +35,7 @@ locals {
 
 # deploys the base module
 module "aws_observability_accelerator" {
-  source = "../"
+  source = "../main"
   # source = "github.com/aws-observability/terraform-aws-observability-accelerator?ref=v2.0.0"
 
   aws_region = var.aws_region
@@ -94,8 +94,9 @@ module "eks_monitoring" {
 
   # optional, defaults to 60s interval and 15s timeout
   prometheus_config = {
-    global_scrape_interval = "60s"
-    global_scrape_timeout  = "15s"
+    global_scrape_interval     = "60s"
+    global_scrape_timeout      = "15s"
+    global_scrape_sample_limit = 5000
   }
 
   tags = local.tags
