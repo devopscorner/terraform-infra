@@ -9,19 +9,19 @@
 # ==========================================================================
 
 #============================================
-# NODE GROUP - DEVOPSCORNER SHAREDREDIS
+# NODE GROUP - SHAREDREDIS - PROD
 #============================================
 locals {
   #for tagging
-  Environment_sharedredis     = "STG"
-  Name_sharedredis            = "EKS-1.22-DEVOPSCORNER-SHAREDREDIS"
-  Type_sharedredis            = "PRODUCTS"
-  ProductName_sharedredis     = "EKS-DEVOPSCORNER"
-  ProductGroup_sharedredis    = "SHAREDREDIS-EKS-DEVOPSCORNER"
-  Department_sharedredis      = "DEVOPS"
-  DepartmentGroup_sharedredis = "SHAREDREDIS-DEVOPS"
-  ResourceGroup_sharedredis   = "SHAREDREDIS-EKS-DEVOPSCORNER"
-  Services_sharedredis        = "SHAREDREDIS"
+  Environment_sharedredis_prod     = "PROD"
+  Name_sharedredis_prod            = "EKS-1.23-SHAREDREDIS-PROD"
+  Type_sharedredis_prod            = "PROJECTS"
+  ProductName_sharedredis_prod     = "EKS-DEVOPSCORNER"
+  ProductGroup_sharedredis_prod    = "PROD-EKS-DEVOPSCORNER"
+  Department_sharedredis_prod      = "SOFTENG"
+  DepartmentGroup_sharedredis_prod = "PROD-SOFTENG"
+  ResourceGroup_sharedredis_prod   = "PROD-EKS-DEVOPSCORNER"
+  Services_sharedredis_prod        = "SHAREDREDIS"
 }
 
 # --------------------------------------------------------------------------
@@ -32,8 +32,8 @@ locals {
 # - https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/autoscaling_attachment
 
 ## Scale Down
-resource "aws_autoscaling_schedule" "scale_down_sharedredis" {
-  autoscaling_group_name = aws_eks_node_group.sharedredis["sharedredis"].resources[0].autoscaling_groups[0].name
+resource "aws_autoscaling_schedule" "scale_down_sharedredis_prod" {
+  autoscaling_group_name = aws_eks_node_group.sharedredis["prod"].resources[0].autoscaling_groups[0].name
   desired_capacity       = 0
   max_size               = 0
   min_size               = 0
@@ -43,11 +43,11 @@ resource "aws_autoscaling_schedule" "scale_down_sharedredis" {
 }
 
 ## Scale Up
-resource "aws_autoscaling_schedule" "scale_up_sharedredis" {
-  autoscaling_group_name = aws_eks_node_group.sharedredis["sharedredis"].resources[0].autoscaling_groups[0].name
-  desired_capacity       = 0
+resource "aws_autoscaling_schedule" "scale_up_sharedredis_prod" {
+  autoscaling_group_name = aws_eks_node_group.sharedredis["prod"].resources[0].autoscaling_groups[0].name
+  desired_capacity       = 1
   max_size               = 5
-  min_size               = 0
+  min_size               = 1
   recurrence             = "0 0 * * MON-FRI"
   scheduled_action_name  = "scale_up"
   # start_time           = "2022-03-28T00:00:00Z"
@@ -56,142 +56,185 @@ resource "aws_autoscaling_schedule" "scale_up_sharedredis" {
 # --------------------------------------------------------------------------
 #  Autoscaling Tag
 # --------------------------------------------------------------------------
-resource "aws_autoscaling_group_tag" "Environment_group_tag_sharedredis" {
+resource "aws_autoscaling_group_tag" "Environment_group_tag_sharedredis_prod" {
   for_each = toset(
     [for asg in flatten(
-      [for resources in aws_eks_node_group.sharedredis["sharedredis"].resources : resources.autoscaling_groups]
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
     ) : asg.name]
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Environment"
-    value = local.Environment_sharedredis
+    key                 = "Environment"
+    value               = local.Environment_sharedredis_prod
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_group_tag" "Name_group_tag_sharedredis" {
+resource "aws_autoscaling_group_tag" "Name_group_tag_sharedredis_prod" {
   for_each = toset(
     [for asg in flatten(
-      [for resources in aws_eks_node_group.sharedredis["sharedredis"].resources : resources.autoscaling_groups]
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
     ) : asg.name]
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Name"
-    value = local.Name_sharedredis
+    key                 = "Name"
+    value               = local.Name_sharedredis_prod
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_group_tag" "Type_group_tag_sharedredis" {
+resource "aws_autoscaling_group_tag" "Type_group_tag_sharedredis_prod" {
   for_each = toset(
     [for asg in flatten(
-      [for resources in aws_eks_node_group.sharedredis["sharedredis"].resources : resources.autoscaling_groups]
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
     ) : asg.name]
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Type"
-    value = local.Type_sharedredis
+    key                 = "Type"
+    value               = local.Type_sharedredis_prod
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_group_tag" "ProductName_group_tag_sharedredis" {
+resource "aws_autoscaling_group_tag" "ProductName_group_tag_sharedredis_prod" {
   for_each = toset(
     [for asg in flatten(
-      [for resources in aws_eks_node_group.sharedredis["sharedredis"].resources : resources.autoscaling_groups]
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
     ) : asg.name]
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "ProductName"
-    value = local.ProductName_sharedredis
+    key                 = "ProductName"
+    value               = local.ProductName_sharedredis_prod
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_group_tag" "ProductGroup_group_tag_sharedredis" {
+resource "aws_autoscaling_group_tag" "ProductGroup_group_tag_sharedredis_prod" {
   for_each = toset(
     [for asg in flatten(
-      [for resources in aws_eks_node_group.sharedredis["sharedredis"].resources : resources.autoscaling_groups]
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
     ) : asg.name]
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "ProductGroup"
-    value = local.ProductGroup_sharedredis
+    key                 = "ProductGroup"
+    value               = local.ProductGroup_sharedredis_prod
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_group_tag" "Department_group_tag_sharedredis" {
+resource "aws_autoscaling_group_tag" "Department_group_tag_sharedredis_prod" {
   for_each = toset(
     [for asg in flatten(
-      [for resources in aws_eks_node_group.sharedredis["sharedredis"].resources : resources.autoscaling_groups]
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
     ) : asg.name]
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Department"
-    value = local.Department_sharedredis
+    key                 = "Department"
+    value               = local.Department_sharedredis_prod
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_group_tag" "DepartmentGroup_group_tag_sharedredis" {
+resource "aws_autoscaling_group_tag" "DepartmentGroup_group_tag_sharedredis_prod" {
   for_each = toset(
     [for asg in flatten(
-      [for resources in aws_eks_node_group.sharedredis["sharedredis"].resources : resources.autoscaling_groups]
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
     ) : asg.name]
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "DepartmentGroup"
-    value = local.DepartmentGroup_sharedredis
+    key                 = "DepartmentGroup"
+    value               = local.DepartmentGroup_sharedredis_prod
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_group_tag" "ResourceGroup_group_tag_sharedredis" {
+resource "aws_autoscaling_group_tag" "ResourceGroup_group_tag_sharedredis_prod" {
   for_each = toset(
     [for asg in flatten(
-      [for resources in aws_eks_node_group.sharedredis["sharedredis"].resources : resources.autoscaling_groups]
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
     ) : asg.name]
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "ResourceGroup"
-    value = local.ResourceGroup_sharedredis
+    key                 = "ResourceGroup"
+    value               = local.ResourceGroup_sharedredis_prod
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_group_tag" "Services_group_tag_sharedredis" {
+resource "aws_autoscaling_group_tag" "Services_group_tag_sharedredis_prod" {
   for_each = toset(
     [for asg in flatten(
-      [for resources in aws_eks_node_group.sharedredis["sharedredis"].resources : resources.autoscaling_groups]
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
     ) : asg.name]
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "Service"
-    value = local.Services_sharedredis
+    key                 = "Service"
+    value               = local.Services_sharedredis_prod
     propagate_at_launch = true
   }
 }
 
-resource "aws_autoscaling_group_tag" "ClusterName_group_tag_sharedredis" {
+// Mandatory TAGS for Cluster-Autoscaller
+resource "aws_autoscaling_group_tag" "Clustername_group_tag_sharedredis_prod" {
   for_each = toset(
     [for asg in flatten(
-      [for resources in aws_eks_node_group.sharedredis["sharedredis"].resources : resources.autoscaling_groups]
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
     ) : asg.name]
   )
   autoscaling_group_name = each.value
   tag {
-    key   = "ClusterName"
-    value = "${var.eks_cluster_name}"
+    key                 = "ClusterName"
+    value               = "${var.eks_cluster_name}-${var.env[local.env]}"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_group_tag" "Autoscaler_ownership_group_tag_sharedredis_prod" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "k8s.io/cluster-autoscaler/${var.eks_cluster_name}-${var.env[local.env]}"
+    value               = "owned"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_group_tag" "Autoscaler_enable_group_tag_sharedredis_prod" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "k8s.io/cluster-autoscaler/enabled"
+    value               = "true"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_group_tag" "Terraform_group_tag_sharedredis_prod" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.sharedredis["prod"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "Terraform"
+    value               = "true"
     propagate_at_launch = true
   }
 }
@@ -200,18 +243,18 @@ resource "aws_autoscaling_group_tag" "ClusterName_group_tag_sharedredis" {
 #  Autoscaling Output
 # --------------------------------------------------------------------------
 ## Scale Down ##
-output "eks_node_scale_down_sharedredis" {
-  value = aws_autoscaling_schedule.scale_down_sharedredis.arn
+output "eks_node_scale_down_sharedredis_prod" {
+  value = aws_autoscaling_schedule.scale_down_sharedredis_prod.arn
 }
 
 ## Scale Up ##
-output "eks_node_scale_up_sharedredis" {
-  value = aws_autoscaling_schedule.scale_up_sharedredis.arn
+output "eks_node_scale_up_sharedredis_prod" {
+  value = aws_autoscaling_schedule.scale_up_sharedredis_prod.arn
 }
 
 # --------------------------------------------------------------------------
 #  Autoscaling Node Group Output
 # --------------------------------------------------------------------------
-output "eks_node_asg_group_sharedredis" {
-  value = aws_eks_node_group.sharedredis["sharedredis"].resources[0].autoscaling_groups[0].name
+output "eks_node_asg_group_sharedredis_prod" {
+  value = aws_eks_node_group.sharedredis["prod"].resources[0].autoscaling_groups[0].name
 }

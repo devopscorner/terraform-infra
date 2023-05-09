@@ -14,7 +14,7 @@
 locals {
   #for tagging
   Environment_nifi_dev     = "DEV"
-  Name_nifi_dev            = "EKS-1.22-NIFI-DEV"
+  Name_nifi_dev            = "EKS-1.23-NIFI-DEV"
   Type_nifi_dev            = "PROJECTS"
   ProductName_nifi_dev     = "EKS-DEVOPSCORNER"
   ProductGroup_nifi_dev    = "DEV-EKS-DEVOPSCORNER"

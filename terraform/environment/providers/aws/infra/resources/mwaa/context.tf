@@ -24,9 +24,9 @@ module "this" {
   source  = "cloudposse/label/null"
   version = "0.25.0" # requires Terraform >= 0.13.0
 
-  enabled             = var.enabled
-  namespace           = var.namespace
-  tenant              = var.tenant
+  enabled   = var.enabled
+  namespace = var.namespace
+  tenant    = var.tenant
   # environment       = var.environment
   stage               = var.stage
   name                = var.name
@@ -115,7 +115,7 @@ variable "tenant" {
 # variable "environment" {
 #   type        = string
 #   default     = null
-#   description = "ID element. Usually used for region e.g. 'uw2', 'us-west-2', OR role 'prod', 'staging', 'dev', 'UAT'"
+#   description = "ID element. Usually used for region e.g. 'uw2', 'ap-southeast-1', OR role 'prod', 'staging', 'dev', 'UAT'"
 # }
 
 variable "stage" {

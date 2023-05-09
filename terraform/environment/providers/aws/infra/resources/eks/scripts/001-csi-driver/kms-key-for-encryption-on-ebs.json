@@ -1,0 +1,30 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kms:CreateGrant",
+        "kms:ListGrants",
+        "kms:RevokeGrant"
+      ],
+      "Resource": ["arn:aws:kms:ap-southeast-1:YOUR_AWS_ACCOUNT:key/4d7ef7e8-cef9-4482-bc2e-87c742544ee5"],
+      "Condition": {
+        "Bool": {
+          "kms:GrantIsForAWSResource": "true"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kms:Encrypt",
+        "kms:Decrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*",
+        "kms:DescribeKey"
+      ],
+      "Resource": ["arn:aws:kms:ap-southeast-1:YOUR_AWS_ACCOUNT:key/4d7ef7e8-cef9-4482-bc2e-87c742544ee5"]
+    }
+  ]
+}

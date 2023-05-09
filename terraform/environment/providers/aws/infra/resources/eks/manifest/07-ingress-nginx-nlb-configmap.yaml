@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: ingress-nginx
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+    app.kubernetes.io/version: 1.7.0
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+data:
+  allow-snippet-annotations: "true"
+  http-snippet: |
+    server {
+      listen 2443;
+      return 301 https://$host$request_uri;
+    }
+  proxy-real-ip-cidr: 10.8.0.0/16
+  use-forwarded-headers: 'true'

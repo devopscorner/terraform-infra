@@ -1,0 +1,6 @@
+aws_region                      = "ap-southeast-1"
+eks_cluster_id                  = "devopscorner-prod"
+managed_prometheus_workspace_id = "ws-xxx"
+managed_grafana_workspace_id    = "g-xxx"
+grafana_api_key                 = ""
+grafana_workspace_name          = "devopscorner-grafana"

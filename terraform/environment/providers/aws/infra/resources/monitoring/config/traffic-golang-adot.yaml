@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: traffic-golang-adot
+  namespace: devopscorner
+  labels:
+    io.kompose.service: traffic-golang-adot
+spec:
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    io.kompose.service: traffic-golang-adot
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traffic-golang-adot
+  namespace: devopscorner
+  labels:
+    io.kompose.service: traffic-golang-adot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: traffic-golang-adot
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        io.kompose.service: traffic-golang-adot
+    spec:
+      containers:
+        - name: traffic-golang-adot
+          image: ellerbrock/alpine-bash-curl-ssl:latest
+          args:
+            - /bin/bash
+            - -c
+            - sleep 10; while :; do curl bookstore-adot:8080/metrics > /dev/null 1>&1; sleep 2; curl bookstore-adot:8080/health > /dev/null 2>&1; sleep 5; done
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      schedulerName: default-scheduler

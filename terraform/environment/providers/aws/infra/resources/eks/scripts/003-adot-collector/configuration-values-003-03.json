@@ -1,0 +1,12 @@
+{
+  "collector": {
+    "serviceAccount": {
+      "create": false,
+      "name": "adot-collector-sa"
+    },
+    "amp": {
+      "enabled": true,
+      "remoteWriteEndpoint": "https://aps-workspaces.ap-southeast-1.amazonaws.com/workspaces/ws-xxx/api/v1/remote_write"
+    }
+  }
+}

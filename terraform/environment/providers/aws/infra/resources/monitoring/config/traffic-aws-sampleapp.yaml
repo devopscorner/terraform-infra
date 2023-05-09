@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: traffic-aws-sampleapp
+  namespace: devopscorner
+spec:
+  ports:
+    - name: tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    io.kompose.service: traffic-aws-sampleapp
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traffic-aws-sampleapp
+  namespace: devopscorner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: traffic-aws-sampleapp
+  template:
+    metadata:
+      labels:
+        io.kompose.service: traffic-aws-sampleapp
+    spec:
+      containers:
+        - name: traffic-aws-sampleapp
+          image: ellerbrock/alpine-bash-curl-ssl:latest
+          args:
+            - /bin/bash
+            - '-c'
+            - >-
+              sleep 10; while :; do curl aws-otel-sampleapp:8080/ > /dev/null
+              1>&1; sleep 2; curl aws-otel-sampleapp:8080/outgoing-sampleapp > /dev/null 2>&1;
+              sleep 5; done
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      schedulerName: default-scheduler

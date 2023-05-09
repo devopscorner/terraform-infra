@@ -9,13 +9,13 @@
 # ------------------------------------
 #  AWS Zone
 # ------------------------------------
-variable "region" {
+variable "aws_az" {
   type        = map(string)
   description = "AWS Zone Target Deployment"
   default = {
-    lab     = "ap-southeast-1"
-    staging = "ap-southeast-1"
-    prod    = "ap-southeast-1"
+    lab     = "ap-southeast-1a"
+    staging = "ap-southeast-1b"
+    prod    = "ap-southeast-1b"
   }
 }
 
@@ -34,20 +34,20 @@ variable "access_my_ip" {
 variable "dns_zone" {
   type = map(string)
   default = {
-    dev     = "ZONE-ID-DEV"
-    uat     = "ZONE-ID-UAT"
-    lab     = "ZONE-ID-LAB"
-    staging = "ZONE-ID-STAGING"
-    prod    = "ZONE-ID-PROD"
+    dev     = "ZONE_ID"
+    uat     = "ZONE_ID"
+    lab     = "ZONE_ID"
+    staging = "ZONE_ID"
+    prod    = "ZONE_ID"
   }
 }
 
 variable "dns_url" {
   type = map(string)
   default = {
-    lab     = "devopscorner.lab"
+    lab     = "awscb.id"
     staging = "awscb.id"
-    prod    = "devopscorner.id"
+    prod    = "awscb.id"
   }
 }
 
@@ -70,9 +70,9 @@ variable "ssh_key_pair" {
   type        = map(string)
   description = "default keyname"
   default = {
-    lab     = "devopscorner-deploy-lab"
-    staging = "devopscorner-deploy-staging"
-    prod    = "devopscorner-deploy-prod"
+    lab     = "devopscorner-poc"
+    staging = "devopscorner-poc"
+    prod    = "devopscorner-poc"
   }
 }
 
@@ -88,8 +88,8 @@ variable "eks_name_env" {
 variable "k8s_version" {
   type = map(string)
   default = {
-    lab     = "1.22"
-    staging = "1.22"
-    prod    = "1.22"
+    lab     = "1.23"
+    staging = "1.23"
+    prod    = "1.23"
   }
 }

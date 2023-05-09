@@ -1,0 +1,2 @@
+resources:
+  - https://amazon-eks.s3.amazonaws.com/docs/addons-otel-permissions.yaml

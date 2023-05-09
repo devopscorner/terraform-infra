@@ -82,31 +82,31 @@ variable "ssh_public_key" {
   type        = string
   description = "SSH Public Key"
   ## file:///Users/[username]/.ssh/id_rsa.pub
-  default     = ""
+  default = ""
 }
 
 # ------------------------------------
 #  AMI Linux
 # ------------------------------------
 variable "ami_os" {
-   type        = string
-   description = "Selected OS AMI"
-   ### AWS Linux ###
-   # default   = "aws-linux"
-   ### Ubuntu ###
-   default     = "ubuntu"
+  type        = string
+  description = "Selected OS AMI"
+  ### AWS Linux ###
+  # default   = "aws-linux"
+  ### Ubuntu ###
+  default = "ubuntu"
 }
 
 variable "ami_aws_linux" {
-   type        = string
-   description = "AWS Linux AMI to use.  Must match availability zone, instance type, etc"
-   ### AWS Linux ###
-   default     = "ami-0dc5785603ad4ff54"
+  type        = string
+  description = "AWS Linux AMI to use.  Must match availability zone, instance type, etc"
+  ### AWS Linux ###
+  default = "ami-0dc5785603ad4ff54"
 }
 
 variable "ami_ubuntu" {
-   type        = string
-   description = "Ubuntu Linux AMI to use.  Must match availability zone, instance type, etc"
-   ### Ubuntu ###
-   default     = "ami-0fed77069cd5a6d6c"
+  type        = string
+  description = "Ubuntu Linux AMI to use.  Must match availability zone, instance type, etc"
+  ### Ubuntu ###
+  default = "ami-0fed77069cd5a6d6c"
 }

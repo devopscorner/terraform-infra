@@ -14,8 +14,8 @@
 locals {
   #for tagging
   Environment_devops      = "STG"
-  Name_monitoring         = "EKS-1.22-DEVOPSCORNER-MONITORING"
-  Name_tools              = "EKS-1.22-DEVOPSCORNER-TOOLS"
+  Name_monitoring         = "EKS-1.23-DEVOPSCORNER-MONITORING"
+  Name_tools              = "EKS-1.23-DEVOPSCORNER-TOOLS"
   Type_devops             = "PRODUCTS"
   ProductName_monitoring  = "EKS-DEVOPSCORNER"
   ProductName_tools       = "EKS-DEVOPSCORNER"
@@ -158,6 +158,63 @@ resource "aws_autoscaling_group_tag" "Services_group_tag_devops_monitoring" {
   }
 }
 
+// Mandatory TAGS for Cluster-Autoscaller
+resource "aws_autoscaling_group_tag" "Clustername_group_tag_devops_monitoring" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.devops["monitoring"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "ClusterName"
+    value               = "${var.eks_cluster_name}-${var.env[local.env]}"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_group_tag" "Autoscaler_ownership_group_tag_devops_monitoring" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.devops["monitoring"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "k8s.io/cluster-autoscaler/${var.eks_cluster_name}-${var.env[local.env]}"
+    value               = "owned"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_group_tag" "Autoscaler_enable_group_tag_devops_monitoring" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.devops["monitoring"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "k8s.io/cluster-autoscaler/enabled"
+    value               = "true"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_group_tag" "Terraform_group_tag_devops_monitoring" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.devops["monitoring"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "Terraform"
+    value               = "true"
+    propagate_at_launch = true
+  }
+}
+
 # Tools
 resource "aws_autoscaling_group_tag" "Environment_group_tag_devops_tools" {
   for_each = toset(
@@ -295,6 +352,63 @@ resource "aws_autoscaling_group_tag" "ClusterName_group_devops_tools" {
   tag {
     key   = "ClusterName"
     value = "${var.eks_cluster_name}"
+    propagate_at_launch = true
+  }
+}
+
+// Mandatory TAGS for Cluster-Autoscaller
+resource "aws_autoscaling_group_tag" "Clustername_group_tag_devops_tools" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.devops["tools"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "ClusterName"
+    value               = "${var.eks_cluster_name}-${var.env[local.env]}"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_group_tag" "Autoscaler_ownership_group_tag_devops_tools" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.devops["tools"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "k8s.io/cluster-autoscaler/${var.eks_cluster_name}-${var.env[local.env]}"
+    value               = "owned"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_group_tag" "Autoscaler_enable_group_tag_devops_tools" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.devops["tools"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "k8s.io/cluster-autoscaler/enabled"
+    value               = "true"
+    propagate_at_launch = true
+  }
+}
+
+resource "aws_autoscaling_group_tag" "Terraform_group_tag_devops_tools" {
+  for_each = toset(
+    [for asg in flatten(
+      [for resources in aws_eks_node_group.devops["tools"].resources : resources.autoscaling_groups]
+    ) : asg.name]
+  )
+  autoscaling_group_name = each.value
+  tag {
+    key                 = "Terraform"
+    value               = "true"
     propagate_at_launch = true
   }
 }

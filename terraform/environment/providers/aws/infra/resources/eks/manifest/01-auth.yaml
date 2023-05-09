@@ -8,13 +8,17 @@ data:
     - groups:
       - system:bootstrappers
       - system:nodes
-      rolearn: arn:aws:iam::YOUR_AWS_ACCOUNT:role/eks-role-devopscorner-staging-nodes
+      rolearn: arn:aws:iam::YOUR_AWS_ACCOUNT:role/eks-role-devopscorner-prod-nodes
       username: system:node:{{EC2PrivateDNSName}}
     - groups:
       - engineering:ops
       rolearn: arn:aws:iam::YOUR_AWS_ACCOUNT:role/devopscorner-Lead
       username: devops
   mapUsers: |
+    - userarn: arn:aws:iam::YOUR_AWS_ACCOUNT:user/zeroc0d3
+      username: zeroc0d3
+      groups:
+        - system:masters
     - userarn: arn:aws:iam::YOUR_AWS_ACCOUNT:user/devops
       username: devops
       groups:

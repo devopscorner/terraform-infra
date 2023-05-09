@@ -14,7 +14,7 @@
 locals {
   #for tagging
   Environment_goapp_uat     = "UAT"
-  Name_goapp_uat            = "EKS-1.22-GOAPP-UAT"
+  Name_goapp_uat            = "EKS-1.23-GOAPP-UAT"
   Type_goapp_uat            = "PROJECTS"
   ProductName_goapp_uat     = "EKS-DEVOPSCORNER"
   ProductGroup_goapp_uat    = "UAT-EKS-DEVOPSCORNER"

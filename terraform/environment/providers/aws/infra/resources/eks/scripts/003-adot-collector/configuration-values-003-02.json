@@ -1,0 +1,9 @@
+{
+  "manager": {
+    "resource": {
+      "limits": {
+        "cpu": "200m"
+      }
+    }
+  }
+}

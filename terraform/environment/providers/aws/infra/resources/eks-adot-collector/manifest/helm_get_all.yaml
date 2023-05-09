@@ -1,0 +1,664 @@
+NAME: adot-collector
+LAST DEPLOYED: Wed Apr 26 17:20:13 2023
+NAMESPACE: observability
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+USER-SUPPLIED VALUES:
+serviceAccount:
+  annotations:
+    eks:
+      amazonaws:
+        com/role-arn: arn:aws:iam::YOUR_AWS_ACCOUNT:role/adot-collector
+  name: adot-collector
+
+COMPUTED VALUES:
+additionalLabels: {}
+adotCollector:
+  daemonSet:
+    ampexporters:
+      authenticator: sigv4auth
+      endpoint: ""
+      namespaces: ""
+      resourcetootel: false
+    ampreceivers:
+      scrapeConfigs: |
+        - job_name: 'k8s_metrics_scrape'
+          sample_limit: 10000
+          metrics_path: /metrics
+          kubernetes_sd_configs:
+            - role: pod
+          relabel_configs:
+            - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+              action: keep
+              regex: true
+            - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+              action: replace
+              regex: (.+)
+              target_label: __metrics_path__
+            - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+              action: replace
+              regex: ([^:]+)(?::\d+)?;(\d+)
+              replacement: $$1:$$2
+              target_label: __address__
+            - action: labelmap
+              regex: __meta_kubernetes_pod_label_(.+)
+            - source_labels: [__meta_kubernetes_pod_node_name]
+              action: keep
+              regex: ${K8S_NODE_NAME}
+            - source_labels: [__meta_kubernetes_namespace]
+              action: replace
+              target_label: K8S_NAMESPACE
+            - source_labels: [__meta_kubernetes_pod_name]
+              action: replace
+              target_label: K8S_POD_NAME
+            - source_labels: [__meta_kubernetes_pod_container_name]
+              action: replace
+              target_label: EKS_Container
+      scrapeInterval: 15s
+      scrapeTimeout: 10s
+    clusterRoleBindingName: adot-collector-role-binding
+    clusterRoleName: adot-collector-role
+    command:
+    - /awscollector
+    - --config=/conf/adot-config.yaml
+    configMap:
+      app: opentelemetry
+      component: adot-conf
+      name: adot-conf
+    containersName: adot-collector-container
+    createNamespace: true
+    cwexporters:
+      dimensionRollupOption: NoDimensionRollup
+      enabled: true
+      logGroupName: ""
+      logStreamName: InputNodeName
+      namespace: ContainerInsights
+      parseJsonEncodedAttrValues:
+      - Sources
+      - kubernetes
+    cwreceivers:
+      addFullPodNameMetricLabel: ""
+      addServiceAsAttribute: ""
+      collectionInterval: ""
+      containerOrchestrator: ""
+      preferFullPodName: ""
+    daemonSetName: adot-collector-daemonset
+    enabled: true
+    env:
+    - name: K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    - name: HOST_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.hostIP
+    - name: K8S_POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    - name: HOST_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+    - name: K8S_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    extensions:
+      healthCheck: ""
+      sigv4auth:
+        region: ""
+    metricDeclarations: |
+      # node metrics
+      - dimensions: [[NodeName, InstanceId, ClusterName]]
+        metric_name_selectors:
+          - node_cpu_utilization
+          - node_memory_utilization
+          - node_network_total_bytes
+          - node_cpu_reserved_capacity
+          - node_memory_reserved_capacity
+          - node_number_of_running_pods
+          - node_number_of_running_containers
+      - dimensions: [[ClusterName]]
+        metric_name_selectors:
+          - node_cpu_utilization
+          - node_memory_utilization
+          - node_network_total_bytes
+          - node_cpu_reserved_capacity
+          - node_memory_reserved_capacity
+          - node_number_of_running_pods
+          - node_number_of_running_containers
+          - node_cpu_usage_total
+          - node_cpu_limit
+          - node_memory_working_set
+          - node_memory_limit
+      # pod metrics
+      - dimensions: [[PodName, Namespace, ClusterName], [Service, Namespace, ClusterName], [Namespace, ClusterName], [ClusterName]]
+        metric_name_selectors:
+          - pod_cpu_utilization
+          - pod_memory_utilization
+          - pod_network_rx_bytes
+          - pod_network_tx_bytes
+          - pod_cpu_utilization_over_pod_limit
+          - pod_memory_utilization_over_pod_limit
+      - dimensions: [[PodName, Namespace, ClusterName], [ClusterName]]
+        metric_name_selectors:
+          - pod_cpu_reserved_capacity
+          - pod_memory_reserved_capacity
+      - dimensions: [[PodName, Namespace, ClusterName]]
+        metric_name_selectors:
+          - pod_number_of_container_restarts
+      # cluster metrics
+      - dimensions: [[ClusterName]]
+        metric_name_selectors:
+          - cluster_node_count
+          - cluster_failed_node_count
+      # service metrics
+      - dimensions: [[Service, Namespace, ClusterName], [ClusterName]]
+        metric_name_selectors:
+          - service_number_of_running_pods
+      # node fs metrics
+      - dimensions: [[NodeName, InstanceId, ClusterName], [ClusterName]]
+        metric_name_selectors:
+          - node_filesystem_utilization
+      # namespace metrics
+      - dimensions: [[Namespace, ClusterName], [ClusterName]]
+        metric_name_selectors:
+          - namespace_number_of_running_pods
+    namespace: amazon-metrics
+    namespaceOverride: ""
+    processors:
+      timeout: 60s
+    resources:
+      limits:
+        cpu: 200m
+        memory: 200Mi
+      requests:
+        cpu: 200m
+        memory: 200Mi
+    service:
+      extensions:
+      - health_check
+      - sigv4auth
+      metrics:
+        exporters:
+        - prometheusremotewrite
+        processors:
+        - batch/metrics
+        receivers:
+        - prometheus
+    serviceAccount:
+      annotations: {}
+      create: true
+      name: adot-collector-sa
+    volumeMounts:
+    - mountPath: /rootfs
+      name: rootfs
+      readOnly: true
+    - mountPath: /var/run/docker.sock
+      name: dockersock
+      readOnly: true
+    - mountPath: /var/lib/docker
+      name: varlibdocker
+      readOnly: true
+    - mountPath: /run/containerd/containerd.sock
+      name: containerdsock
+      readOnly: true
+    - mountPath: /sys
+      name: sys
+      readOnly: true
+    - mountPath: /dev/disk
+      name: devdisk
+      readOnly: true
+    - mountPath: /conf
+      name: adot-config-vol
+    volumes:
+    - configMap:
+        items:
+        - key: adot-config
+          path: adot-config.yaml
+        name: adot-conf
+      name: adot-config-vol
+    - hostPath:
+        path: /
+      name: rootfs
+    - hostPath:
+        path: /var/run/docker.sock
+      name: dockersock
+    - hostPath:
+        path: /var/lib/docker
+      name: varlibdocker
+    - hostPath:
+        path: /run/containerd/containerd.sock
+      name: containerdsock
+    - hostPath:
+        path: /sys
+      name: sys
+    - hostPath:
+        path: /dev/disk/
+      name: devdisk
+  image:
+    daemonSetPullPolicy: IfNotPresent
+    name: aws-otel-collector
+    repository: amazon/aws-otel-collector
+    sidecarPullPolicy: Always
+    tag: v0.28.0
+  sidecar:
+    enabled: false
+    image:
+      name: ""
+      pullPolicy: ""
+      repository: ""
+      tag: ""
+    name: adot-sidecar
+    namespace: adot-sidecar-namespace
+    namespaceOverride: ""
+    regionS3: ""
+    replicas: 1
+    resources:
+      limits:
+        cpu: 256m
+        memory: 512Mi
+      requests:
+        cpu: 32m
+        memory: 24Mi
+awsRegion: ""
+clusterName: ""
+fullnameOverride: ""
+global:
+  namespaceOverride: ""
+nameOverride: ""
+serviceAccount:
+  annotations:
+    eks:
+      amazonaws:
+        com/role-arn: arn:aws:iam::YOUR_AWS_ACCOUNT:role/adot-collector
+  create: true
+  name: adot-collector
+
+HOOKS:
+MANIFEST:
+---
+# Source: adot-exporter-for-eks-on-ec2/templates/adot-collector/namespace.yaml
+# Specify namespace for ADOT Collector as a DaemonSet.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: amazon-metrics
+  labels:
+    name: amazon-metrics
+    helm.sh/chart: adot-exporter-for-eks-on-ec2-0.14.0
+    app.kubernetes.io/name: adot-exporter-for-eks-on-ec2
+    app.kubernetes.io/instance: adot-collector
+    app.kubernetes.io/version: "0.28.0"
+    app.kubernetes.io/component: opentelemetry
+    app.kubernetes.io/part-of: adot-exporter-for-eks-on-ec2
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: adot-exporter-for-eks-on-ec2/templates/adot-collector/serviceaccount.yaml
+# Service account provides identity information for a user to be able to authenticate processes running in a pod.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: adot-collector-sa
+  namespace: amazon-metrics
+---
+# Source: adot-exporter-for-eks-on-ec2/templates/adot-collector/configmap.yaml
+# ConfigMap for ADOT Collector as a DaemonSet with the specified configurations, including configured values from values.yaml.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: adot-conf
+  namespace: amazon-metrics
+  labels:
+    app: opentelemetry
+    component: adot-conf
+    helm.sh/chart: adot-exporter-for-eks-on-ec2-0.14.0
+    app.kubernetes.io/name: adot-exporter-for-eks-on-ec2
+    app.kubernetes.io/instance: adot-collector
+    app.kubernetes.io/version: "0.28.0"
+    app.kubernetes.io/component: opentelemetry
+    app.kubernetes.io/part-of: adot-exporter-for-eks-on-ec2
+    app.kubernetes.io/managed-by: Helm
+data:
+  adot-config:  |
+    extensions:
+      health_check:
+      sigv4auth:
+        region:
+    receivers:
+      awscontainerinsightreceiver:
+        collection_interval:
+        container_orchestrator:
+        add_service_as_attribute:
+        prefer_full_pod_name:
+        add_full_pod_name_metric_label:
+      prometheus:
+        config:
+          global:
+            scrape_interval: 15s
+            scrape_timeout: 10s
+          scrape_configs:
+
+            - job_name: 'k8s_metrics_scrape'
+              sample_limit: 10000
+              metrics_path: /metrics
+              kubernetes_sd_configs:
+                - role: pod
+              relabel_configs:
+                - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+                  action: keep
+                  regex: true
+                - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+                  action: replace
+                  regex: (.+)
+                  target_label: __metrics_path__
+                - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]
+                  action: replace
+                  regex: ([^:]+)(?::\d+)?;(\d+)
+                  replacement: $$1:$$2
+                  target_label: __address__
+                - action: labelmap
+                  regex: __meta_kubernetes_pod_label_(.+)
+                - source_labels: [__meta_kubernetes_pod_node_name]
+                  action: keep
+                  regex: ${K8S_NODE_NAME}
+                - source_labels: [__meta_kubernetes_namespace]
+                  action: replace
+                  target_label: K8S_NAMESPACE
+                - source_labels: [__meta_kubernetes_pod_name]
+                  action: replace
+                  target_label: K8S_POD_NAME
+                - source_labels: [__meta_kubernetes_pod_container_name]
+                  action: replace
+                  target_label: EKS_Container
+
+    processors:
+      batch/metrics:
+        timeout: 60s
+    exporters:
+      awsemf:
+        namespace: ContainerInsights
+        log_group_name: '/aws/containerinsights/golang-adot/performance'
+        log_stream_name: InputNodeName
+        region:
+        resource_to_telemetry_conversion:
+          enabled: true
+        dimension_rollup_option: NoDimensionRollup
+        parse_json_encoded_attr_values:
+        - Sources
+        - kubernetes
+        metric_declarations:
+
+          # node metrics
+          - dimensions: [[NodeName, InstanceId, ClusterName]]
+            metric_name_selectors:
+              - node_cpu_utilization
+              - node_memory_utilization
+              - node_network_total_bytes
+              - node_cpu_reserved_capacity
+              - node_memory_reserved_capacity
+              - node_number_of_running_pods
+              - node_number_of_running_containers
+          - dimensions: [[ClusterName]]
+            metric_name_selectors:
+              - node_cpu_utilization
+              - node_memory_utilization
+              - node_network_total_bytes
+              - node_cpu_reserved_capacity
+              - node_memory_reserved_capacity
+              - node_number_of_running_pods
+              - node_number_of_running_containers
+              - node_cpu_usage_total
+              - node_cpu_limit
+              - node_memory_working_set
+              - node_memory_limit
+          # pod metrics
+          - dimensions: [[PodName, Namespace, ClusterName], [Service, Namespace, ClusterName], [Namespace, ClusterName], [ClusterName]]
+            metric_name_selectors:
+              - pod_cpu_utilization
+              - pod_memory_utilization
+              - pod_network_rx_bytes
+              - pod_network_tx_bytes
+              - pod_cpu_utilization_over_pod_limit
+              - pod_memory_utilization_over_pod_limit
+          - dimensions: [[PodName, Namespace, ClusterName], [ClusterName]]
+            metric_name_selectors:
+              - pod_cpu_reserved_capacity
+              - pod_memory_reserved_capacity
+          - dimensions: [[PodName, Namespace, ClusterName]]
+            metric_name_selectors:
+              - pod_number_of_container_restarts
+          # cluster metrics
+          - dimensions: [[ClusterName]]
+            metric_name_selectors:
+              - cluster_node_count
+              - cluster_failed_node_count
+          # service metrics
+          - dimensions: [[Service, Namespace, ClusterName], [ClusterName]]
+            metric_name_selectors:
+              - service_number_of_running_pods
+          # node fs metrics
+          - dimensions: [[NodeName, InstanceId, ClusterName], [ClusterName]]
+            metric_name_selectors:
+              - node_filesystem_utilization
+          # namespace metrics
+          - dimensions: [[Namespace, ClusterName], [ClusterName]]
+            metric_name_selectors:
+              - namespace_number_of_running_pods
+
+      prometheusremotewrite:
+        namespace:
+        endpoint:
+        resource_to_telemetry_conversion:
+          enabled: false
+        auth:
+          authenticator: sigv4auth
+
+    service:
+      pipelines:
+        metrics:
+          receivers:
+          - prometheus
+          processors:
+          - batch/metrics
+          exporters:
+          - prometheusremotewrite
+      extensions:
+      - health_check
+      - sigv4auth
+---
+# Source: adot-exporter-for-eks-on-ec2/templates/adot-collector/clusterrole.yaml
+# ClusterRole for ADOT Collector as a DaemonSet contains rules, and defines and grants permissions to specified resources/endpoints.
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: adot-collector-role
+  labels:
+    helm.sh/chart: adot-exporter-for-eks-on-ec2-0.14.0
+    app.kubernetes.io/name: adot-exporter-for-eks-on-ec2
+    app.kubernetes.io/instance: adot-collector
+    app.kubernetes.io/version: "0.28.0"
+    app.kubernetes.io/component: opentelemetry
+    app.kubernetes.io/part-of: adot-exporter-for-eks-on-ec2
+    app.kubernetes.io/managed-by: Helm
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "nodes", "endpoints"]
+    verbs: ["list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["replicasets"]
+    verbs: ["list", "watch"]
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["list", "watch"]
+  - apiGroups: [""]
+    resources: ["nodes/proxy"]
+    verbs: ["get"]
+  - apiGroups: [""]
+    resources: ["nodes/stats", "configmaps", "events"]
+    verbs: ["create", "get"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["adot-container-insight-clusterleader", "otel-container-insight-clusterleader"]
+    verbs: ["get","update"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    resourceNames: ["otel-container-insight-clusterleader"]
+    verbs: ["get", "update", "create"]
+  - apiGroups: ["coordination.k8s.io"]
+    resources: ["leases"]
+    verbs: ["get", "create"]
+---
+# Source: adot-exporter-for-eks-on-ec2/templates/adot-collector/clusterrolebinding.yaml
+# ClusterRoleBinding for ADOT Collector as a DaemonSet references and grants permissions defined in ClusterRole to service accounts/users/groups in subjects.
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: adot-collector-role-binding
+  labels:
+    helm.sh/chart: adot-exporter-for-eks-on-ec2-0.14.0
+    app.kubernetes.io/name: adot-exporter-for-eks-on-ec2
+    app.kubernetes.io/instance: adot-collector
+    app.kubernetes.io/version: "0.28.0"
+    app.kubernetes.io/component: opentelemetry
+    app.kubernetes.io/part-of: adot-exporter-for-eks-on-ec2
+    app.kubernetes.io/managed-by: Helm
+subjects:
+- kind: ServiceAccount
+  name: adot-collector-sa
+  namespace: amazon-metrics
+roleRef:
+  kind: ClusterRole
+  name: adot-collector-role
+  apiGroup: rbac.authorization.k8s.io
+---
+# Source: adot-exporter-for-eks-on-ec2/templates/adot-collector/daemonset.yaml
+# ADOT Collector as a DaemonSet for deployment.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: adot-collector-daemonset
+  namespace: amazon-metrics
+  labels:
+    helm.sh/chart: adot-exporter-for-eks-on-ec2-0.14.0
+    app.kubernetes.io/name: adot-exporter-for-eks-on-ec2
+    app.kubernetes.io/instance: adot-collector
+    app.kubernetes.io/version: "0.28.0"
+    app.kubernetes.io/component: opentelemetry
+    app.kubernetes.io/part-of: adot-exporter-for-eks-on-ec2
+    app.kubernetes.io/managed-by: Helm
+spec:
+  selector:
+    matchLabels:
+      name: adot-collector-daemonset
+      app.kubernetes.io/name: adot-exporter-for-eks-on-ec2
+      app.kubernetes.io/instance: adot-collector
+  template:
+    metadata:
+      labels:
+        name: adot-collector-daemonset
+        helm.sh/chart: adot-exporter-for-eks-on-ec2-0.14.0
+        app.kubernetes.io/name: adot-exporter-for-eks-on-ec2
+        app.kubernetes.io/instance: adot-collector
+        app.kubernetes.io/version: "0.28.0"
+        app.kubernetes.io/component: opentelemetry
+        app.kubernetes.io/part-of: adot-exporter-for-eks-on-ec2
+        app.kubernetes.io/managed-by: Helm
+      annotations:
+        checksum/config: 6f9f55a761439ce0a7da6ac2e7dc438d41a2810da404d59a8426373dbb8a827c
+    spec:
+      containers:
+        - name: adot-collector-container
+          image: "amazon/aws-otel-collector:v0.28.0"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: K8S_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: HOST_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: K8S_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          command:
+            - /awscollector
+            - --config=/conf/adot-config.yaml
+          volumeMounts:
+            - mountPath: /rootfs
+              name: rootfs
+              readOnly: true
+            - mountPath: /var/run/docker.sock
+              name: dockersock
+              readOnly: true
+            - mountPath: /var/lib/docker
+              name: varlibdocker
+              readOnly: true
+            - mountPath: /run/containerd/containerd.sock
+              name: containerdsock
+              readOnly: true
+            - mountPath: /sys
+              name: sys
+              readOnly: true
+            - mountPath: /dev/disk
+              name: devdisk
+              readOnly: true
+            - mountPath: /conf
+              name: adot-config-vol
+          resources:
+            limits:
+              cpu: 200m
+              memory: 200Mi
+            requests:
+              cpu: 200m
+              memory: 200Mi
+      volumes:
+          - configMap:
+              items:
+              - key: adot-config
+                path: adot-config.yaml
+              name: adot-conf
+            name: adot-config-vol
+          - hostPath:
+              path: /
+            name: rootfs
+          - hostPath:
+              path: /var/run/docker.sock
+            name: dockersock
+          - hostPath:
+              path: /var/lib/docker
+            name: varlibdocker
+          - hostPath:
+              path: /run/containerd/containerd.sock
+            name: containerdsock
+          - hostPath:
+              path: /sys
+            name: sys
+          - hostPath:
+              path: /dev/disk/
+            name: devdisk
+      serviceAccountName: adot-collector-sa
+
+NOTES:
+Thank you for installing adot-exporter-for-eks-on-ec2.
+
+Your release is named adot-collector.
+
+To learn more about the release, try:
+
+  $ helm status adot-collector
+  $ helm get all adot-collector

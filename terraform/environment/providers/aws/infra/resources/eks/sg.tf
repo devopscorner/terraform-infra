@@ -13,14 +13,11 @@ resource "aws_security_group" "eks_sg" {
   vpc_id      = data.aws_vpc.selected.id
 
   ingress {
-    description      = "SSH Port"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
+    description = "SSH Port"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
     cidr_blocks = [
-      data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr,
@@ -41,15 +38,12 @@ resource "aws_security_group" "eks_sg" {
     to_port     = 5432
     protocol    = "tcp"
     cidr_blocks = [
-      data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
-    security_groups  = [
+    security_groups = [
       data.terraform_remote_state.core_state.outputs.security_group_id
     ]
   }
@@ -60,15 +54,12 @@ resource "aws_security_group" "eks_sg" {
     to_port     = 6379
     protocol    = "tcp"
     cidr_blocks = [
-      data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
-    security_groups  = [
+    security_groups = [
       data.terraform_remote_state.core_state.outputs.security_group_id
     ]
   }
@@ -78,12 +69,12 @@ resource "aws_security_group" "eks_sg" {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
-    cidr_blocks      = [
+    cidr_blocks = [
       "0.0.0.0/0",
       "172.0.0.0/32"
     ]
     ipv6_cidr_blocks = ["::/0"]
-    security_groups  = [
+    security_groups = [
       data.terraform_remote_state.core_state.outputs.security_group_id
     ]
   }
@@ -93,12 +84,12 @@ resource "aws_security_group" "eks_sg" {
     from_port   = 8000
     to_port     = 9000
     protocol    = "tcp"
-    cidr_blocks      = [
+    cidr_blocks = [
       "0.0.0.0/0",
       "172.0.0.0/32"
     ]
     ipv6_cidr_blocks = ["::/0"]
-    security_groups  = [
+    security_groups = [
       data.terraform_remote_state.core_state.outputs.security_group_id
     ]
   }
@@ -109,15 +100,12 @@ resource "aws_security_group" "eks_sg" {
     to_port     = 9092
     protocol    = "tcp"
     cidr_blocks = [
-      data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
-    security_groups  = [
+    security_groups = [
       data.terraform_remote_state.core_state.outputs.security_group_id
     ]
   }
@@ -128,15 +116,12 @@ resource "aws_security_group" "eks_sg" {
     to_port     = 3888
     protocol    = "tcp"
     cidr_blocks = [
-      data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr
     ]
     ipv6_cidr_blocks = ["::/0"]
-    security_groups  = [
+    security_groups = [
       data.terraform_remote_state.core_state.outputs.security_group_id
     ]
   }
@@ -147,9 +132,6 @@ resource "aws_security_group" "eks_sg" {
     to_port     = 9300
     protocol    = "tcp"
     cidr_blocks = [
-      data.terraform_remote_state.core_state.outputs.ec2_private_1a_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_private_1b_cidr,
-      data.terraform_remote_state.core_state.outputs.ec2_private_1c_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1a_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1b_cidr,
       data.terraform_remote_state.core_state.outputs.eks_private_1c_cidr

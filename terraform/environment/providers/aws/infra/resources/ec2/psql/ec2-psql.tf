@@ -75,7 +75,7 @@ resource "aws_instance" "psql" {
 
   root_block_device {
     volume_size           = "30"
-    volume_type           = "gp2"
+    volume_type           = "gp3"
     delete_on_termination = true
     encrypted             = true
     kms_key_id            = data.aws_kms_key.cmk_key.arn

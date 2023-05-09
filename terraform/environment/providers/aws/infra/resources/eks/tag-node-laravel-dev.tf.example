@@ -14,7 +14,7 @@
 locals {
   #for tagging
   Environment_laravel_dev     = "DEV"
-  Name_laravel_dev            = "EKS-1.22-LARAVEL-DEV"
+  Name_laravel_dev            = "EKS-1.23-LARAVEL-DEV"
   Type_laravel_dev            = "PROJECTS"
   ProductName_laravel_dev     = "EKS-DEVOPSCORNER"
   ProductGroup_laravel_dev    = "DEV-EKS-DEVOPSCORNER"

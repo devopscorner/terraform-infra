@@ -1,0 +1,62 @@
+NAME: cert-manager-ca
+LAST DEPLOYED: Thu Apr 27 21:23:14 2023
+NAMESPACE: cert-manager
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+USER-SUPPLIED VALUES:
+null
+
+COMPUTED VALUES:
+clusterIssuers:
+- name: cert-manager-selfsigned
+  type: selfSigned
+- issuer:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: cert-manager-selfsigned
+  name: cert-manager-ca
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  secretName: cert-manager-ca-root
+  type: CA
+
+HOOKS:
+MANIFEST:
+---
+# Source: cert-manager-ca/templates/certificate.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-manager-ca
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: cert-manager-ca
+  secretName: cert-manager-ca-root
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: cert-manager-selfsigned
+---
+# Source: cert-manager-ca/templates/clusterissuers.yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cert-manager-selfsigned
+spec:
+  selfSigned: {}
+---
+# Source: cert-manager-ca/templates/clusterissuers.yaml
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cert-manager-ca
+spec:
+  ca:
+    secretName: cert-manager-ca-root
+
